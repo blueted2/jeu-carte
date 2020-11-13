@@ -7,6 +7,7 @@ import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.console_ui.VisitorAffichage;
 
 /**
+ * Une implementation de {@link VisitableAffichage}. 
  * @author grego
  *
  */
@@ -17,10 +18,10 @@ public class Carte implements VisitableAffichage {
 	Forme forme;
 
 	/**
-	 * Constructeur {@code Carte}.
-	 * @param couleurCarte La {@code Couleur} de la forme sur la carte.
-	 * @param remplissageCarte Le {@code Remplissage} de la forme de la carte.
-	 * @param formeCarte La {@code forme} sur la carte.
+	 * Constructeur {@link Carte}.
+	 * @param couleurCarte La {@link Couleur} de la forme sur la carte.
+	 * @param remplissageCarte Le {@link Remplissage} de la forme de la carte.
+	 * @param formeCarte La {@link forme} sur la carte.
 	 */
 	public Carte(Couleur couleurCarte, Remplissage remplissageCarte, Forme formeCarte) {
 		couleur = couleurCarte;
@@ -29,21 +30,21 @@ public class Carte implements VisitableAffichage {
 	}
 
 	/**
-	 * @return La {@code Couleur} de la carte
+	 * @return La {@link Couleur} de la carte
 	 */
 	public Couleur getCouleur() {
 		return couleur;
 	}
 
 	/**
-	 * @return Le {@code Remplissage} de la carte
+	 * @return Le {@link Remplissage} de la carte
 	 */
 	public Remplissage getRemplissage() {
 		return remplissage;
 	}
 
 	/**
-	 * @return @return La {@code forme} de la carte
+	 * @return La {@link forme} de la carte
 	 */
 	public Forme getForme() {
 		return forme;

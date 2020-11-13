@@ -22,7 +22,7 @@ public class Tapis_5x3 extends Tapis {
 		return true;
 	}
 
-	// L'emplacement donn� a-t-il une carte voisine ?.
+	// L'emplacement donné a-t-il une carte voisine ?.
 	boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions voisines a la carte

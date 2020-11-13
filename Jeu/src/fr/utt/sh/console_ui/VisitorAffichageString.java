@@ -73,8 +73,9 @@ public class VisitorAffichageString implements VisitorAffichage {
 	}
 
 	/**
-	 * @param visitable
-	 * @return Une representaion {@code String} du {@code VisitableAffichage} donné. 
+	 * @param visitable Un object implementant {@link VisitableAffichage}. 
+	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné. 
+	 * @see VisitableAffichage
 	 */
 	public static String getRepresentationString(VisitableAffichage visitable) {
 		VisitorAffichageString vis = new VisitorAffichageString();

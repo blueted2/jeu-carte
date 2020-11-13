@@ -9,11 +9,14 @@ import fr.utt.sh.core.Tapis_5x3;
  */
 public interface VisitorAffichage {
 	/**
-	 * @param tapis
+	 * Visiter un {@link Tapis_5x3}, pour pouvoir créer une version affichable.
+	 * @param tapis {@link Tapis_5x3}
 	 */
 	public void visit(Tapis_5x3 tapis);
+	
 	/**
-	 * @param carte
+	 * Visiter une {@link Carte}, pour pouvoir créer une version affichable.
+	 * @param carte {@link Carte}
 	 */
 	public void visit(Carte carte);
 	

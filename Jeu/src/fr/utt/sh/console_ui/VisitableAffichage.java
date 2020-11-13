@@ -7,8 +7,8 @@ package fr.utt.sh.console_ui;
 public interface VisitableAffichage {
 
 	/**
-	 * Accepter un {@code VisitorAffichage}.
-	 * @param v {@code VisitorAffichage}.
+	 * Accepter un {@link VisitorAffichage}.
+	 * @param v {@link VisitorAffichage}.
 	 */
 	public void accept(VisitorAffichage v);
 }

@@ -34,7 +34,7 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * @return Donne l'instance de {@code ControlleurJeu}.
+	 * @return Donne l'instance de {@link ControlleurJeu}.
 	 */
 	public static ControlleurJeu getInstance() {
 		if (instance == null) {
@@ -96,23 +96,24 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * @return le {@code Joueur} actuel.
+	 * Obtenir le {@link Joueur} actuel.
+	 * @return Le {@link Joueur} actuel.
 	 */
 	public Joueur getJoueurActuel() {
 		return joueurActuel;
 	}
 
 	/**
-	 * Appelle a son tour {@code poserCarte} dans son tapis, mais prend comme
+	 * Appelle a son tour {@link poserCarte} dans le tapis du jeu, mais prend comme
 	 * parametre supplementaire le joueur qui veux poser une carte, afin de verifier
 	 * si le joueur a le droit de poser une carte.
 	 * 
 	 * @see Tapis#poserCarte
-	 * @param joueur Le {@code Joueur} qui veux poser une carte.
+	 * @param joueur Le {@link Joueur} qui veux poser une carte.
 	 * @param carte  La carte a poser.
 	 * @param x      Abscisse de la carte.
 	 * @param y      Ordonnee de la carte.
-	 * @return {@code true} si la carte a pu etre pos�e, {@code false} sinon
+	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon
 	 */
 	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
 		if (joueur != joueurActuel)
@@ -130,9 +131,9 @@ public class ControlleurJeu {
 	
 	
 	/**
-	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le la list des cartes restantes/non pioch�es. 
+	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le la list des cartes restantes/non piochées. 
 	 * @param joueur Le joueur voulant piocher une carte.
-	 * @return {@code null} si le joueur n'a pas le droit de piocher une carte, une {@code Carte} sinon.
+	 * @return Si le joueur a le droit de piocher une carte, une {@link Carte}, sinon {@code null}.
 	 */
 	public Carte piocherCarte(Joueur joueur) {
 		if(tapis.estRempli()) return null;
@@ -157,7 +158,7 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * @return Le {@code Tapis} du jeu actuel.
+	 * @return Le {@link Tapis} du jeu actuel.
 	 */
 	public Tapis getTapis() {
 		return tapis;

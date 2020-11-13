@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 /**
  * Cette classe représente un joueur. Elle implemente le patron de conception
- * strategy. Chaque tour, ControlleurJeu appelle la methode {@code joueur}, ce
- * qui en tour appelle la methode execute d'une {@code Strategy}.
+ * strategy. Chaque tour, ControlleurJeu appelle la methode {@link Joueur#jouer()}, ce
+ * qui en tour appelle la methode execute d'une {@link Strategy}.
  * 
  * @author grego
  *
@@ -43,7 +43,7 @@ public class Joueur {
 	/**
 	 * Seulement utilisé pour les regles standards.
 	 * 
-	 * @return La {@code Carte} precedement piochée.
+	 * @return La {@link Carte} precedement piochée.
 	 */
 	public Carte getCartePiochee() {
 		return cartePiochee;
@@ -52,7 +52,7 @@ public class Joueur {
 	/**
 	 * Seulement utilisé pour les regles standards.
 	 * 
-	 * @return La {@code Carte} victoire.
+	 * @return La {@link Carte} victoire.
 	 */
 	public Carte getCarteVicotoire() {
 		return null;
@@ -62,7 +62,7 @@ public class Joueur {
 	 * Donne la carte a l'index donné.
 	 * 
 	 * @param index L'indice de la carte demandée.
-	 * @return {@code Carte}
+	 * @return {@link Carte}
 	 */
 	public Carte getCarte(int index) {
 		if (cartes.size() <= index) {
@@ -81,7 +81,7 @@ public class Joueur {
 
 	/**
 	 * Seuelement utiliser avec les regles standards.
-	 * @return Une {@code ArrayList} des cartes dans le deck du joueur.
+	 * @return Une {@link ArrayList} des cartes dans le deck du joueur.
 	 */
 	public ArrayList<Carte> getCartes() {
 		return cartes;
@@ -107,9 +107,10 @@ public class Joueur {
 	}
 
 	/**
-	 * @param i
-	 * @param x
-	 * @param y
+	 * Poser une carte du deck. 
+	 * @param i L'index de la carte a poser.
+	 * @param x Abscisse de la carte.
+	 * @param y Ordonnée de la carte.
 	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
 	 */
 	public boolean poserCarte(int i, int x, int y) {
