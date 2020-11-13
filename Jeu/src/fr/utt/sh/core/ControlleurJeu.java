@@ -5,6 +5,7 @@ package fr.utt.sh.core;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
@@ -68,22 +69,26 @@ public class ControlleurJeu {
 	public void commencerNouvellePartie(int nombreDeJoueurs) {
 		genererCartes();
 		genererJoueurs(nombreDeJoueurs);
-		
+
 		iteratorJoueurs = joueurs.iterator();
 		joueurActuel = iteratorJoueurs.next();
-		
+
 		tapis = new Tapis_5x3();
 	}
 
 	/**
-	 * Verifie si le joueur actuel a fini son tour, puis passe au joueur suivant. 
-	 * @return {@code true} si on a pu passer au joueur suivant, {@code false} sinon. 
+	 * Verifie si le joueur actuel a fini son tour, puis passe au joueur suivant.
+	 * 
+	 * @return {@code true} si on a pu passer au joueur suivant, {@code false}
+	 *         sinon.
 	 */
 	public boolean passerAuJoueurSuivant() {
 		if (!iteratorJoueurs.hasNext()) {
 			iteratorJoueurs = joueurs.iterator();
 		}
 		joueurActuel = iteratorJoueurs.next();
+		joueurAPiocheCarteCeTour = false;
+		joueurAPoseCarteCeTour = false;
 		return true;
 	}
 
@@ -95,25 +100,49 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Appelle a son tour {@code poserCarte} dans son tapis, mais prend comme parametre
-	 * supplementaire le joueur qui veux poser une carte, afin de verifier si le
-	 * joueur a le droit de poser une carte.
+	 * Appelle a son tour {@code poserCarte} dans son tapis, mais prend comme
+	 * parametre supplementaire le joueur qui veux poser une carte, afin de verifier
+	 * si le joueur a le droit de poser une carte.
 	 * 
 	 * @see Tapis#poserCarte
 	 * @param joueur Le {@code Joueur} qui veux poser une carte.
-	 * @param carte La carte a poser.
-	 * @param x Abscisse de la carte.
-	 * @param y Ordonnee de la carte.
+	 * @param carte  La carte a poser.
+	 * @param x      Abscisse de la carte.
+	 * @param y      Ordonnee de la carte.
 	 * @return
 	 */
 	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
-		return tapis.poserCarte(carte, x, y);
+		if (joueur != joueurActuel)
+			return false;
+		if (joueurAPoseCarteCeTour)
+			return false;
+
+		if (!tapis.poserCarte(carte, x, y))
+			return false;
+		
+//		joueurAPoseCarteCeTour = true;
+		return true;
 	}
 	
-	public void jouer() {
-		joueurActuel.jouer();
-	}
 	
+	
+	/**
+	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le la list des cartes restantes/non piochées. 
+	 * @param joueur Le joueur voulant piocher une carte.
+	 * @return {@code null} si le joueur n'a pas le droit de piocher une carte, une {@code Carte} sinon.
+	 */
+	public Carte piocherCarte(Joueur joueur) {
+		if(joueurActuel != joueur) return null;
+		if(joueurAPiocheCarteCeTour) return null;
+		
+		int i = new Random().nextInt(cartesRestantes.size());
+		Carte c = cartesRestantes.get(i);
+		cartesRestantes.remove(i);
+		
+		joueurAPiocheCarteCeTour = true;
+		return c;
+	}
+
 	public Tapis getTapis() {
 		return tapis;
 	}

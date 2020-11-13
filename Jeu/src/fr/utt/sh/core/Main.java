@@ -11,13 +11,16 @@ import fr.utt.sh.console_ui.VisitorAffichageString;
 public class Main {
 
 	public static void main(String[] args) {
-		ControlleurJeu controlleurJeu = ControlleurJeu.getInstance();
+		ControlleurJeu c = ControlleurJeu.getInstance();
 		
-		controlleurJeu.commencerNouvellePartie(4);
-		controlleurJeu.getJoueurActuel().jouer();
-		controlleurJeu.getJoueurActuel().jouer();
+		c.commencerNouvellePartie(4);
+		c.getJoueurActuel().jouer();
+		System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
+		c.passerAuJoueurSuivant();
+		c.getJoueurActuel().jouer();
 		
-		System.out.println(VisitorAffichageString.getRepresentationString(controlleurJeu.getTapis()));
+		
+		System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
 	}
 
 }

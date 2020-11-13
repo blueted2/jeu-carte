@@ -62,12 +62,13 @@ public class Tapis_5x3 extends Tapis {
 	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
+		
+		if (!positionLegale(x, y))
+			return false;
 
 		if (getCarteAt(x, y) != null)
 			return false;
-
-		if (!positionLegale(x, y))
-			return false;
+		
 
 		// Cas particulier pour la premiere carte, car elle ne peut jamais avoir de
 		// voisins
