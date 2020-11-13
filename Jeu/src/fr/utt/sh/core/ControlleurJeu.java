@@ -59,6 +59,7 @@ public class ControlleurJeu {
 		joueurs = new ArrayList<Joueur>();
 		for (int i = 0; i < nombreDeJoueurs; i++) {
 			joueurs.add(new Joueur(Integer.toString(i)));
+//			joueurs.add(new Joueur());
 		}
 
 	}
@@ -155,6 +156,9 @@ public class ControlleurJeu {
 		return tapis.estRempli();
 	}
 
+	/**
+	 * @return Le {@code Tapis} du jeu actuel.
+	 */
 	public Tapis getTapis() {
 		return tapis;
 	}

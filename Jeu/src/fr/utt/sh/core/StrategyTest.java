@@ -1,5 +1,12 @@
 package fr.utt.sh.core;
 
+/**
+ * Une implementation test d'une strateg. Quand cette strategy est utilisée,
+ * elle pioche, puis tante de poser une carte a la premiere position disponible.
+ * 
+ * @author grego
+ *
+ */
 public class StrategyTest implements Strategy {
 
 	int pos = 1;
@@ -15,7 +22,7 @@ public class StrategyTest implements Strategy {
 					return true;
 			}
 		}
-		
+
 		return false;
 
 	}

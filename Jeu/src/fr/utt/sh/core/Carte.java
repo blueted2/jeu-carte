@@ -16,6 +16,12 @@ public class Carte implements VisitableAffichage {
 	Remplissage remplissage;
 	Forme forme;
 
+	/**
+	 * Constructeur {@code Carte}.
+	 * @param couleurCarte La {@code Couleur} de la forme sur la carte.
+	 * @param remplissageCarte Le {@code Remplissage} de la forme de la carte.
+	 * @param formeCarte La {@code forme} sur la carte.
+	 */
 	public Carte(Couleur couleurCarte, Remplissage remplissageCarte, Forme formeCarte) {
 		couleur = couleurCarte;
 		remplissage = remplissageCarte;

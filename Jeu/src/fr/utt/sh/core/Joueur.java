@@ -25,20 +25,33 @@ public class Joueur {
 
 	Strategy strategy = new StrategyTest();
 
+	/**
+	 * Constructeur par defaut.
+	 */
+	public Joueur() {
+		 this.id = "defaut";
+	}
+
+	/**
+	 * Construvteur avec un id, pour l'affichaige dans la console. 
+	 * @param id Un {@code String} pour l'affichage dans la console.
+	 */
 	public Joueur(String id) {
 		this.id = id;
 	}
-	
+
 	/**
-	 * Seulement utilisé pour les regles standards. 
+	 * Seulement utilisé pour les regles standards.
+	 * 
 	 * @return La {@code Carte} precedement piochée.
 	 */
 	public Carte getCartePiochee() {
 		return cartePiochee;
 	}
-	
+
 	/**
-	 * Seulement utilisé pour les regles standards. 
+	 * Seulement utilisé pour les regles standards.
+	 * 
 	 * @return La {@code Carte} victoire.
 	 */
 	public Carte getCarteVicotoire() {
@@ -66,13 +79,17 @@ public class Joueur {
 		return cartes.size();
 	}
 
+	/**
+	 * Seuelement utiliser avec les regles standards.
+	 * @return Une {@code ArrayList} des cartes dans le deck du joueur.
+	 */
 	public ArrayList<Carte> getCartes() {
 		return cartes;
 	}
 
 	/**
-	 * Pose la carte qui vient d'etre piochee. Doit seuelement etre utilisé pour
-	 * les regles normales.
+	 * Pose la carte qui vient d'etre piochee. Doit seuelement etre utilisé pour les
+	 * regles normales.
 	 * 
 	 * @param x Abscisse de la carte.
 	 * @param y Ordonnée de la carte.

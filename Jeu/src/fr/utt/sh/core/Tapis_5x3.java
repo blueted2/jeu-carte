@@ -2,6 +2,11 @@ package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 
+/**
+ * Le tapis de jeu standard. Un rectangle de taille 5x3, mais acceptant des positions 0-6 et 0-4 inclus, afin de permttre au jeu de se decaler. 
+ * @author grego
+ *
+ */
 public class Tapis_5x3 extends Tapis {
 
 	private Carte[][] cartes = new Carte[7][5];
