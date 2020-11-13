@@ -26,10 +26,20 @@ public class Carte implements VisitableAffichage{
 	}
 	
 
+	/**
+	 * Couleurs de carte valides. 
+	 * @author grego
+	 *
+	 */
 	public enum Couleur {
 		Rouge, Bleu, Vert
 	}
-
+	
+	/**
+	 * Remplissages de carte valides. 
+	 * @author grego
+	 *
+	 */
 	public enum Remplissage {
 		Rempli, Vide
 	}
@@ -39,5 +49,4 @@ public class Carte implements VisitableAffichage{
 		v.visit(this);
 		
 	}
-	// Test
 }

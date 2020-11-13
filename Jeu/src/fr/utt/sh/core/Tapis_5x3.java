@@ -21,6 +21,13 @@ public class Tapis_5x3 extends Tapis {
 
 
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * @param carte {@inheritDoc}
+	 * @param x de 0 a 6
+	 * @param y de 0 a 4
+	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (cartes[x][y] != null)
