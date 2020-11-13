@@ -39,4 +39,5 @@ public class Carte implements VisitableAffichage{
 		v.visit(this);
 		
 	}
+	// Test
 }
