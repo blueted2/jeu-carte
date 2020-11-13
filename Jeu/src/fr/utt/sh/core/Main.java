@@ -17,7 +17,6 @@ public class Main {
 		while (!c.tapisEstRempli()) {
 			c.getJoueurActuel().jouer();
 			System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
-			c.passerAuJoueurSuivant();
 		}
 	}
 }

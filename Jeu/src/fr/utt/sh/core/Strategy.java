@@ -10,5 +10,10 @@ package fr.utt.sh.core;
  *
  */
 public interface Strategy {
+	/**
+	 * Appelé quand le joueur doit jouer. Prend en parametre un {@code Joueur}. 
+	 * @param joueur
+	 * @return {@code true} si la strategy a pu etre effectuée, {@code false} sinon.
+	 */
 	public boolean execute(Joueur joueur);
 }

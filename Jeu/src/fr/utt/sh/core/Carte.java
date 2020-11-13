@@ -10,7 +10,7 @@ import fr.utt.sh.console_ui.VisitorAffichage;
  * @author grego
  *
  */
-public class Carte implements VisitableAffichage{
+public class Carte implements VisitableAffichage {
 
 	Couleur couleur;
 	Remplissage remplissage;
@@ -22,43 +22,58 @@ public class Carte implements VisitableAffichage{
 		forme = formeCarte;
 	}
 
+	/**
+	 * @return La {@code Couleur} de la carte
+	 */
 	public Couleur getCouleur() {
 		return couleur;
 	}
 
+	/**
+	 * @return Le {@code Remplissage} de la carte
+	 */
 	public Remplissage getRemplissage() {
 		return remplissage;
 	}
-	
+
+	/**
+	 * @return @return La {@code forme} de la carte
+	 */
 	public Forme getForme() {
 		return forme;
 	}
 
 	/**
-	 * Couleurs de carte valides. 
+	 * Couleurs possible d'une carte.
+	 * 
 	 * @author grego
 	 *
 	 */
 	public enum Couleur {
 		Rouge, Bleu, Vert
 	}
-	
+
 	/**
-	 * Remplissages de carte valides. 
+	 * Remplissages possibles de la forme sur une carte.
+	 * 
 	 * @author grego
 	 *
 	 */
 	public enum Remplissage {
 		Rempli, Vide
 	}
-	
+
+	/**
+	 * Formes possibles sur une carte.
+	 * @author grego
+	 *
+	 */
 	public enum Forme {
 		Triangle, Carre, Cercle
 	}
 
-	
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
-		
+
 	}
 }

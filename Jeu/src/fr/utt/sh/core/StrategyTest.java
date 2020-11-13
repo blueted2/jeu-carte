@@ -13,7 +13,6 @@ public class StrategyTest implements Strategy {
 			for (int x = 1; x < 6; x++) {
 				if (joueur.poserCarte(x, y))
 					return true;
-				
 			}
 		}
 		

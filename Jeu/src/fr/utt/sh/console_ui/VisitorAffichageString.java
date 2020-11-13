@@ -1,10 +1,13 @@
 package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.Tapis_5x3;
-import fr.utt.sh.core.Carte.Forme;
+import fr.utt.sh.core.Tapis_5x3;;
 import fr.utt.sh.core.Carte.Remplissage;
 
+/**
+ * @author grego
+ *
+ */
 public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
@@ -44,7 +47,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 					charForme = "▲";
 					break;
 				case Triangle:
-					charForme = "●";
+					charForme = "o";
 					break;
 				default:
 					break;
@@ -69,6 +72,10 @@ public class VisitorAffichageString implements VisitorAffichage {
 		representationString = String.format("%s%s", charCouleur, charForme);
 	}
 
+	/**
+	 * @param visitable
+	 * @return Une representaion {@code String} du {@code VisitableAffichage} donné. 
+	 */
 	public static String getRepresentationString(VisitableAffichage visitable) {
 		VisitorAffichageString vis = new VisitorAffichageString();
 		visitable.accept(vis);

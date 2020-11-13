@@ -29,10 +29,18 @@ public class Joueur {
 		this.id = id;
 	}
 	
+	/**
+	 * Seulement utilisé pour les regles standards. 
+	 * @return La {@code Carte} precedement piochée.
+	 */
 	public Carte getCartePiochee() {
 		return cartePiochee;
 	}
 	
+	/**
+	 * Seulement utilisé pour les regles standards. 
+	 * @return La {@code Carte} victoire.
+	 */
 	public Carte getCarteVicotoire() {
 		return null;
 	}
@@ -51,6 +59,9 @@ public class Joueur {
 		return cartes.get(index);
 	}
 
+	/**
+	 * @return {@code int} le nombre de cartes.
+	 */
 	public int getNombreCartes() {
 		return cartes.size();
 	}
@@ -63,8 +74,8 @@ public class Joueur {
 	 * Pose la carte qui vient d'etre piochee. Doit seuelement etre utilisé pour
 	 * les regles normales.
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x Abscisse de la carte.
+	 * @param y Ordonnée de la carte.
 	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon
 	 */
 	public boolean poserCarte(int x, int y) {
@@ -78,10 +89,19 @@ public class Joueur {
 		return true;
 	}
 
+	/**
+	 * @param i
+	 * @param x
+	 * @param y
+	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
+	 */
 	public boolean poserCarte(int i, int x, int y) {
 		return false;
 	}
 
+	/**
+	 * @return {@code true} si une carte a pu etre piochée, {@code false} sinon.
+	 */
 	public boolean piocherCarte() {
 		Carte nouvelleCarte = cj.piocherCarte(this);
 		if (cj == null)
@@ -95,8 +115,10 @@ public class Joueur {
 	 * Excute la strategy donné lors de la construction du joueur.
 	 */
 	public void jouer() {
-		if (strategy.execute(this))
+		if (strategy.execute(this)) {
 			System.out.println(String.format("Je suis %s et j'ai joué", this.toString()));
+			cj.passerAuJoueurSuivant();
+		}
 	}
 
 	public String toString() {

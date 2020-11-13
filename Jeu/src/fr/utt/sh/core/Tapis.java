@@ -29,8 +29,7 @@ public abstract class Tapis implements VisitableAffichage {
 	 * @param y1 Ordonnee de la premiere carte.
 	 * @param x2 Abscisse de la deuxieme carte.
 	 * @param y2 Ordonnee de la deuxieme carte.
-	 * @return {@code true} si l'�change a pu etre effectuer,
-	 *         {@code false} sinon.
+	 * @return {@code true} si l'�change a pu etre effectuer, {@code false} sinon.
 	 */
 	public abstract boolean echangerCartes(int x1, int y1, int x2, int y2);
 
@@ -45,15 +44,17 @@ public abstract class Tapis implements VisitableAffichage {
 	public abstract Carte getCarteAt(int x, int y);
 
 	/**
-	 * Poser une {@code Carte} a une certaine position. 
+	 * Poser une {@code Carte} a une certaine position.
 	 * 
 	 * @param carte La carte a poser.
-	 * @param x Abscisse de la carte.
-	 * @param y Ordonnee de la carte.
-	 * @return 
+	 * @param x     Abscisse de la carte.
+	 * @param y     Ordonnee de la carte.
+	 * @return {@code Carte} si il y a bien une carte a la position specifiée,
+	 *         {@code null} si il n'y a pas de carte, ou la position n'est pas
+	 *         valide.
 	 */
 	public abstract boolean poserCarte(Carte carte, int x, int y);
-	
+
 	/**
 	 * @return {@code true} si le terrain ne peut plus accepter de cartes,
 	 *         {@code false} sinon
