@@ -7,27 +7,34 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
+ * Cette classe singleton se charge de controller le flux general du jeu, ainsi
+ * de la logique des regles.
+ * 
  * @author grego
  *
  */
 public class ControlleurJeu {
-	
-	// Test permissions
-	// Test merge
 
 	private static ControlleurJeu instance;
 	ArrayList<Carte> cartesRestantes;
-	ArrayList<Joueur> joueurs;
 
+	ArrayList<Joueur> joueurs;
 	Iterator<Joueur> iteratorJoueurs;
 
-	Joueur joueurActuel;
+	Tapis tapis;
 
-	public ControlleurJeu() {
+	Joueur joueurActuel;
+	boolean joueurAPoseCarteCeTour = false;
+	boolean joueurAPiocheCarteCeTour = false;
+
+	ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
 		joueurs = new ArrayList<Joueur>();
 	}
 
+	/**
+	 * @return Donne l'instance de {@code ControlleurJeu}.
+	 */
 	public static ControlleurJeu getInstance() {
 		if (instance == null) {
 			instance = new ControlleurJeu();
@@ -45,29 +52,69 @@ public class ControlleurJeu {
 		}
 	}
 
-	private void genererJoueurs(int nombreDeJoueurs) {
+	void genererJoueurs(int nombreDeJoueurs) {
 		joueurs = new ArrayList<Joueur>();
 		for (int i = 0; i < nombreDeJoueurs; i++) {
 			joueurs.add(new Joueur(Integer.toString(i)));
 		}
-		iteratorJoueurs = joueurs.iterator();
 
 	}
 
+	/**
+	 * Permet de commencer une nouvelle partie, et supprime celle deja en cours.
+	 * 
+	 * @param nombreDeJoueurs le nombre de joueurs dans la partie
+	 */
 	public void commencerNouvellePartie(int nombreDeJoueurs) {
 		genererCartes();
 		genererJoueurs(nombreDeJoueurs);
+		
+		iteratorJoueurs = joueurs.iterator();
+		joueurActuel = iteratorJoueurs.next();
+		
+		tapis = new Tapis_5x3();
 	}
 
-	public Joueur passerAuJoueurSuivant() {
+	/**
+	 * Verifie si le joueur actuel a fini son tour, puis passe au joueur suivant. 
+	 * @return {@code true} si on a pu passer au joueur suivant, {@code false} sinon. 
+	 */
+	public boolean passerAuJoueurSuivant() {
 		if (!iteratorJoueurs.hasNext()) {
 			iteratorJoueurs = joueurs.iterator();
 		}
 		joueurActuel = iteratorJoueurs.next();
+		return true;
+	}
+
+	/**
+	 * @return le {@code Joueur} actuel.
+	 */
+	public Joueur getJoueurActuel() {
 		return joueurActuel;
 	}
 
-	public Joueur getJoueurActuel() {
-		return joueurActuel;
+	/**
+	 * Appelle a son tour {@code poserCarte} dans son tapis, mais prend comme parametre
+	 * supplementaire le joueur qui veux poser une carte, afin de verifier si le
+	 * joueur a le droit de poser une carte.
+	 * 
+	 * @see Tapis#poserCarte
+	 * @param joueur Le {@code Joueur} qui veux poser une carte.
+	 * @param carte La carte a poser.
+	 * @param x Abscisse de la carte.
+	 * @param y Ordonnee de la carte.
+	 * @return
+	 */
+	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
+		return tapis.poserCarte(carte, x, y);
+	}
+	
+	public void jouer() {
+		joueurActuel.jouer();
+	}
+	
+	public Tapis getTapis() {
+		return tapis;
 	}
 }

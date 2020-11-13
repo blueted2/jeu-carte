@@ -48,8 +48,8 @@ public abstract class Tapis implements VisitableAffichage {
 	 * Poser une {@code Carte} a une certaine position. 
 	 * 
 	 * @param carte La carte a poser.
-	 * @param x
-	 * @param y
+	 * @param x Abscisse de la carte.
+	 * @param y Ordonnee de la carte.
 	 * @return
 	 */
 	public abstract boolean poserCarte(Carte carte, int x, int y);

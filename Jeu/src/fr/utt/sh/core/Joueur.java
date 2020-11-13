@@ -6,7 +6,8 @@ package fr.utt.sh.core;
 import java.util.ArrayList;
 
 /**
- * Cette classe représente un joueur.
+ * Cette classe représente un joueur. Elle implemente le patron de conception strategy. 
+ * Chaque tour, ControlleurJeu appelle la methode {@code joueur}, ce qui en tour appelle la methode execute d'une {@code Strategy}.
  * 
  * @author grego
  *
@@ -16,10 +17,17 @@ public class Joueur {
 	ArrayList<Carte> cartes = new ArrayList<Carte>();
 	String id;
 	
+	Strategy strategy = new StrategyTest();
+	
 	public Joueur(String id) {
 		this.id = id;
 	}
 
+	/**
+	 * Donne la carte a l'index donné.
+	 * @param index
+	 * @return
+	 */
 	public Carte getCarte(int index) {
 		if (cartes.size() <= index) {
 			return null;
@@ -37,8 +45,12 @@ public class Joueur {
 	}
 	
 
+	/**
+	 * Excute la strategy donné lors de la construction du joueur.
+	 */
 	public void jouer() {
-		System.out.println(String.format("Je suis %s et j'ai joué", this.toString()));
+		if(strategy.execute(this)) 
+			System.out.println(String.format("Je suis %s et j'ai joué", this.toString()));
 	}
 	
 	

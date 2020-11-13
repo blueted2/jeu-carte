@@ -33,8 +33,8 @@ public class VisitorAffichageString implements VisitorAffichage{
 	}
 
 	public void visit(Carte carte) {
-		char charCouleur = carte.couleur.name().charAt(0);
-		char charRemlissage = (carte.remplissage == Carte.Remplissage.Vide) ? ' ' : 'X';
+		char charCouleur = carte.getCouleur().name().charAt(0);
+		char charRemlissage = (carte.getRemplissage() == Carte.Remplissage.Vide) ? ' ' : 'X';
 		representationString = String.format("%s%s", charCouleur, charRemlissage);
 	}
 	
