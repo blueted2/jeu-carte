@@ -14,13 +14,11 @@ public class Main {
 		ControlleurJeu c = ControlleurJeu.getInstance();
 		
 		c.commencerNouvellePartie(4);
-		c.getJoueurActuel().jouer();
-		System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
-		c.passerAuJoueurSuivant();
-		c.getJoueurActuel().jouer();
-		
-		
-		System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
+		for(int i=0; i<20; i++) {
+			c.getJoueurActuel().jouer();
+			System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
+			c.passerAuJoueurSuivant();
+		}
 	}
 
 }

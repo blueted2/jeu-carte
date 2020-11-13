@@ -29,8 +29,8 @@ public abstract class Tapis implements VisitableAffichage {
 	 * @param y1 Ordonnee de la premiere carte.
 	 * @param x2 Abscisse de la deuxieme carte.
 	 * @param y2 Ordonnee de la deuxieme carte.
-	 * @return <code>true</code> si l'échange a pu etre effectuer,
-	 *         <code>false</code> sinon.
+	 * @return {@code true} si l'échange a pu etre effectuer,
+	 *         {@code false} sinon.
 	 */
 	public abstract boolean echangerCartes(int x1, int y1, int x2, int y2);
 
@@ -50,7 +50,7 @@ public abstract class Tapis implements VisitableAffichage {
 	 * @param carte La carte a poser.
 	 * @param x Abscisse de la carte.
 	 * @param y Ordonnee de la carte.
-	 * @return
+	 * @return 
 	 */
 	public abstract boolean poserCarte(Carte carte, int x, int y);
 

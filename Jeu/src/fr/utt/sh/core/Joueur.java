@@ -6,7 +6,7 @@ package fr.utt.sh.core;
 import java.util.ArrayList;
 
 /**
- * Cette classe reprÈsente un joueur. Elle implemente le patron de conception
+ * Cette classe repr√©sente un joueur. Elle implemente le patron de conception
  * strategy. Chaque tour, ControlleurJeu appelle la methode {@code joueur}, ce
  * qui en tour appelle la methode execute d'une {@code Strategy}.
  * 
@@ -28,12 +28,20 @@ public class Joueur {
 	public Joueur(String id) {
 		this.id = id;
 	}
+	
+	public Carte getCartePiochee() {
+		return cartePiochee;
+	}
+	
+	public Carte getCarteVicotoire() {
+		return null;
+	}
 
 	/**
-	 * Donne la carte a l'index donnÈ.
+	 * Donne la carte a l'index donn√©.
 	 * 
-	 * @param index
-	 * @return
+	 * @param index L'indice de la carte demand√©e.
+	 * @return {@code Carte}
 	 */
 	public Carte getCarte(int index) {
 		if (cartes.size() <= index) {
@@ -52,12 +60,12 @@ public class Joueur {
 	}
 
 	/**
-	 * Pose une carte qui vient d'etre piochee. Doit seuelement etre utilisÈ pour
+	 * Pose la carte qui vient d'etre piochee. Doit seuelement etre utilis√© pour
 	 * les regles normales.
 	 * 
 	 * @param x
 	 * @param y
-	 * @return {@code true} si la carte a pu etre posÈe, {@code false} sinon
+	 * @return {@code true} si la carte a pu etre pos√©e, {@code false} sinon
 	 */
 	public boolean poserCarte(int x, int y) {
 		if (cartePiochee == null)
@@ -84,11 +92,11 @@ public class Joueur {
 	}
 
 	/**
-	 * Excute la strategy donnÈ lors de la construction du joueur.
+	 * Excute la strategy donn√© lors de la construction du joueur.
 	 */
 	public void jouer() {
 		if (strategy.execute(this))
-			System.out.println(String.format("Je suis %s et j'ai jouÈ", this.toString()));
+			System.out.println(String.format("Je suis %s et j'ai jou√©", this.toString()));
 	}
 
 	public String toString() {

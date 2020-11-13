@@ -9,10 +9,15 @@ public class StrategyTest implements Strategy {
 	public boolean execute(Joueur joueur) {
 		joueur.piocherCarte();
 
-		if (!joueur.poserCarte(1, 1)) {
-			joueur.poserCarte(1, 2);
+		for (int y = 1; y < 4; y++) {
+			for (int x = 1; x < 6; x++) {
+				if (joueur.poserCarte(x, y))
+					return true;
+				
+			}
 		}
-		return true;
+		
+		return false;
 
 	}
 }

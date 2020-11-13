@@ -48,7 +48,9 @@ public class ControlleurJeu {
 		cartesRestantes = new ArrayList<Carte>();
 		for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
 			for (Carte.Couleur couleur : Carte.Couleur.values()) {
-				cartesRestantes.add(new Carte(couleur, remplissage));
+				for(Carte.Forme forme : Carte.Forme.values()) {
+					cartesRestantes.add(new Carte(couleur, remplissage, forme));
+				}
 			}
 		}
 	}
@@ -109,7 +111,7 @@ public class ControlleurJeu {
 	 * @param carte  La carte a poser.
 	 * @param x      Abscisse de la carte.
 	 * @param y      Ordonnee de la carte.
-	 * @return
+	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon
 	 */
 	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
 		if (joueur != joueurActuel)
@@ -134,6 +136,7 @@ public class ControlleurJeu {
 	public Carte piocherCarte(Joueur joueur) {
 		if(joueurActuel != joueur) return null;
 		if(joueurAPiocheCarteCeTour) return null;
+		
 		
 		int i = new Random().nextInt(cartesRestantes.size());
 		Carte c = cartesRestantes.get(i);
