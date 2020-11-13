@@ -1,6 +1,10 @@
 package fr.utt.sh.core;
 
 import fr.utt.sh.core.Carte.Remplissage;
+
+import java.util.Scanner;
+
+import fr.utt.sh.console_ui.VisitorAffichageString;
 import fr.utt.sh.core.Carte.Couleur;
 
 /**

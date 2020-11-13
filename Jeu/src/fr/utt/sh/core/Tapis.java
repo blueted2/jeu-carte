@@ -1,5 +1,7 @@
 package fr.utt.sh.core;
 
+import fr.utt.sh.console_ui.VisitableAffichage;
+
 /**
  * {@code Tapis} est une classe abstraite de base pour toutes les variantes de
  * tapis possibles. <br>

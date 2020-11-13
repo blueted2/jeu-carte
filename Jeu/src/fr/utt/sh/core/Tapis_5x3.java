@@ -1,5 +1,7 @@
 package fr.utt.sh.core;
 
+import fr.utt.sh.console_ui.VisitorAffichage;
+
 public class Tapis_5x3 extends Tapis {
 
 	private Carte[][] cartes = new Carte[7][5];

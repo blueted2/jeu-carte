@@ -1,4 +1,4 @@
-package fr.utt.sh.core;
+package fr.utt.sh.console_ui;
 
 public interface VisitableAffichage {
 

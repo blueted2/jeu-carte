@@ -1,4 +1,8 @@
-package fr.utt.sh.core;
+package fr.utt.sh.console_ui;
+
+import fr.utt.sh.core.Carte;
+import fr.utt.sh.core.Tapis_5x3;
+import fr.utt.sh.core.Carte.Remplissage;
 
 public class VisitorAffichageString implements VisitorAffichage{
 	

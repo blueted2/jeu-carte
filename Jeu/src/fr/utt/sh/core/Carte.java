@@ -3,6 +3,9 @@
  */
 package fr.utt.sh.core;
 
+import fr.utt.sh.console_ui.VisitableAffichage;
+import fr.utt.sh.console_ui.VisitorAffichage;
+
 /**
  * @author grego
  *
