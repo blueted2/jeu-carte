@@ -111,7 +111,7 @@ public class ControlleurJeu {
 	 * @param carte  La carte a poser.
 	 * @param x      Abscisse de la carte.
 	 * @param y      Ordonnee de la carte.
-	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon
+	 * @return {@code true} si la carte a pu etre posï¿½e, {@code false} sinon
 	 */
 	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
 		if (joueur != joueurActuel)
@@ -129,11 +129,12 @@ public class ControlleurJeu {
 	
 	
 	/**
-	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le la list des cartes restantes/non piochées. 
+	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le la list des cartes restantes/non piochï¿½es. 
 	 * @param joueur Le joueur voulant piocher une carte.
 	 * @return {@code null} si le joueur n'a pas le droit de piocher une carte, une {@code Carte} sinon.
 	 */
 	public Carte piocherCarte(Joueur joueur) {
+		if(tapis.estRempli()) return null;
 		if(joueurActuel != joueur) return null;
 		if(joueurAPiocheCarteCeTour) return null;
 		
@@ -144,6 +145,14 @@ public class ControlleurJeu {
 		
 		joueurAPiocheCarteCeTour = true;
 		return c;
+	}
+	
+	/**
+	 * @return {@code true} si le terrain ne peut plus accepter de cartes,
+	 *         {@code false} sinon
+	 */
+	public boolean tapisEstRempli() {
+		return tapis.estRempli();
 	}
 
 	public Tapis getTapis() {

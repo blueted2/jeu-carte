@@ -12,13 +12,12 @@ public class Main {
 
 	public static void main(String[] args) {
 		ControlleurJeu c = ControlleurJeu.getInstance();
-		
+
 		c.commencerNouvellePartie(4);
-		for(int i=0; i<20; i++) {
+		while (!c.tapisEstRempli()) {
 			c.getJoueurActuel().jouer();
 			System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
 			c.passerAuJoueurSuivant();
 		}
 	}
-
 }

@@ -17,7 +17,7 @@ public class Tapis_5x3 extends Tapis {
 		return true;
 	}
 
-	// L'emplacement donné a-t-il une carte voisine ?.
+	// L'emplacement donnï¿½ a-t-il une carte voisine ?.
 	boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions voisines a la carte
@@ -62,13 +62,12 @@ public class Tapis_5x3 extends Tapis {
 	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
-		
+
 		if (!positionLegale(x, y))
 			return false;
 
 		if (getCarteAt(x, y) != null)
 			return false;
-		
 
 		// Cas particulier pour la premiere carte, car elle ne peut jamais avoir de
 		// voisins
@@ -80,6 +79,17 @@ public class Tapis_5x3 extends Tapis {
 		premiereCartePosee = true;
 		return true;
 
+	}
+
+
+	public boolean estRempli() {
+		for (int y = 1; y < 4; y++) {
+			for (int x = 1; x < 6; x++) {
+				if (getCarteAt(x, y) == null)
+					return false;
+			}
+		}
+		return true;
 	}
 
 	public void accept(VisitorAffichage v) {
