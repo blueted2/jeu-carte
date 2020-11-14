@@ -14,10 +14,10 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	public void visit(Tapis_5x3 tapis) {
 		representationString = "";
-		representationString += "----------------------\n";
-		for (int y = 0; y < 5; y++) {
+		representationString += "----------------\n";
+		for (int y = 0; y < 3; y++) {
 			representationString += "|";
-			for (int x = 0; x < 7; x++) {
+			for (int x = 0; x < 5; x++) {
 				Carte carte = tapis.getCarteAt(x, y);
 
 				String strCarte;
@@ -29,9 +29,10 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 				representationString += strCarte + "|";
 			}
-			representationString += "\n" + "----------------------\n";
+			representationString += "\n" + "----------------\n";
 		}
 	}
+	
 
 	public void visit(Carte carte) {
 		char charCouleur = carte.getCouleur().name().charAt(0);
@@ -47,7 +48,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 					charForme = "▲";
 					break;
 				case Triangle:
-					charForme = "o";
+					charForme = "●";
 					break;
 				default:
 					break;
@@ -68,13 +69,12 @@ public class VisitorAffichageString implements VisitorAffichage {
 					break;
 			}
 		}
-
 		representationString = String.format("%s%s", charCouleur, charForme);
 	}
 
 	/**
-	 * @param visitable Un object implementant {@link VisitableAffichage}. 
-	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné. 
+	 * @param visitable Un object implementant {@link VisitableAffichage}.
+	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
 	 * @see VisitableAffichage
 	 */
 	public static String getRepresentationString(VisitableAffichage visitable) {

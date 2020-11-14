@@ -48,7 +48,7 @@ public abstract class Tapis implements VisitableAffichage {
 	 * 
 	 * @param carte La carte a poser.
 	 * @param x     Abscisse de la carte.
-	 * @param y     Ordonnee de la carte.
+	 * @param y     Ordonnée de la carte.
 	 * @return {@link Carte} si il y a bien une carte a la position specifiée,
 	 *         {@code null} si il n'y a pas de carte, ou la position n'est pas
 	 *         valide.
