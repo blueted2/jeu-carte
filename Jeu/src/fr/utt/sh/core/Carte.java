@@ -81,6 +81,9 @@ public class Carte implements VisitableAffichage {
 
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
-
+	}
+	
+	public String toString() {
+		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}
 }

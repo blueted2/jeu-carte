@@ -7,6 +7,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import fr.utt.sh.console_ui.VisitorAffichage;
+import fr.utt.sh.console_ui.VisitorAffichageString;
+import fr.utt.sh.core.strategy.StrategyJoueurConsole;
+import fr.utt.sh.core.strategy.StrategyTest;
+import fr.utt.sh.core.tapis.Tapis;
+import fr.utt.sh.core.tapis.Tapis_5x3;
+
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
  * de la logique des règles.
@@ -27,6 +34,7 @@ public class ControlleurJeu {
 	Joueur joueurActuel;
 	boolean joueurAPoseCarteCeTour = false;
 	boolean joueurAPiocheCarteCeTour = false;
+	boolean joueurADeplaceCarteCeTour = false;
 
 	ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
@@ -48,7 +56,7 @@ public class ControlleurJeu {
 		cartesRestantes = new ArrayList<Carte>();
 		for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
 			for (Carte.Couleur couleur : Carte.Couleur.values()) {
-				for(Carte.Forme forme : Carte.Forme.values()) {
+				for (Carte.Forme forme : Carte.Forme.values()) {
 					cartesRestantes.add(new Carte(couleur, remplissage, forme));
 				}
 			}
@@ -56,11 +64,18 @@ public class ControlleurJeu {
 	}
 
 	void genererJoueurs(int nombreDeJoueurs) {
-		joueurs = new ArrayList<Joueur>();
-		for (int i = 0; i < nombreDeJoueurs; i++) {
-			joueurs.add(new Joueur(Integer.toString(i)));
-//			joueurs.add(new Joueur());
+		if (nombreDeJoueurs == 2) {
+			joueurs = new ArrayList<Joueur>();
+			joueurs.add(new Joueur("Humain", new StrategyJoueurConsole()));
+			joueurs.add(new Joueur("Bot", new StrategyTest()));
+
 		}
+		return;
+//		joueurs = new ArrayList<Joueur>();
+//		for (int i = 0; i < nombreDeJoueurs; i++) {
+//			joueurs.add(new Joueur(Integer.toString(i)));
+////			joueurs.add(new Joueur());
+//		}
 
 	}
 
@@ -86,17 +101,32 @@ public class ControlleurJeu {
 	 *         sinon.
 	 */
 	public boolean passerAuJoueurSuivant() {
+		if (!joueurAPiocheCarteCeTour)
+			return false;
+
+		if (!joueurAPoseCarteCeTour)
+			return false;
+
 		if (!iteratorJoueurs.hasNext()) {
 			iteratorJoueurs = joueurs.iterator();
 		}
+
 		joueurActuel = iteratorJoueurs.next();
 		joueurAPiocheCarteCeTour = false;
 		joueurAPoseCarteCeTour = false;
+		joueurADeplaceCarteCeTour = false;
+
+		System.out.println("-------------------------------------");
+		System.out.println(String.format("A %s de jouer", joueurActuel));
+
+		afficherTapis();
+
 		return true;
 	}
 
 	/**
 	 * Obtenir le {@link Joueur} actuel.
+	 * 
 	 * @return Le {@link Joueur} actuel.
 	 */
 	public Joueur getJoueurActuel() {
@@ -104,9 +134,39 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Appelle a son tour {@link Tapis#poserCarte} dans le tapis du jeu, mais prend comme
-	 * paramètre supplémentaire le joueur qui veux poser une carte, afin de verifier
-	 * si le joueur a le droit de poser une carte.
+	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le
+	 * la list des cartes restantes/non piochées.
+	 * 
+	 * @param joueur Le joueur voulant piocher une carte.
+	 * @return Si le joueur a le droit de piocher une carte, une {@link Carte},
+	 *         sinon {@code null}.
+	 */
+	public Carte piocherCarte(Joueur joueur) {
+		if (tapis.estRempli())
+			return null;
+		if (joueurActuel != joueur)
+			return null;
+		if (joueurAPiocheCarteCeTour)
+			return null;
+
+		int i = new Random().nextInt(cartesRestantes.size());
+		Carte c = cartesRestantes.get(i);
+		cartesRestantes.remove(i);
+
+		System.out.println();
+		System.out.println(String.format("%s a piocher un %s %s %s |%s|", joueur, c.getForme().name(),
+				c.getCouleur().name(), c.getRemplissage().name(), VisitorAffichageString.getRepresentationString(c)));
+
+		afficherTapis();
+
+		joueurAPiocheCarteCeTour = true;
+		return c;
+	}
+
+	/**
+	 * Appelle a son tour {@link Tapis#poserCarte} dans le tapis du jeu, mais prend
+	 * comme paramètre supplémentaire le joueur qui veux poser une carte, afin de
+	 * verifier si le joueur a le droit de poser une carte.
 	 * 
 	 * @see Tapis#poserCarte
 	 * @param joueur Le {@link Joueur} qui veux poser une carte.
@@ -120,35 +180,45 @@ public class ControlleurJeu {
 			return false;
 		if (joueurAPoseCarteCeTour)
 			return false;
+		if (!joueurAPiocheCarteCeTour)
+			return false;
 
 		if (!tapis.poserCarte(carte, x, y))
 			return false;
-		
-//		joueurAPoseCarteCeTour = true;
+
+		System.out.println();
+		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueur, x, y));
+		afficherTapis();
+
+		joueurAPoseCarteCeTour = true;
 		return true;
 	}
-	
-	
-	
+
 	/**
-	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le la list des cartes restantes/non piochées. 
-	 * @param joueur Le joueur voulant piocher une carte.
-	 * @return Si le joueur a le droit de piocher une carte, une {@link Carte}, sinon {@code null}.
+	 * @param joueur Le joueur essayant de deplacer une carte.
+	 * @param x1     Abscisse de depart de la carte.
+	 * @param y1     Ordonnée de depart de la carte.
+	 * @param x2     Abscisse d'arrivée de la carte.
+	 * @param y2     Ordonnée d'arrivée de la carte.
+	 * @return {@code true} si le deplacement a pu etre effectué, {@code false}
+	 *         sinon.
 	 */
-	public Carte piocherCarte(Joueur joueur) {
-		if(tapis.estRempli()) return null;
-		if(joueurActuel != joueur) return null;
-		if(joueurAPiocheCarteCeTour) return null;
-		
-		
-		int i = new Random().nextInt(cartesRestantes.size());
-		Carte c = cartesRestantes.get(i);
-		cartesRestantes.remove(i);
-		
-		joueurAPiocheCarteCeTour = true;
-		return c;
+	public boolean deplacerCarte(Joueur joueur, int x1, int y1, int x2, int y2) {
+		if (joueurADeplaceCarteCeTour)
+			return false;
+
+		if (!tapis.deplacerCarte(x1, y1, x2, y2))
+			return false;
+
+		System.out.println();
+		System.out.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueur, x1, y1, x2, y2));
+		afficherTapis();
+
+		joueurADeplaceCarteCeTour = true;
+		return true;
+
 	}
-	
+
 	/**
 	 * @return {@code true} si le terrain ne peut plus accepter de cartes,
 	 *         {@code false} sinon
@@ -158,9 +228,40 @@ public class ControlleurJeu {
 	}
 
 	/**
+	 * Le joueur actuel a-t-il le droit d'arreter son tour.
+	 * 
+	 * @return {@code true} si le joueur actuel peut arreter son tour, {@code false}
+	 *         sinon.
+	 */
+	public boolean joueurActuelPeutFinir() {
+		return (joueurAPiocheCarteCeTour && joueurAPoseCarteCeTour);
+	}
+
+	/**
+	 * Faire jouer le joueur actuel. Si le joueur a fini son tour, on passe au
+	 * joueur suivant.
+	 * 
+	 * @return {@code true} si le joueur actuel a fini son tour, {@code false}
+	 *         sinon.
+	 */
+	public boolean jouer() {
+		if (joueurActuel.jouer()) {
+			passerAuJoueurSuivant();
+			return true;
+		}
+
+		return false;
+
+	}
+
+	/**
 	 * @return Le {@link Tapis} du jeu actuel.
 	 */
 	public Tapis getTapis() {
 		return tapis;
+	}
+
+	void afficherTapis() {
+		System.out.print(VisitorAffichageString.getRepresentationString(tapis));
 	}
 }

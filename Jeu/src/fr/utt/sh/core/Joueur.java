@@ -5,6 +5,9 @@ package fr.utt.sh.core;
 
 import java.util.ArrayList;
 
+import fr.utt.sh.core.strategy.Strategy;
+import fr.utt.sh.core.strategy.StrategyJoueurConsole;
+
 /**
  * Cette classe représente un joueur. Elle implémente le patron de conception
  * {@code Strategy}. Chaque tour, ControlleurJeu appelle la méthode
@@ -24,7 +27,7 @@ public class Joueur {
 
 	String id;
 
-	Strategy strategy = new StrategyTest();
+	Strategy strategy = new StrategyJoueurConsole();
 
 	/**
 	 * Constructeur par défaut.
@@ -37,9 +40,11 @@ public class Joueur {
 	 * Constructeur avec un id, pour l'affichaige dans la console.
 	 * 
 	 * @param id Un {@code String} pour l'affichage dans la console.
+	 * @param strategy La {@link Strategy} que le joueur va utiliser.
 	 */
-	public Joueur(String id) {
+	public Joueur(String id, Strategy strategy) {
 		this.id = id;
+		this.strategy = strategy;
 	}
 
 	/**
@@ -89,6 +94,18 @@ public class Joueur {
 	public ArrayList<Carte> getCartes() {
 		return cartes;
 	}
+	
+	/**
+	 * @return {@code true} si une carte a pu être piochée, {@code false} sinon.
+	 */
+	public boolean piocherCarte() {
+		Carte carte = cj.piocherCarte(this);
+		if(carte == null) {
+			return false;
+		}
+		cartePiochee = carte; 
+		return true;
+	}
 
 	/**
 	 * Pose la carte qui vient d'être piochée. Doit seulement être utilisé pour les
@@ -122,25 +139,30 @@ public class Joueur {
 	}
 
 	/**
-	 * @return {@code true} si une carte a pu être piochée, {@code false} sinon.
+	 * Le joueur essaye de deplacer une carte.
+	 * @param x1 Abscisse de depart de la carte.
+	 * @param y1 Ordonnée de depart de la carte.
+	 * @param x2 Abscisse d'arrivée de la carte.
+	 * @param y2 Ordonnée d'arrivée de la carte.
+	 * @return {@code true} si le deplacement a pu etre effectué, {@code false} sinon.
 	 */
-	public boolean piocherCarte() {
-		Carte nouvelleCarte = cj.piocherCarte(this);
-		if (cj == null)
-			return false;
-
-		cartePiochee = nouvelleCarte;
-		return true;
+	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
+		return cj.deplacerCarte(this, x1, y1, x2, y2);
 	}
+	
 
 	/**
 	 * Exécute la strategy donné lors de la construction du joueur.
+	 * @return {@code true} si le joueur a fini son tour, {@code false} sinon.
 	 */
-	public void jouer() {
-		if (strategy.execute(this)) {
-			System.out.println(String.format("Je suis %s et j'ai joué", this.toString()));
-			cj.passerAuJoueurSuivant();
-		}
+	public boolean jouer() {
+		if (strategy.execute(this))
+			return true;
+		return false;
+	}
+	
+	public enum Actions {
+		PiocherCarte, PoserCarte, DeplacerCarte
 	}
 
 	public String toString() {

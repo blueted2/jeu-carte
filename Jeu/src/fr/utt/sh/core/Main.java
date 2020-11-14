@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		ControlleurJeu c = ControlleurJeu.getInstance();
-		c.commencerNouvellePartie(4);
+		c.commencerNouvellePartie(2);
 		
 //		c.getJoueurActuel().jouer();
 //		
@@ -22,8 +22,7 @@ public class Main {
 ////
 //		
 		while (!c.tapisEstRempli()) {
-			c.getJoueurActuel().jouer();
-			System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
+			c.jouer();
 		}
 	}
 }

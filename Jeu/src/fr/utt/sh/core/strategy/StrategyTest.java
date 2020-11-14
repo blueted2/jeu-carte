@@ -1,4 +1,7 @@
-package fr.utt.sh.core;
+package fr.utt.sh.core.strategy;
+
+import fr.utt.sh.core.ControlleurJeu;
+import fr.utt.sh.core.Joueur;
 
 /**
  * Une implementation test d'une strateg. Quand cette strategy est utilisée,

@@ -1,8 +1,8 @@
 package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.Tapis_5x3;
 import fr.utt.sh.core.Carte.Remplissage;
+import fr.utt.sh.core.tapis.Tapis_5x3;
 
 /**
  * @author grego
@@ -13,10 +13,13 @@ public class VisitorAffichageString implements VisitorAffichage {
 	private String representationString;
 
 	public void visit(Tapis_5x3 tapis) {
-		representationString = "";
-		representationString += "----------------\n";
+		representationString =  "   0  1  2  3  4 \n";
+		representationString += "  ┌──┬──┬──┬──┬──┐\n";
+		
 		for (int y = 0; y < 3; y++) {
-			representationString += "|";
+			
+			String yStr = Integer.toString(y);
+			representationString += yStr + " │";
 			for (int x = 0; x < 5; x++) {
 				Carte carte = tapis.getCarteAt(x, y);
 
@@ -27,9 +30,17 @@ public class VisitorAffichageString implements VisitorAffichage {
 					strCarte = getRepresentationString(carte);
 				}
 
-				representationString += strCarte + "|";
+				representationString += strCarte + "│";
 			}
-			representationString += "\n" + "----------------\n";
+			if(y==2) {
+				representationString += "\n";
+				representationString += "  └──┴──┴──┴──┴──┘\n";
+			}
+			else {
+				representationString += "\n";
+				representationString += "  ├──┼──┼──┼──┼──┤\n";
+			}
+			
 		}
 	}
 	

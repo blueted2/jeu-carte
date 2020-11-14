@@ -1,4 +1,6 @@
-package fr.utt.sh.core;
+package fr.utt.sh.core.strategy;
+
+import fr.utt.sh.core.Joueur;
 
 /**
  * Classe interface de strategy. Lorsque le joueur veux jouer, elle appelle la

@@ -1,6 +1,7 @@
-package fr.utt.sh.core;
+package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
+import fr.utt.sh.core.Carte;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille 5x3, mais acceptant des
@@ -66,13 +67,35 @@ public class Tapis_5x3 extends Tapis {
 	}
 
 	@Override
-	public boolean echangerCartes(int x1, int y1, int x2, int y2) {
+	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
 
-		Carte buff = cartes[x1][y1];
-		cartes[x1][y1] = cartes[x2][y2];
-		cartes[x2][y2] = buff;
+		if (!positionLegale(x1, y1))
+			return false;
+		if (!positionLegale(x2, y2))
+			return false;
 
-		return true;
+		if (getCarteAt(x1, y1) == null)
+			return false;
+
+		if (positionJouable(x2, y2)) {
+			if (getCarteAt(x2, y2) != null) {
+				// Si la positoin d'arrivée est jouable et contient une carte, retournée false;
+				return false;
+			}
+
+			setCarteAt(getCarteAt(x1, y1), x2, y2);
+			setCarteAt(null, x1, y1);
+			return true;
+		}
+
+		Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
+		setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
+
+		if (poserCarte(carteDeplacee, x2, y2)) // Essayer de la poser
+			return true;
+
+		setCarteAt(carteDeplacee, x1, y1); // Sinon, le remettre d'ou elle vient.
+		return false;
 	}
 
 	/**
@@ -80,8 +103,8 @@ public class Tapis_5x3 extends Tapis {
 	 * {@inheritDoc}
 	 * 
 	 * @param carte {@inheritDoc}
-	 * @param x     de 0 a 4
-	 * @param y     de 0 a 2
+	 * @param x     de -1 a 5 inclu
+	 * @param y     de -1 a 3 inclu
 	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
@@ -104,14 +127,26 @@ public class Tapis_5x3 extends Tapis {
 		}
 
 		if (x == -1) {
-			if (!decalerADroite()) // Si le tapis a pu etre decalé a droite
+			if (!decalerADroite())
 				return false;
-
 			setCarteAt(carte, 0, y);
-			premiereCartePosee = true;
-			return true;
+		} else if (x == 5) {
+			if (!decalerAGauche())
+				return false;
+			setCarteAt(carte, 0, 4);
+
+		} else if (y == -1) {
+			if (!decalerEnBas())
+				return false;
+			setCarteAt(carte, x, 0);
+		} else if (x == 5) {
+			if (!decalerEnHaut())
+				return false;
+			setCarteAt(carte, x, 2);
 		}
-		return false;
+
+		premiereCartePosee = true;
+		return true;
 	}
 
 	boolean decalerAGauche() {
@@ -150,6 +185,40 @@ public class Tapis_5x3 extends Tapis {
 			setCarteAt(null, 0, y);
 		}
 		return true;
+	}
+
+	boolean decalerEnHaut() {
+		for (int x = 0; x < 5; x++) {
+			if (getCarteAt(x, 0) != null)
+				return false;
+		}
+
+		for (int x = 0; x < 5; x++) {
+			for (int y = 0; y < 2; y++) {
+				Carte c = getCarteAt(x, y + 1);
+				setCarteAt(c, x, y);
+			}
+			setCarteAt(null, x, 2);
+		}
+		return true;
+
+	}
+
+	boolean decalerEnBas() {
+		for (int x = 0; x < 5; x++) {
+			if (getCarteAt(x, 2) != null)
+				return false;
+		}
+
+		for (int x = 0; x < 5; x++) {
+			for (int y = 2; y > 0; y--) {
+				Carte c = getCarteAt(x, y - 1);
+				setCarteAt(c, x, y);
+			}
+			setCarteAt(null, x, 0);
+		}
+		return true;
+
 	}
 
 	public boolean estRempli() {

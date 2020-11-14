@@ -1,6 +1,7 @@
-package fr.utt.sh.core;
+package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitableAffichage;
+import fr.utt.sh.core.Carte;
 
 /**
  * {@link Tapis} est une classe abstraite de base pour toutes les variantes de
@@ -25,13 +26,13 @@ public abstract class Tapis implements VisitableAffichage {
 	 * Echanger la position de deux cartes posées sur le tapis. Cette méthode prend
 	 * en compte si
 	 * 
-	 * @param x1 Abscisse de la premiere carte.
-	 * @param y1 Ordonnee de la premiere carte.
-	 * @param x2 Abscisse de la deuxieme carte.
-	 * @param y2 Ordonnee de la deuxieme carte.
+	 * @param x1 Abscisse depart de la carte.
+	 * @param y1 Ordonnee depart de la carte.
+	 * @param x2 Abscisse arrivée de la carte.
+	 * @param y2 Ordonnee arrivée de la carte.
 	 * @return {@code true} si l'échange a pu etre effectuer, {@code false} sinon.
 	 */
-	public abstract boolean echangerCartes(int x1, int y1, int x2, int y2);
+	public abstract boolean deplacerCarte(int x1, int y1, int x2, int y2);
 
 	/**
 	 * Obtenir la {@link Carte} a une position donnée.
