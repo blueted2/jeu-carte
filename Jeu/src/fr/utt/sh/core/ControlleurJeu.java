@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
- * de la logique des regles.
+ * de la logique des règles.
  * 
  * @author grego
  *
@@ -80,7 +80,7 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Verifie si le joueur actuel a fini son tour, puis passe au joueur suivant.
+	 * Vérifie si le joueur actuel a fini son tour, puis passe au joueur suivant.
 	 * 
 	 * @return {@code true} si on a pu passer au joueur suivant, {@code false}
 	 *         sinon.
@@ -104,16 +104,16 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Appelle a son tour {@link poserCarte} dans le tapis du jeu, mais prend comme
-	 * parametre supplementaire le joueur qui veux poser une carte, afin de verifier
+	 * Appelle a son tour {@link Tapis#poserCarte} dans le tapis du jeu, mais prend comme
+	 * paramètre supplémentaire le joueur qui veux poser une carte, afin de verifier
 	 * si le joueur a le droit de poser une carte.
 	 * 
 	 * @see Tapis#poserCarte
 	 * @param joueur Le {@link Joueur} qui veux poser une carte.
 	 * @param carte  La carte a poser.
 	 * @param x      Abscisse de la carte.
-	 * @param y      Ordonnee de la carte.
-	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon
+	 * @param y      Ordonnée de la carte.
+	 * @return {@code true} si la carte a pu être posée, {@code false} sinon
 	 */
 	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
 		if (joueur != joueurActuel)

@@ -6,9 +6,10 @@ package fr.utt.sh.core;
 import java.util.ArrayList;
 
 /**
- * Cette classe représente un joueur. Elle implemente le patron de conception
- * strategy. Chaque tour, ControlleurJeu appelle la methode {@link Joueur#jouer()}, ce
- * qui en tour appelle la methode execute d'une {@link Strategy}.
+ * Cette classe représente un joueur. Elle implémente le patron de conception
+ * {@code Strategy}. Chaque tour, ControlleurJeu appelle la méthode
+ * {@link Joueur#jouer()}, ce qui en tour appelle la méthode exécute d'une
+ * {@link Strategy}.
  * 
  * @author grego
  *
@@ -26,14 +27,15 @@ public class Joueur {
 	Strategy strategy = new StrategyTest();
 
 	/**
-	 * Constructeur par defaut.
+	 * Constructeur par défaut.
 	 */
 	public Joueur() {
-		 this.id = "defaut";
+		this.id = "defaut";
 	}
 
 	/**
-	 * Construvteur avec un id, pour l'affichaige dans la console. 
+	 * Constructeur avec un id, pour l'affichaige dans la console.
+	 * 
 	 * @param id Un {@code String} pour l'affichage dans la console.
 	 */
 	public Joueur(String id) {
@@ -41,16 +43,16 @@ public class Joueur {
 	}
 
 	/**
-	 * Seulement utilisé pour les regles standards.
+	 * Seulement utilisé pour les règles standards.
 	 * 
-	 * @return La {@link Carte} precedement piochée.
+	 * @return La {@link Carte} précédemment piochée.
 	 */
 	public Carte getCartePiochee() {
 		return cartePiochee;
 	}
 
 	/**
-	 * Seulement utilisé pour les regles standards.
+	 * Seulement utilisé pour les règles standards.
 	 * 
 	 * @return La {@link Carte} victoire.
 	 */
@@ -80,16 +82,17 @@ public class Joueur {
 	}
 
 	/**
-	 * Seuelement utiliser avec les regles standards.
-	 * @return Une {@link ArrayList} des cartes dans le deck du joueur.
+	 * Seulement utiliser avec les règles standards.
+	 * 
+	 * @return Une {@link ArrayList} des cartes dans le main du joueur.
 	 */
 	public ArrayList<Carte> getCartes() {
 		return cartes;
 	}
 
 	/**
-	 * Pose la carte qui vient d'etre piochee. Doit seuelement etre utilisé pour les
-	 * regles normales.
+	 * Pose la carte qui vient d'être piochée. Doit seulement être utilisé pour les
+	 * règles normales.
 	 * 
 	 * @param x Abscisse de la carte.
 	 * @param y Ordonnée de la carte.
@@ -107,18 +110,19 @@ public class Joueur {
 	}
 
 	/**
-	 * Poser une carte du deck. 
+	 * Poser une carte dans la main du joueur. .
+	 * 
 	 * @param i L'index de la carte a poser.
 	 * @param x Abscisse de la carte.
 	 * @param y Ordonnée de la carte.
-	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
+	 * @return {@code true} si la carte a pu être posée, {@code false} sinon.
 	 */
 	public boolean poserCarte(int i, int x, int y) {
 		return false;
 	}
 
 	/**
-	 * @return {@code true} si une carte a pu etre piochée, {@code false} sinon.
+	 * @return {@code true} si une carte a pu être piochée, {@code false} sinon.
 	 */
 	public boolean piocherCarte() {
 		Carte nouvelleCarte = cj.piocherCarte(this);
@@ -130,7 +134,7 @@ public class Joueur {
 	}
 
 	/**
-	 * Excute la strategy donné lors de la construction du joueur.
+	 * Exécute la strategy donné lors de la construction du joueur.
 	 */
 	public void jouer() {
 		if (strategy.execute(this)) {

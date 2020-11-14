@@ -74,7 +74,7 @@ public class Tapis_5x3 extends Tapis {
 		if (getCarteAt(x, y) != null)
 			return false;
 
-		// Cas particulier pour la premiere carte, car elle ne peut jamais avoir de
+		// Cas particulier pour la première carte, car elle ne peut jamais avoir de
 		// voisins
 		if (premiereCartePosee && !positionAVoisins(x, y))
 			return false;
