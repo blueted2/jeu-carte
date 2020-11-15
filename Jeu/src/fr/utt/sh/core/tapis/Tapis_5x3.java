@@ -5,7 +5,7 @@ import fr.utt.sh.core.Carte;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille 5x3, mais acceptant des
- * positions 0-6 et 0-4 inclus, afin de permttre au jeu de se decaler.
+ * positions -1 a 5 et -1-3 inclus, afin de permttre au jeu de se decaler.
  * 
  * @author grego
  *
