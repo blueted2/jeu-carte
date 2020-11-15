@@ -2,7 +2,7 @@ package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Carte.Remplissage;
-import fr.utt.sh.core.tapis.Tapis_5x3;
+import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**
  * @author grego
@@ -12,15 +12,48 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
 
-	public void visit(Tapis_5x3 tapis) {
-		representationString =  "   0  1  2  3  4 \n";
-		representationString += "  ┌──┬──┬──┬──┬──┐\n";
+	public void visit(Tapis_Rectangulaire tapis) {
 		
-		for (int y = 0; y < 3; y++) {
+		representationString = "";
+		
+		int l = tapis.getLargeur();
+		int h = tapis.getHauteur();
+				
+		String ligneNombres;
+		String ligneHaut;
+		String ligneSeparateur;
+		String ligneBas;
+		
+		ligneNombres    = "   0  "  ;
+		ligneHaut       = "  ┌──";
+		ligneSeparateur = "  ├──";
+		ligneBas        = "  └──";
+		
+		for (int x=1; x<l; x++) {
+			ligneNombres += Integer.toString(x) + "  ";
+			ligneHaut       += "┬──";
+			ligneSeparateur += "┼──";
+			ligneBas        += "┴──";
+			
+		}
+		ligneNombres    += "\n";
+		ligneHaut       += "┐ \n";
+		ligneSeparateur += "┤ \n";
+		ligneBas        += "┘ \n";
+		
+		
+		representationString += ligneNombres;
+		representationString += ligneHaut;
+		
+		
+		
+		String ligne;
+		for (int y = 0; y < h; y++) {
 			
 			String yStr = Integer.toString(y);
-			representationString += yStr + " │";
-			for (int x = 0; x < 5; x++) {
+			ligne = yStr + " │";
+			
+			for (int x = 0; x < l; x++) {
 				Carte carte = tapis.getCarteAt(x, y);
 
 				String strCarte;
@@ -30,16 +63,16 @@ public class VisitorAffichageString implements VisitorAffichage {
 					strCarte = getRepresentationString(carte);
 				}
 
-				representationString += strCarte + "│";
+				ligne += strCarte + "│";
 			}
-			if(y==2) {
-				representationString += "\n";
-				representationString += "  └──┴──┴──┴──┴──┘\n";
-			}
-			else {
-				representationString += "\n";
-				representationString += "  ├──┼──┼──┼──┼──┤\n";
-			}
+			ligne += "\n";
+			representationString += ligne;
+			
+			
+			if(y != h-1)
+				representationString += ligneSeparateur;
+			else
+				representationString += ligneBas;
 			
 		}
 	}

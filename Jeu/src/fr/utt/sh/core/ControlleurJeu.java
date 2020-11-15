@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.console_ui.VisitorAffichageString;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
