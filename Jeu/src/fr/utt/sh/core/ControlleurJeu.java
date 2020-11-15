@@ -257,7 +257,7 @@ public class ControlleurJeu {
 	 * @return Le {@link Tapis} du jeu actuel.
 	 */
 	public Tapis getTapis() {
-		return tapis;
+		return tapis.getClone();
 	}
 
 	void afficherTapis() {

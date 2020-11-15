@@ -4,8 +4,9 @@ import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Carte;
 
 /**
- * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais acceptant des
- * positions -1 a largeur et -1 a hauteur inclus, afin de permttre au jeu de se decaler.
+ * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais
+ * acceptant des positions -1 a largeur et -1 a hauteur inclus, afin de permttre
+ * au jeu de se decaler.
  * 
  * @author grego
  *
@@ -17,35 +18,47 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	private int largeur;
 	private int hauteur;
-	
+
 	/**
-	 * Constructeur pour un tapis rectangulaire general. 
+	 * Constructeur pour un tapis rectangulaire general.
+	 * 
 	 * @param largeur Largeur du jeu.
 	 * @param hauteur Hauteur du jeu.
 	 */
 	public Tapis_Rectangulaire(int largeur, int hauteur) {
 		this.largeur = largeur;
 		this.hauteur = hauteur;
-		
+
 		cartes = new Carte[largeur][hauteur];
 	}
-	
+
+	/**
+	 * Constructeur pour cloner un tapis.
+	 * 
+	 * @param cartes Une liste 2d des cartes deja jouées.
+	 */
+	public Tapis_Rectangulaire(Carte[][] cartes) {
+		this.cartes = cartes;
+	}
+
 	/**
 	 * Getter largeur du tapis.
+	 * 
 	 * @return int
 	 */
 	public int getLargeur() {
 		return largeur;
 	}
-	
+
 	/**
 	 * Getter hauteur du tapis.
+	 * 
 	 * @return int
 	 */
 	public int getHauteur() {
 		return hauteur;
 	}
-	
+
 	// La position est elle valide, c'est-a-dire dans les bornes du tapis ? Peu
 	// inclure les bords pour permettre au tapis de se decaller.
 	boolean positionLegale(int x, int y) {
@@ -59,9 +72,9 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	// La position est elle valide, mais cette fois sans les bords.
 	boolean positionJouable(int x, int y) {
-		if (x < 0 || x > largeur-1)
+		if (x < 0 || x > largeur - 1)
 			return false;
-		if (y < 0 || y > hauteur-1)
+		if (y < 0 || y > hauteur - 1)
 			return false;
 
 		return true;
@@ -164,7 +177,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		} else if (x == largeur) {
 			if (!decalerAGauche())
 				return false;
-			setCarteAt(carte, 0, largeur-1);
+			setCarteAt(carte, 0, largeur - 1);
 
 		} else if (y == -1) {
 			if (!decalerEnBas())
@@ -173,7 +186,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		} else if (x == largeur) {
 			if (!decalerEnHaut())
 				return false;
-			setCarteAt(carte, x, hauteur-1);
+			setCarteAt(carte, x, hauteur - 1);
 		}
 
 		premiereCartePosee = true;
@@ -190,11 +203,11 @@ public class Tapis_Rectangulaire extends Tapis {
 		}
 
 		for (int y = 0; y < hauteur; y++) {
-			for (int x = 0; x < largeur-1; x++) {
+			for (int x = 0; x < largeur - 1; x++) {
 				Carte c = getCarteAt(x + 1, y);
 				setCarteAt(c, x, y);
 			}
-			setCarteAt(null, largeur-1, y);
+			setCarteAt(null, largeur - 1, y);
 		}
 		return true;
 	}
@@ -203,13 +216,13 @@ public class Tapis_Rectangulaire extends Tapis {
 		for (int y = 0; y < hauteur; y++) {
 			// Si il y a une carte sur la colonne de gauche, les cartes ne peuvent pas être
 			// décalés.
-			if (getCarteAt(largeur-1, y) != null) {
+			if (getCarteAt(largeur - 1, y) != null) {
 				return false;
 			}
 		}
 
 		for (int y = 0; y < hauteur; y++) {
-			for (int x = largeur-1; x > 0; x--) {
+			for (int x = largeur - 1; x > 0; x--) {
 				Carte c = getCarteAt(x - 1, y);
 				setCarteAt(c, x, y);
 			}
@@ -225,11 +238,11 @@ public class Tapis_Rectangulaire extends Tapis {
 		}
 
 		for (int x = 0; x < largeur; x++) {
-			for (int y = 0; y < hauteur-1; y++) {
+			for (int y = 0; y < hauteur - 1; y++) {
 				Carte c = getCarteAt(x, y + 1);
 				setCarteAt(c, x, y);
 			}
-			setCarteAt(null, x, hauteur-1);
+			setCarteAt(null, x, hauteur - 1);
 		}
 		return true;
 
@@ -237,12 +250,12 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	boolean decalerEnBas() {
 		for (int x = 0; x < largeur; x++) {
-			if (getCarteAt(x, hauteur-1) != null)
+			if (getCarteAt(x, hauteur - 1) != null)
 				return false;
 		}
 
 		for (int x = 0; x < largeur; x++) {
-			for (int y = hauteur-1; y > 0; y--) {
+			for (int y = hauteur - 1; y > 0; y--) {
 				Carte c = getCarteAt(x, y - 1);
 				setCarteAt(c, x, y);
 			}
@@ -264,6 +277,11 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
+	}
+
+	@Override
+	public Tapis getClone() {
+		return new Tapis_Rectangulaire(cartes);
 	}
 
 }

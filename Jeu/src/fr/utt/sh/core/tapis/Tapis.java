@@ -62,4 +62,11 @@ public abstract class Tapis implements VisitableAffichage {
 	 */
 	public abstract boolean estRempli();
 
+	/**
+	 * Donne un clone du tapis, afin d'avoir access direct au tapis, tout en
+	 * protegeant celui utilisé pour le jeu.
+	 * 
+	 * @return Un {@code Tapis} clone.
+	 */
+	public abstract Tapis getClone();
 }
