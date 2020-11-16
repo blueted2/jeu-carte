@@ -2,6 +2,7 @@ package fr.utt.sh.core.strategy;
 
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
+import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**
  * Une implementation test d'une strateg. Quand cette strategy est utilisée,
@@ -16,10 +17,14 @@ public class StrategyTest implements Strategy {
 
 	@Override
 	public boolean execute(Joueur joueur) {
+		Tapis_Rectangulaire tapis = (Tapis_Rectangulaire)c.getTapis();
+		int lTapis = tapis.getLargeur();
+		int hTapis = tapis.getHauteur();
+		
 		joueur.piocherCarte();
 
-		for (int y = 0; y < 3; y++) {
-			for (int x = -1; x < 5; x++) {
+		for (int y = 0; y < hTapis; y++) {
+			for (int x = -1; x < lTapis; x++) {
 				if (joueur.poserCarte(x, y))
 					return true;
 			}

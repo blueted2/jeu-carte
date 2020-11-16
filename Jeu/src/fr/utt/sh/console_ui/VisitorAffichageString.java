@@ -13,118 +13,123 @@ public class VisitorAffichageString implements VisitorAffichage {
 	private String representationString;
 
 	public void visit(Tapis_Rectangulaire tapis) {
-		
+
 		representationString = "";
-		
-		int l = tapis.getLargeur();
-		int h = tapis.getHauteur();
-				
+
+		int largeurTapis = tapis.getLargeur();
+		int hauteurTapis = tapis.getHauteur();
+
 		String ligneNombres;
 		String ligneHaut;
 		String ligneSeparateur;
 		String ligneBas;
-		
-		ligneNombres    = "   0  "  ;
+
+		ligneNombres    = "   0  ";
 		ligneHaut       = "  ┌──";
 		ligneSeparateur = "  ├──";
 		ligneBas        = "  └──";
-		
-		for (int x=1; x<l; x++) {
-			ligneNombres += Integer.toString(x) + "  ";
+
+		for (int x = 1; x < largeurTapis; x++) {
+			ligneNombres    += Integer.toString(x) + "  ";
 			ligneHaut       += "┬──";
 			ligneSeparateur += "┼──";
 			ligneBas        += "┴──";
-			
 		}
+
 		ligneNombres    += "\n";
 		ligneHaut       += "┐ \n";
 		ligneSeparateur += "┤ \n";
 		ligneBas        += "┘ \n";
-		
-		
+
 		representationString += ligneNombres;
 		representationString += ligneHaut;
-		
-		
-		
+
 		String ligne;
-		for (int y = 0; y < h; y++) {
-			
-			String yStr = Integer.toString(y);
-			ligne = yStr + " │";
-			
-			for (int x = 0; x < l; x++) {
+		for (int y = 0; y < hauteurTapis; y++) {
+			ligne = Integer.toString(y) + " │";
+
+			for (int x = 0; x < largeurTapis; x++) {
 				Carte carte = tapis.getCarteAt(x, y);
 
 				String strCarte;
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = getRepresentationString(carte);
+					strCarte = getRepresentationStringStatic(carte);
 				}
 
 				ligne += strCarte + "│";
 			}
 			ligne += "\n";
+
 			representationString += ligne;
-			
-			
-			if(y != h-1)
+
+			if (y != hauteurTapis - 1) // Sinon on est pas a la derniere ligne
 				representationString += ligneSeparateur;
 			else
 				representationString += ligneBas;
-			
+
 		}
 	}
-	
 
 	public void visit(Carte carte) {
-		char charCouleur = carte.getCouleur().name().charAt(0);
-//		char charRemlissage = (carte.getRemplissage() == Carte.Remplissage.Vide) ? ' ' : 'X';
-
-		String charForme = "?";
-		if (carte.getRemplissage() == Remplissage.Rempli) {
-			switch (carte.getForme()) {
-				case Carre:
-					charForme = "■";
-					break;
-				case Cercle:
-					charForme = "▲";
-					break;
-				case Triangle:
-					charForme = "●";
-					break;
-				default:
-					break;
-
-			}
-		} else {
-			switch (carte.getForme()) {
-				case Carre:
-					charForme = "□";
-					break;
-				case Cercle:
-					charForme = "△";
-					break;
-				case Triangle:
-					charForme = "○";
-					break;
-				default:
-					break;
-			}
-		}
+		char   charCouleur = carte.getCouleur().name().charAt(0);
+		String charForme   = getCharForme(carte);
 		representationString = String.format("%s%s", charCouleur, charForme);
 	}
 
 	/**
+	 * Raccourcis pour:
+	 * 
+	 * <pre>
+	 * {
+	 * 	&#64;code
+	 * 	VisitorAffichageString visitor = new VisitorAffichageString();
+	 * 	visitable.accept(visitor);
+	 * 	return visitor.getRepresentationString();
+	 * }
+	 * </pre>
+	 * 
 	 * @param visitable Un object implementant {@link VisitableAffichage}.
 	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
-	 * @see VisitableAffichage
 	 */
-	public static String getRepresentationString(VisitableAffichage visitable) {
+	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
 		VisitorAffichageString vis = new VisitorAffichageString();
 		visitable.accept(vis);
 		return vis.representationString;
 	}
 
+	/**
+	 * @return La representation string d'un{@link VisitableAffichage}.
+	 */
+	public String getRepresentationString() {
+		return representationString;
+	}
+
+	String getCharForme(Carte carte) {
+		if (carte.getRemplissage() == Remplissage.Rempli)
+			switch (carte.getForme()) {
+				case Carre:
+					return "■";
+				case Cercle:
+					return "▲";
+				case Triangle:
+					return "●";
+				default:
+					return "?";
+			}
+
+		else
+			switch (carte.getForme()) {
+				case Carre:
+					return "□";
+				case Cercle:
+					return "△";
+				case Triangle:
+					return "○";
+				default:
+					return "?";
+			}
+
+	}
 }

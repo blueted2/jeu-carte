@@ -12,6 +12,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis_5x3;
+import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
@@ -23,21 +24,24 @@ import fr.utt.sh.core.tapis.Tapis_5x3;
 public class ControlleurJeu {
 
 	private static ControlleurJeu instance;
-	ArrayList<Carte> cartesRestantes;
+	ArrayList<Carte>              cartesRestantes;
 
 	ArrayList<Joueur> joueurs;
-	Iterator<Joueur> iteratorJoueurs;
+	Iterator<Joueur>  iteratorJoueurs;
 
 	Tapis tapis;
 
 	Joueur joueurActuel;
-	boolean joueurAPoseCarteCeTour = false;
-	boolean joueurAPiocheCarteCeTour = false;
+
+	boolean debutPartie;
+
+	boolean joueurAPoseCarteCeTour    = false;
+	boolean joueurAPiocheCarteCeTour  = false;
 	boolean joueurADeplaceCarteCeTour = false;
 
 	ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
-		joueurs = new ArrayList<Joueur>();
+		joueurs         = new ArrayList<Joueur>();
 	}
 
 	/**
@@ -88,9 +92,10 @@ public class ControlleurJeu {
 		genererJoueurs(nombreDeJoueurs);
 
 		iteratorJoueurs = joueurs.iterator();
-		joueurActuel = iteratorJoueurs.next();
 
-		tapis = new Tapis_5x3();
+		tapis       = new Tapis_Rectangulaire(6, 4);
+		debutPartie = true;
+		passerAuJoueurSuivant();
 	}
 
 	/**
@@ -100,19 +105,27 @@ public class ControlleurJeu {
 	 *         sinon.
 	 */
 	public boolean passerAuJoueurSuivant() {
-		if (!joueurAPiocheCarteCeTour)
-			return false;
 
-		if (!joueurAPoseCarteCeTour)
-			return false;
+		// Si c'est le debut de la partie, on a pas besoin de verifier si le joueur
+		// actuel a deja pioché/poser une carte...
+		if (!debutPartie) {
+			if (!joueurAPiocheCarteCeTour)
+				return false;
 
+			if (!joueurAPoseCarteCeTour)
+				return false;
+		} else
+			debutPartie = false;
+
+		// Si on est a la fin de l'iterator, en créer un nouveau.
 		if (!iteratorJoueurs.hasNext()) {
 			iteratorJoueurs = joueurs.iterator();
 		}
 
 		joueurActuel = iteratorJoueurs.next();
-		joueurAPiocheCarteCeTour = false;
-		joueurAPoseCarteCeTour = false;
+
+		joueurAPiocheCarteCeTour  = false;
+		joueurAPoseCarteCeTour    = false;
 		joueurADeplaceCarteCeTour = false;
 
 		System.out.println("-------------------------------------");
@@ -148,13 +161,17 @@ public class ControlleurJeu {
 		if (joueurAPiocheCarteCeTour)
 			return null;
 
-		int i = new Random().nextInt(cartesRestantes.size());
+		int   i = new Random().nextInt(cartesRestantes.size());
 		Carte c = cartesRestantes.get(i);
 		cartesRestantes.remove(i);
 
+		String carte       = VisitorAffichageString.getRepresentationStringStatic(c);
+		String forme       = c.getForme().name();
+		String couleur     = c.getCouleur().name();
+		String remplissage = c.getRemplissage().name();
+
 		System.out.println();
-		System.out.println(String.format("%s a piocher un %s %s %s |%s|", joueur, c.getForme().name(),
-				c.getCouleur().name(), c.getRemplissage().name(), VisitorAffichageString.getRepresentationString(c)));
+		System.out.println(String.format("%s a piocher un %s %s %s |%s|", joueur, forme, couleur, remplissage, carte));
 
 		afficherTapis();
 
@@ -261,6 +278,6 @@ public class ControlleurJeu {
 	}
 
 	void afficherTapis() {
-		System.out.print(VisitorAffichageString.getRepresentationString(tapis));
+		System.out.print(VisitorAffichageString.getRepresentationStringStatic(tapis));
 	}
 }
