@@ -15,8 +15,7 @@ import fr.utt.sh.core.VisitorComptageScore;
 public class Tapis_Rectangulaire extends Tapis {
 
 	private Carte[][] cartes;
-	boolean premiereCartePosee = false;
-	
+	boolean           premiereCartePosee = false;
 
 	private int largeur;
 	private int hauteur;
@@ -41,8 +40,8 @@ public class Tapis_Rectangulaire extends Tapis {
 	 */
 	public Tapis_Rectangulaire(Carte[][] cartes) {
 		this.cartes = cartes;
-		largeur = cartes.length;
-		hauteur = cartes[0].length;
+		largeur     = cartes.length;
+		hauteur     = cartes[0].length;
 	}
 
 	/**
@@ -109,6 +108,11 @@ public class Tapis_Rectangulaire extends Tapis {
 		return cartes[x][y];
 	}
 
+	@Override
+	public void retirerCarte(int x, int y) {
+		setCarteAt(null, x, y);
+	}
+	
 	// Pas de vérification
 	void setCarteAt(Carte carte, int x, int y) {
 		cartes[x][y] = carte;
@@ -278,7 +282,6 @@ public class Tapis_Rectangulaire extends Tapis {
 		}
 		return true;
 	}
-
 
 	@Override
 	public Tapis getClone() {

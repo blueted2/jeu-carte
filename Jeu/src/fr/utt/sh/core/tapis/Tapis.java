@@ -71,4 +71,11 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @return Un {@code Tapis} clone.
 	 */
 	public abstract Tapis getClone();
+	
+	
+	/** Retire une carte.
+	 * @param x
+	 * @param y
+	 */
+	public abstract void retirerCarte(int x, int y);
 }

@@ -1,6 +1,7 @@
 package fr.utt.sh.core.strategy;
 
 import fr.utt.sh.console_ui.Utils;
+import fr.utt.sh.console_ui.VisitorAffichageString;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
@@ -11,10 +12,6 @@ public class StrategyJoueurConsole implements Strategy {
 
 	@Override
 	public boolean execute(Joueur joueur) {
-
-		Carte carteTest = new Carte(Carte.Couleur.Rouge, Carte.Remplissage.Rempli, Carte.Forme.Carre);
-		System.out.println(String.format("Score pour (%s): %d", carteTest, cj.getScorePourCarte(carteTest)));
-
 		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x} {y} | finir");
 		System.out.print("Action: ");
 		String[] mots = Utils.getLigneSeparee();

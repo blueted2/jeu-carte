@@ -1,6 +1,5 @@
 package fr.utt.sh.core;
 
-import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 public class VisitorComptageScoreStandard implements VisitorComptageScore {
