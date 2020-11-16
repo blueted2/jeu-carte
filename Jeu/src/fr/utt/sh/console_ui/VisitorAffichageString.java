@@ -1,78 +1,135 @@
 package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.Tapis_5x3;
-import fr.utt.sh.core.Carte.Forme;
 import fr.utt.sh.core.Carte.Remplissage;
+import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
+/**
+ * @author grego
+ *
+ */
 public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
 
-	public void visit(Tapis_5x3 tapis) {
+	public void visit(Tapis_Rectangulaire tapis) {
+
 		representationString = "";
-		representationString += "----------------------\n";
-		for (int y = 0; y < 5; y++) {
-			representationString += "|";
-			for (int x = 0; x < 7; x++) {
+
+		int largeurTapis = tapis.getLargeur();
+		int hauteurTapis = tapis.getHauteur();
+
+		String ligneNombres;
+		String ligneHaut;
+		String ligneSeparateur;
+		String ligneBas;
+
+		ligneNombres    = "   0  ";
+		ligneHaut       = "  ┌──";
+		ligneSeparateur = "  ├──";
+		ligneBas        = "  └──";
+
+		for (int x = 1; x < largeurTapis; x++) {
+			ligneNombres    += Integer.toString(x) + "  ";
+			ligneHaut       += "┬──";
+			ligneSeparateur += "┼──";
+			ligneBas        += "┴──";
+		}
+
+		ligneNombres    += "\n";
+		ligneHaut       += "┐ \n";
+		ligneSeparateur += "┤ \n";
+		ligneBas        += "┘ \n";
+
+		representationString += ligneNombres;
+		representationString += ligneHaut;
+
+		String ligne;
+		for (int y = 0; y < hauteurTapis; y++) {
+			ligne = Integer.toString(y) + " │";
+
+			for (int x = 0; x < largeurTapis; x++) {
 				Carte carte = tapis.getCarteAt(x, y);
 
 				String strCarte;
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = getRepresentationString(carte);
+					strCarte = getRepresentationStringStatic(carte);
 				}
 
-				representationString += strCarte + "|";
+				ligne += strCarte + "│";
 			}
-			representationString += "\n" + "----------------------\n";
+			ligne += "\n";
+
+			representationString += ligne;
+
+			if (y != hauteurTapis - 1) // Sinon on est pas a la derniere ligne
+				representationString += ligneSeparateur;
+			else
+				representationString += ligneBas;
+
 		}
 	}
 
 	public void visit(Carte carte) {
-		char charCouleur = carte.getCouleur().name().charAt(0);
-//		char charRemlissage = (carte.getRemplissage() == Carte.Remplissage.Vide) ? ' ' : 'X';
-
-		String charForme = "?";
-		if (carte.getRemplissage() == Remplissage.Rempli) {
-			switch (carte.getForme()) {
-				case Carre:
-					charForme = "■";
-					break;
-				case Cercle:
-					charForme = "▲";
-					break;
-				case Triangle:
-					charForme = "●";
-					break;
-				default:
-					break;
-
-			}
-		} else {
-			switch (carte.getForme()) {
-				case Carre:
-					charForme = "□";
-					break;
-				case Cercle:
-					charForme = "△";
-					break;
-				case Triangle:
-					charForme = "○";
-					break;
-				default:
-					break;
-			}
-		}
-
+		char   charCouleur = carte.getCouleur().name().charAt(0);
+		String charForme   = getCharForme(carte);
 		representationString = String.format("%s%s", charCouleur, charForme);
 	}
 
-	public static String getRepresentationString(VisitableAffichage visitable) {
+	/**
+	 * Raccourcis pour:
+	 * 
+	 * <pre>
+	 * {
+	 * 	&#64;code
+	 * 	VisitorAffichageString visitor = new VisitorAffichageString();
+	 * 	visitable.accept(visitor);
+	 * 	return visitor.getRepresentationString();
+	 * }
+	 * </pre>
+	 * 
+	 * @param visitable Un object implementant {@link VisitableAffichage}.
+	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
+	 */
+	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
 		VisitorAffichageString vis = new VisitorAffichageString();
 		visitable.accept(vis);
 		return vis.representationString;
 	}
 
+	/**
+	 * @return La representation string d'un{@link VisitableAffichage}.
+	 */
+	public String getRepresentationString() {
+		return representationString;
+	}
+
+	String getCharForme(Carte carte) {
+		if (carte.getRemplissage() == Remplissage.Rempli)
+			switch (carte.getForme()) {
+				case Carre:
+					return "■";
+				case Cercle:
+					return "▲";
+				case Triangle:
+					return "●";
+				default:
+					return "?";
+			}
+
+		else
+			switch (carte.getForme()) {
+				case Carre:
+					return "□";
+				case Cercle:
+					return "△";
+				case Triangle:
+					return "○";
+				default:
+					return "?";
+			}
+
+	}
 }
