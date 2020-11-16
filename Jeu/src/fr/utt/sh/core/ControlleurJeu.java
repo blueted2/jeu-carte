@@ -93,7 +93,7 @@ public class ControlleurJeu {
 
 		iteratorJoueurs = joueurs.iterator();
 
-		tapis       = new Tapis_Rectangulaire(6, 4);
+		tapis       = new Tapis_5x3();
 		debutPartie = true;
 		passerAuJoueurSuivant();
 	}
@@ -265,9 +265,7 @@ public class ControlleurJeu {
 			passerAuJoueurSuivant();
 			return true;
 		}
-
 		return false;
-
 	}
 
 	/**
@@ -280,4 +278,18 @@ public class ControlleurJeu {
 	void afficherTapis() {
 		System.out.print(VisitorAffichageString.getRepresentationStringStatic(tapis));
 	}
+
+	
+	/**
+	 * Permet d'obtenir le score d'une carte pour l'etat actuel du tapis.
+	 * @param carte La {@link Carte} pour laquelle on veut calculer le score.
+	 * @return Le score pour la carte.
+	 */
+	public int getScorePourCarte(Carte carte) {
+		VisitorComptageScore v = new VisitorComptageScoreStandard(carte);
+		tapis.accept(v);
+		
+		return v.getPoints();
+	}
+
 }

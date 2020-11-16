@@ -2,6 +2,8 @@ package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.core.Carte;
+import fr.utt.sh.core.VisitableComptageScore;
+import fr.utt.sh.core.VisitorComptageScore;
 
 /**
  * {@link Tapis} est une classe abstraite de base pour toutes les variantes de
@@ -20,7 +22,7 @@ import fr.utt.sh.core.Carte;
  * @author grego
  *
  */
-public abstract class Tapis implements VisitableAffichage {
+public abstract class Tapis implements VisitableAffichage, VisitableComptageScore {
 
 	/**
 	 * Echanger la position de deux cartes posées sur le tapis. Cette méthode prend

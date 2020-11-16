@@ -1,7 +1,5 @@
 package fr.utt.sh.core;
 
-import fr.utt.sh.console_ui.VisitorAffichageString;
-
 /**
  * 
  * 
@@ -14,13 +12,6 @@ public class Main {
 		ControlleurJeu c = ControlleurJeu.getInstance();
 		c.commencerNouvellePartie(2);
 		
-//		c.getJoueurActuel().jouer();
-//		
-//		Tapis_5x3 tapis = (Tapis_5x3)c.getTapis();
-//		tapis.decalerADroite();
-//		System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
-////
-//		
 		while (!c.tapisEstRempli()) {
 			c.jouer();
 		}

@@ -2,6 +2,7 @@ package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Carte;
+import fr.utt.sh.core.VisitorComptageScore;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais
@@ -278,13 +279,20 @@ public class Tapis_Rectangulaire extends Tapis {
 		return true;
 	}
 
+
+	@Override
+	public Tapis getClone() {
+		return new Tapis_Rectangulaire(cartes);
+	}
+
+	@Override
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
 	}
 
 	@Override
-	public Tapis getClone() {
-		return new Tapis_Rectangulaire(cartes);
+	public void accept(VisitorComptageScore v) {
+		v.visit(this);
 	}
 
 }
