@@ -15,6 +15,7 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	private Carte[][] cartes;
 	boolean premiereCartePosee = false;
+	
 
 	private int largeur;
 	private int hauteur;
@@ -39,6 +40,8 @@ public class Tapis_Rectangulaire extends Tapis {
 	 */
 	public Tapis_Rectangulaire(Carte[][] cartes) {
 		this.cartes = cartes;
+		largeur = cartes.length;
+		hauteur = cartes[0].length;
 	}
 
 	/**
