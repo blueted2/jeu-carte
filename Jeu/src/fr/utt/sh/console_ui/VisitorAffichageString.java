@@ -181,9 +181,9 @@ public class VisitorAffichageString implements VisitorAffichage {
 				case Carre:
 					return "□";
 				case Cercle:
-					return "△";
-				case Triangle:
 					return "○";
+				case Triangle:
+					return "△";
 				default:
 					return "?";
 			}
