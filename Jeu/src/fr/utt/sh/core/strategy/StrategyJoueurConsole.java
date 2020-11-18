@@ -1,18 +1,17 @@
 package fr.utt.sh.core.strategy;
 
 import fr.utt.sh.console_ui.Utils;
+import fr.utt.sh.console_ui.VisitorAffichageString;
+import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
-import fr.utt.sh.core.tapis.Tapis;
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 public class StrategyJoueurConsole implements Strategy {
 
 	ControlleurJeu cj = ControlleurJeu.getInstance();
-	
+
 	@Override
 	public boolean execute(Joueur joueur) {
-
 		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x} {y} | finir");
 		System.out.print("Action: ");
 		String[] mots = Utils.getLigneSeparee();

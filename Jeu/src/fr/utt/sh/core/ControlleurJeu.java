@@ -8,11 +8,15 @@ import java.util.Iterator;
 import java.util.Random;
 
 import fr.utt.sh.console_ui.VisitorAffichageString;
+import fr.utt.sh.core.score.VisitorComptageScore;
+import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis_5x3;
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
+import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+
+import java.util.HashMap;
 
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
@@ -24,8 +28,8 @@ import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 public class ControlleurJeu {
 
 	private static ControlleurJeu instance;
-	ArrayList<Carte>              cartesRestantes;
 
+	ArrayList<Carte>  cartesRestantes;
 	ArrayList<Joueur> joueurs;
 	Iterator<Joueur>  iteratorJoueurs;
 
@@ -38,6 +42,8 @@ public class ControlleurJeu {
 	boolean joueurAPoseCarteCeTour    = false;
 	boolean joueurAPiocheCarteCeTour  = false;
 	boolean joueurADeplaceCarteCeTour = false;
+
+	HashMap<Joueur, Boolean> joueursAyantPiocheeCarteVictoire;
 
 	ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
@@ -91,10 +97,18 @@ public class ControlleurJeu {
 		genererCartes();
 		genererJoueurs(nombreDeJoueurs);
 
+		joueursAyantPiocheeCarteVictoire = new HashMap<Joueur, Boolean>();
+		for (Joueur joueur : joueurs)
+			joueursAyantPiocheeCarteVictoire.put(joueur, false);
+
 		iteratorJoueurs = joueurs.iterator();
 
-		tapis       = new Tapis_Rectangulaire(6, 4);
+//		tapis       = new Tapis_5x3();
+		tapis = new Tapis_Triangulaire(5);
 		debutPartie = true;
+
+		for (Joueur joueur : joueurs)
+			joueur.piocherCarteVicoire();
 		passerAuJoueurSuivant();
 	}
 
@@ -116,11 +130,11 @@ public class ControlleurJeu {
 				return false;
 		} else
 			debutPartie = false;
+		
 
 		// Si on est a la fin de l'iterator, en créer un nouveau.
-		if (!iteratorJoueurs.hasNext()) {
+		if (!iteratorJoueurs.hasNext())
 			iteratorJoueurs = joueurs.iterator();
-		}
 
 		joueurActuel = iteratorJoueurs.next();
 
@@ -128,8 +142,11 @@ public class ControlleurJeu {
 		joueurAPoseCarteCeTour    = false;
 		joueurADeplaceCarteCeTour = false;
 
+		String stringCarte = VisitorAffichageString.getRepresentationStringStatic((joueurActuel.getCarteVictoire()));
+
 		System.out.println("-------------------------------------");
 		System.out.println(String.format("A %s de jouer", joueurActuel));
+		System.out.println(String.format("Carte victoire: |%s|", stringCarte));
 
 		afficherTapis();
 
@@ -160,10 +177,10 @@ public class ControlleurJeu {
 			return null;
 		if (joueurAPiocheCarteCeTour)
 			return null;
+		if (!toutJoueurAPiocheCarteVictoire())
+			return null;
 
-		int   i = new Random().nextInt(cartesRestantes.size());
-		Carte c = cartesRestantes.get(i);
-		cartesRestantes.remove(i);
+		Carte c = popCarteAleatoire();
 
 		String carte       = VisitorAffichageString.getRepresentationStringStatic(c);
 		String forme       = c.getForme().name();
@@ -177,6 +194,37 @@ public class ControlleurJeu {
 
 		joueurAPiocheCarteCeTour = true;
 		return c;
+	}
+
+	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
+	Carte popCarteAleatoire() {
+		int   i = new Random().nextInt(cartesRestantes.size());
+		Carte c = cartesRestantes.get(i);
+		cartesRestantes.remove(i);
+		return c;
+	}
+
+	boolean toutJoueurAPiocheCarteVictoire() {
+		for (Joueur joueur : joueurs)
+			if (!joueursAyantPiocheeCarteVictoire.get(joueur))
+				return false;
+
+		return true;
+	}
+
+	/**
+	 * Essayer de piocher une carte victoire. Donnera null si le joueur a deja
+	 * pioché une carte victoire.
+	 * 
+	 * @param joueur
+	 * @return Une carte.
+	 */
+	public Carte piocherCarteVictoire(Joueur joueur) {
+		if (joueursAyantPiocheeCarteVictoire.get(joueur))
+			return null;
+
+		joueursAyantPiocheeCarteVictoire.put(joueur, true);
+		return popCarteAleatoire();
 	}
 
 	/**
@@ -204,6 +252,7 @@ public class ControlleurJeu {
 
 		System.out.println();
 		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueur, x, y));
+		afficherPointsJoueurActuel();
 		afficherTapis();
 
 		joueurAPoseCarteCeTour = true;
@@ -228,6 +277,7 @@ public class ControlleurJeu {
 
 		System.out.println();
 		System.out.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueur, x1, y1, x2, y2));
+		afficherPointsJoueurActuel();
 		afficherTapis();
 
 		joueurADeplaceCarteCeTour = true;
@@ -265,19 +315,37 @@ public class ControlleurJeu {
 			passerAuJoueurSuivant();
 			return true;
 		}
-
 		return false;
-
 	}
 
 	/**
 	 * @return Le {@link Tapis} du jeu actuel.
 	 */
 	public Tapis getTapis() {
+		System.out.println(tapis.getClone() == tapis);
 		return tapis.getClone();
 	}
 
 	void afficherTapis() {
 		System.out.print(VisitorAffichageString.getRepresentationStringStatic(tapis));
 	}
+
+	void afficherPointsJoueurActuel() {
+		String stringCarteVictoire = VisitorAffichageString.getRepresentationStringStatic(joueurActuel.getCarteVictoire());
+		System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire, getScorePourCarte(joueurActuel.getCarteVictoire())));
+	}
+	
+	/**
+	 * Permet d'obtenir le score d'une carte pour l'etat actuel du tapis.
+	 * 
+	 * @param carte La {@link Carte} pour laquelle on veut calculer le score.
+	 * @return Le score pour la carte.
+	 */
+	public int getScorePourCarte(Carte carte) {
+		VisitorComptageScore v = new VisitorComptageScoreStandard(carte);
+		tapis.accept(v);
+
+		return v.getPoints();
+	}
+
 }

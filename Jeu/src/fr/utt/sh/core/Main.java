@@ -1,6 +1,8 @@
 package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.VisitorAffichageString;
+import fr.utt.sh.core.tapis.Tapis;
+import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
 /**
  * 
@@ -14,15 +16,20 @@ public class Main {
 		ControlleurJeu c = ControlleurJeu.getInstance();
 		c.commencerNouvellePartie(2);
 		
-//		c.getJoueurActuel().jouer();
-//		
-//		Tapis_5x3 tapis = (Tapis_5x3)c.getTapis();
-//		tapis.decalerADroite();
-//		System.out.println(VisitorAffichageString.getRepresentationString(c.getTapis()));
-////
-//		
 		while (!c.tapisEstRempli()) {
 			c.jouer();
 		}
+		
+//		Tapis tapis = new Tapis_Triangulaire(5);
+//		
+//		System.out.println(VisitorAffichageString.getRepresentationStringStatic(tapis));
+//		
+//		Carte c = new Carte(Carte.Couleur.Rouge, Carte.Remplissage.Rempli, Carte.Forme.Carre);
+//		
+//		tapis.poserCarte(c, 0, 3);
+//		System.out.println(VisitorAffichageString.getRepresentationStringStatic(tapis));
+//		
+//		tapis.poserCarte(c, 1, 0);
+//		System.out.println(VisitorAffichageString.getRepresentationStringStatic(tapis));
 	}
 }

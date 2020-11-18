@@ -21,7 +21,7 @@ public class Joueur {
 
 	ArrayList<Carte> cartes = new ArrayList<Carte>();
 	Carte cartePiochee;
-	Carte victoire;
+	Carte carteVictoire;
 
 	ControlleurJeu cj = ControlleurJeu.getInstance();
 
@@ -61,8 +61,8 @@ public class Joueur {
 	 * 
 	 * @return La {@link Carte} victoire.
 	 */
-	public Carte getCarteVicotoire() {
-		return null;
+	public Carte getCarteVictoire() {
+		return carteVictoire;
 	}
 
 	/**
@@ -107,6 +107,17 @@ public class Joueur {
 		return true;
 	}
 
+	/**Essayer de piocher un carte victoire.
+	 * @return {@code true} si la carte victoire a pu etre posé, {@code false} sinon.
+	 */
+	public boolean piocherCarteVicoire() {
+		Carte carte = cj.piocherCarteVictoire(this);
+		if(carte == null)
+			return false;
+		carteVictoire = carte;
+		return true;
+	}
+	
 	/**
 	 * Pose la carte qui vient d'être piochée. Doit seulement être utilisé pour les
 	 * règles normales.

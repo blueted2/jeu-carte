@@ -2,6 +2,7 @@ package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Carte;
+import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais
@@ -14,8 +15,7 @@ import fr.utt.sh.core.Carte;
 public class Tapis_Rectangulaire extends Tapis {
 
 	private Carte[][] cartes;
-	boolean premiereCartePosee = false;
-	
+	boolean           premiereCartePosee = false;
 
 	private int largeur;
 	private int hauteur;
@@ -39,7 +39,15 @@ public class Tapis_Rectangulaire extends Tapis {
 	 * @param cartes Une liste 2d des cartes deja jouées.
 	 */
 	public Tapis_Rectangulaire(Carte[][] cartes) {
-		this.cartes = cartes;
+		this.cartes = new Carte[cartes.length][];
+		for (int i = 0; i < cartes.length; i++) {
+			this.cartes[i] = new Carte[cartes[i].length];
+			
+			for(int j =0; j<cartes[i].length; j++) {
+				this.cartes[i][j] = cartes[i][j];
+			}
+		}
+
 		largeur = cartes.length;
 		hauteur = cartes[0].length;
 	}
@@ -64,7 +72,7 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	// La position est elle valide, c'est-a-dire dans les bornes du tapis ? Peu
 	// inclure les bords pour permettre au tapis de se decaller.
-	boolean positionLegale(int x, int y) {
+	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
 			return false;
 		if (y < -1 || y > hauteur)
@@ -74,7 +82,7 @@ public class Tapis_Rectangulaire extends Tapis {
 	}
 
 	// La position est elle valide, mais cette fois sans les bords.
-	boolean positionJouable(int x, int y) {
+	public boolean positionJouable(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
 		if (y < 0 || y > hauteur - 1)
@@ -108,9 +116,17 @@ public class Tapis_Rectangulaire extends Tapis {
 		return cartes[x][y];
 	}
 
+	@Override
+	public void retirerCarte(int x, int y) {
+		setCarteAt(null, x, y);
+	}
+
 	// Pas de vérification
-	void setCarteAt(Carte carte, int x, int y) {
+	boolean setCarteAt(Carte carte, int x, int y) {
+		if (!positionLegale(x, y))
+			return false;
 		cartes[x][y] = carte;
+		return true;
 	}
 
 	@Override
@@ -278,13 +294,19 @@ public class Tapis_Rectangulaire extends Tapis {
 		return true;
 	}
 
+	@Override
+	public Tapis getClone() {
+		return new Tapis_Rectangulaire(cartes);
+	}
+
+	@Override
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
 	}
 
 	@Override
-	public Tapis getClone() {
-		return new Tapis_Rectangulaire(cartes);
+	public void accept(VisitorComptageScore v) {
+		v.visit(this);
 	}
 
 }
