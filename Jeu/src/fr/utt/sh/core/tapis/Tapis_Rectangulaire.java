@@ -39,9 +39,17 @@ public class Tapis_Rectangulaire extends Tapis {
 	 * @param cartes Une liste 2d des cartes deja jouées.
 	 */
 	public Tapis_Rectangulaire(Carte[][] cartes) {
-		this.cartes = cartes;
-		largeur     = cartes.length;
-		hauteur     = cartes[0].length;
+		this.cartes = new Carte[cartes.length][];
+		for (int i = 0; i < cartes.length; i++) {
+			this.cartes[i] = new Carte[cartes[i].length];
+			
+			for(int j =0; j<cartes[i].length; j++) {
+				this.cartes[i][j] = cartes[i][j];
+			}
+		}
+
+		largeur = cartes.length;
+		hauteur = cartes[0].length;
 	}
 
 	/**
@@ -64,7 +72,7 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	// La position est elle valide, c'est-a-dire dans les bornes du tapis ? Peu
 	// inclure les bords pour permettre au tapis de se decaller.
-	boolean positionLegale(int x, int y) {
+	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
 			return false;
 		if (y < -1 || y > hauteur)
@@ -74,7 +82,7 @@ public class Tapis_Rectangulaire extends Tapis {
 	}
 
 	// La position est elle valide, mais cette fois sans les bords.
-	boolean positionJouable(int x, int y) {
+	public boolean positionJouable(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
 		if (y < 0 || y > hauteur - 1)
@@ -112,10 +120,13 @@ public class Tapis_Rectangulaire extends Tapis {
 	public void retirerCarte(int x, int y) {
 		setCarteAt(null, x, y);
 	}
-	
+
 	// Pas de vérification
-	void setCarteAt(Carte carte, int x, int y) {
+	boolean setCarteAt(Carte carte, int x, int y) {
+		if (!positionLegale(x, y))
+			return false;
 		cartes[x][y] = carte;
+		return true;
 	}
 
 	@Override

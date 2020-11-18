@@ -3,14 +3,24 @@ package fr.utt.sh.console_ui;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Carte.Remplissage;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
+import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
 /**
+ * Cette classe s'occupe de céer une représentaion string de tout les elements
+ * du jeu.
+ * 
  * @author grego
  *
  */
 public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
+
+	public void visit(Carte carte) {
+		char   charCouleur = carte.getCouleur().name().charAt(0);
+		String charForme   = getCharForme(carte);
+		representationString = String.format("%s%s", charCouleur, charForme);
+	}
 
 	public void visit(Tapis_Rectangulaire tapis) {
 
@@ -72,10 +82,57 @@ public class VisitorAffichageString implements VisitorAffichage {
 		}
 	}
 
-	public void visit(Carte carte) {
-		char   charCouleur = carte.getCouleur().name().charAt(0);
-		String charForme   = getCharForme(carte);
-		representationString = String.format("%s%s", charCouleur, charForme);
+	public void visit(Tapis_Triangulaire tapis) {
+		representationString = "";
+
+		int largeurTapis = tapis.getLargeur();
+		int hauteurTapis = tapis.getHauteur();
+
+		String ligneNombres = "   0  ";
+		String ligneHaut       = "  ┌──┐ \n";
+		String ligneSeparateur = "  ├──┼──";
+		String ligneBas        = "  └──";
+
+		for (int x = 1; x < largeurTapis; x++) {
+			ligneNombres += Integer.toString(x) + "  ";
+			ligneBas     += "┴──";
+		}
+		ligneNombres += "\n";
+		ligneBas += "┘ \n";
+
+		representationString += ligneNombres;
+		representationString += ligneHaut;
+
+		String ligne;
+		for (int y = 0; y < hauteurTapis; y++) {
+			ligne = Integer.toString(y) + " │";
+
+			for (int x = 0; x < y + 1; x++) {
+				Carte carte = tapis.getCarteAt(x, y);
+
+				String strCarte;
+				if (carte == null) {
+					strCarte = "  ";
+				} else {
+					strCarte = getRepresentationStringStatic(carte);
+				}
+
+				ligne += strCarte + "│";
+			}
+			ligne += "\n";
+
+			representationString += ligne;
+
+			// Si on on est pas a la derniere ligne
+			if (y != hauteurTapis - 1) {
+				representationString += ligneSeparateur + "┐ \n";
+				ligneSeparateur      += "┼──";
+
+			} else {
+				representationString += ligneBas;
+			}
+		}
+
 	}
 
 	/**

@@ -14,6 +14,8 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis_5x3;
+import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+
 import java.util.HashMap;
 
 /**
@@ -101,7 +103,8 @@ public class ControlleurJeu {
 
 		iteratorJoueurs = joueurs.iterator();
 
-		tapis       = new Tapis_5x3();
+//		tapis       = new Tapis_5x3();
+		tapis = new Tapis_Triangulaire(5);
 		debutPartie = true;
 
 		for (Joueur joueur : joueurs)
@@ -319,6 +322,7 @@ public class ControlleurJeu {
 	 * @return Le {@link Tapis} du jeu actuel.
 	 */
 	public Tapis getTapis() {
+		System.out.println(tapis.getClone() == tapis);
 		return tapis.getClone();
 	}
 

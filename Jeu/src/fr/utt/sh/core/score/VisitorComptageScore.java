@@ -2,6 +2,7 @@ package fr.utt.sh.core.score;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
+import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
 /**
  * Ce interface a pour but d'etre utilisé pour compter le score du tapis pour
@@ -22,6 +23,9 @@ public interface VisitorComptageScore {
 	 * @param tapis Le {@link Tapis_Rectangulaire} a visiter.
 	 */
 	public abstract void visit(Tapis_Rectangulaire tapis);
+	public abstract void visit(Tapis_Triangulaire tapis_Triangulaire);
 
 	public abstract int getPoints();
+
+	
 }

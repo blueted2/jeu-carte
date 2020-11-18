@@ -5,6 +5,7 @@ import fr.utt.sh.core.Carte.Couleur;
 import fr.utt.sh.core.Carte.Forme;
 import fr.utt.sh.core.Carte.Remplissage;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
+import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
 public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
@@ -56,6 +57,11 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		}
 	}
 
+	@Override
+	public void visit(Tapis_Triangulaire tapis_Triangulaire) {
+		points = 0;
+	}
+	
 	/**
 	 * Permet d'obtenir le nombre de points APRES avoir visiter le tapis.
 	 * 
@@ -130,5 +136,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 		return score;
 	}
+
+	
 
 }

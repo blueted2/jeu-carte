@@ -71,11 +71,43 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @return Un {@code Tapis} clone.
 	 */
 	public abstract Tapis getClone();
+
+	/**
+	 * Determiner si a la position donnée, une carte peut etre posée, incluant les
+	 * bords, c'est-a-dire les positions qui peuvent aussi faire deplacer le tapis.
+	 * 
+	 * @param x Abscisse de la position.
+	 * @param y Ordonnée de la position.
+	 * @return {@code true} si la position est legale, {@code false} sinon.
+	 */
+	public abstract boolean positionLegale(int x, int y);
+
 	
-	
-	/** Retire une carte.
+	/**
+	 * Determiner si a la position donnée, une carte peut etre posée, n'incluant pas les bords.
+	 * <br> 
+	 * Different de {@link #positionLegale(int, int)}. 
+	 * @param x Abscisse de la position.
+	 * @param y Ordonnée de la position.
+	 * @return {@code true} si la position est jouable, {@code false} sinon.
+	 */
+	public abstract boolean positionJouable(int x, int y);
+
+	/**
+	 * Retire une carte.
+	 * 
 	 * @param x
 	 * @param y
 	 */
 	public abstract void retirerCarte(int x, int y);
+	
+	/**Obtenir la largeur du tapis.
+	 * @return {@code int}.
+	 */
+	public abstract int getLargeur();
+	
+	/**Obtenir la hauteur du tapis.
+	 * @return {@code int}.
+	 */
+	public abstract int getHauteur();
 }
