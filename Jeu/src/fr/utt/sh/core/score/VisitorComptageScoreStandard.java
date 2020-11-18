@@ -1,5 +1,9 @@
-package fr.utt.sh.core;
+package fr.utt.sh.core.score;
 
+import fr.utt.sh.core.Carte;
+import fr.utt.sh.core.Carte.Couleur;
+import fr.utt.sh.core.Carte.Forme;
+import fr.utt.sh.core.Carte.Remplissage;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 public class VisitorComptageScoreStandard implements VisitorComptageScore {

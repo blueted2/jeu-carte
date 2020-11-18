@@ -3,8 +3,8 @@ package fr.utt.sh.core.strategy;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
-import fr.utt.sh.core.VisitorComptageScore;
-import fr.utt.sh.core.VisitorComptageScoreStandard;
+import fr.utt.sh.core.score.VisitorComptageScore;
+import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**

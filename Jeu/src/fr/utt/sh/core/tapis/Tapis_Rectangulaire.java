@@ -2,7 +2,7 @@ package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.VisitorComptageScore;
+import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais

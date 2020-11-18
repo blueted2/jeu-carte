@@ -1,5 +1,6 @@
-package fr.utt.sh.core;
+package fr.utt.sh.core.score;
 
+import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**

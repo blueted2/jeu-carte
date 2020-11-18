@@ -2,8 +2,8 @@ package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.VisitableComptageScore;
-import fr.utt.sh.core.VisitorComptageScore;
+import fr.utt.sh.core.score.VisitableComptageScore;
+import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * {@link Tapis} est une classe abstraite de base pour toutes les variantes de

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Random;
 
 import fr.utt.sh.console_ui.VisitorAffichageString;
+import fr.utt.sh.core.score.VisitorComptageScore;
+import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
