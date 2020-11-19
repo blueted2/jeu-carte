@@ -36,19 +36,18 @@ public class Tapis_Triangulaire extends Tapis {
 		}
 	}
 
-	
 	public Tapis_Triangulaire(Carte[][] cartes) {
 		this.cartes = new Carte[cartes.length][];
 		for (int i = 0; i < cartes.length; i++) {
 			this.cartes[i] = new Carte[cartes[i].length];
-			
-			for(int j =0; j<cartes[i].length; j++) {
+
+			for (int j = 0; j < cartes[i].length; j++) {
 				this.cartes[i][j] = cartes[i][j];
 			}
 		}
 		this.taille = cartes.length;
 	}
-	
+
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
@@ -73,7 +72,7 @@ public class Tapis_Triangulaire extends Tapis {
 				return true;
 			}
 			return false;
-			
+
 		} else if (y >= taille) {
 			if (decalerEnHaut()) {
 				setCarteAt(carte, x, taille - 1);
@@ -88,7 +87,6 @@ public class Tapis_Triangulaire extends Tapis {
 				setCarteAt(carte, y, y);
 				return true;
 			}
-			
 
 			if (decalerEnBas()) {
 				setCarteAt(carte, x, x);
@@ -96,8 +94,7 @@ public class Tapis_Triangulaire extends Tapis {
 			}
 			return false;
 
-		} 
-		
+		}
 
 		return false;
 	}

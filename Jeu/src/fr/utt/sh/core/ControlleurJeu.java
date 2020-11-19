@@ -104,7 +104,7 @@ public class ControlleurJeu {
 		iteratorJoueurs = joueurs.iterator();
 
 //		tapis       = new Tapis_5x3();
-		tapis = new Tapis_Triangulaire(5);
+		tapis = new Tapis_5x3();
 		debutPartie = true;
 
 		for (Joueur joueur : joueurs)
@@ -188,7 +188,7 @@ public class ControlleurJeu {
 		String remplissage = c.getRemplissage().name();
 
 		System.out.println();
-		System.out.println(String.format("%s a piocher un %s %s %s |%s|", joueur, forme, couleur, remplissage, carte));
+		System.out.println(String.format("%s a pioché un %s %s %s |%s|", joueur, forme, couleur, remplissage, carte));
 
 		afficherTapis();
 
