@@ -14,7 +14,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		ControlleurJeu c = ControlleurJeu.getInstance();
-		c.commencerNouvellePartie(2);
+		c.commencerNouvellePartie(0, 2);
 		
 		while (!c.tapisEstRempli()) {
 			c.jouer();

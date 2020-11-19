@@ -72,13 +72,24 @@ public class ControlleurJeu {
 		}
 	}
 
-	void genererJoueurs(int nombreDeJoueurs) {
-		if (nombreDeJoueurs == 2) {
-			joueurs = new ArrayList<Joueur>();
-			joueurs.add(new Joueur("Humain", new StrategyJoueurConsole()));
-			joueurs.add(new Joueur("Bot", new StrategyTest()));
+	void genererJoueurs(int nombreDeJoueursHumains, int nombreDeJoueuersBots) {
+		joueurs = new ArrayList<Joueur>();
 
+		int nombreBotsAjoutes    = 0;
+		int nombreHumainsAjoutes = 0;
+
+		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
+			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
+				joueurs.add(new Joueur("Bot", new StrategyTest()));
+				nombreBotsAjoutes++;
+			}
+
+			if (nombreHumainsAjoutes < nombreDeJoueursHumains) {
+				joueurs.add(new Joueur("Humain", new StrategyJoueurConsole()));
+				nombreHumainsAjoutes++;
+			}
 		}
+
 		return;
 //		joueurs = new ArrayList<Joueur>();
 //		for (int i = 0; i < nombreDeJoueurs; i++) {
@@ -93,9 +104,9 @@ public class ControlleurJeu {
 	 * 
 	 * @param nombreDeJoueurs le nombre de joueurs dans la partie
 	 */
-	public void commencerNouvellePartie(int nombreDeJoueurs) {
+	public void commencerNouvellePartie(int nbHumains, int nbBots) {
 		genererCartes();
-		genererJoueurs(nombreDeJoueurs);
+		genererJoueurs(nbHumains, nbBots);
 
 		joueursAyantPiocheeCarteVictoire = new HashMap<Joueur, Boolean>();
 		for (Joueur joueur : joueurs)
@@ -104,7 +115,7 @@ public class ControlleurJeu {
 		iteratorJoueurs = joueurs.iterator();
 
 //		tapis       = new Tapis_5x3();
-		tapis = new Tapis_5x3();
+		tapis       = new Tapis_5x3();
 		debutPartie = true;
 
 		for (Joueur joueur : joueurs)
@@ -130,7 +141,6 @@ public class ControlleurJeu {
 				return false;
 		} else
 			debutPartie = false;
-		
 
 		// Si on est a la fin de l'iterator, en créer un nouveau.
 		if (!iteratorJoueurs.hasNext())
@@ -322,7 +332,6 @@ public class ControlleurJeu {
 	 * @return Le {@link Tapis} du jeu actuel.
 	 */
 	public Tapis getTapis() {
-		System.out.println(tapis.getClone() == tapis);
 		return tapis.getClone();
 	}
 
@@ -331,10 +340,12 @@ public class ControlleurJeu {
 	}
 
 	void afficherPointsJoueurActuel() {
-		String stringCarteVictoire = VisitorAffichageString.getRepresentationStringStatic(joueurActuel.getCarteVictoire());
-		System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire, getScorePourCarte(joueurActuel.getCarteVictoire())));
+		String stringCarteVictoire = VisitorAffichageString
+				.getRepresentationStringStatic(joueurActuel.getCarteVictoire());
+		System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
+				getScorePourCarte(joueurActuel.getCarteVictoire())));
 	}
-	
+
 	/**
 	 * Permet d'obtenir le score d'une carte pour l'etat actuel du tapis.
 	 * 
