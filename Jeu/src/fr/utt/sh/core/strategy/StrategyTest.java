@@ -9,8 +9,10 @@ import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**
- * Une implementation test d'une strateg. Quand cette strategy est utilisée,
- * elle pioche, puis tante de poser une carte a la premiere position disponible.
+ * Une implementation test d'une strategy. Quand cette strategy est utilisée,
+ * elle pioche, puis teste chaque position du tapis afin de trouver celle qui donnera le meilleur score. 
+ * <br>
+ * Cette strategie ne posera pas la carte a une position qui necessitera un deplacement. 
  * 
  * @author grego
  *

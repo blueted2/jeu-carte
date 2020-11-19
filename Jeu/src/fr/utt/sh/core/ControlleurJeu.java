@@ -115,7 +115,7 @@ public class ControlleurJeu {
 		iteratorJoueurs = joueurs.iterator();
 
 //		tapis       = new Tapis_5x3();
-		tapis       = new Tapis_5x3();
+		tapis       = new Tapis_Triangulaire(5);
 		debutPartie = true;
 
 		for (Joueur joueur : joueurs)

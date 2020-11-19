@@ -204,7 +204,7 @@ public class Tapis_Triangulaire extends Tapis {
 
 	@Override
 	public void retirerCarte(int x, int y) {
-
+		setCarteAt(null, x, y);
 	}
 
 	@Override
