@@ -4,6 +4,9 @@
 package fr.utt.sh.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
@@ -19,9 +22,10 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  */
 public class Joueur {
 
-	ArrayList<Carte> cartes = new ArrayList<Carte>();
-	Carte            cartePiochee;
-	Carte            carteVictoire;
+	ArrayList<Carte> cartesMain = new ArrayList<>();
+
+	Carte cartePiochee;
+	Carte carteVictoire;
 
 	ControlleurJeu cj = ControlleurJeu.getInstance();
 
@@ -35,9 +39,9 @@ public class Joueur {
 	public Joueur() {
 		this.id = "defaut";
 	}
-	
+
 	public Joueur(String id, Strategy strategy) {
-		this.id = id;
+		this.id       = id;
 		this.strategy = strategy;
 	}
 
@@ -85,27 +89,39 @@ public class Joueur {
 	 * @param index L'indice de la carte demandée.
 	 * @return {@link Carte}
 	 */
-	public Carte getCarte(int index) {
-		if (cartes.size() <= index) {
+	public Carte getCarteDansMain(int index) {
+		if (cartesMain.size() <= index) {
 			return null;
 		}
 
-		return cartes.get(index);
+		return cartesMain.get(index);
 	}
 
+	public void ajouterCarteDansMain(Carte carte) {
+		cartesMain.add(carte);
+	}
+	
+	public boolean retirerCarteDansMain(Carte carte) {
+		if(!cartesMain.contains(carte))
+			return false;
+		
+		cartesMain.remove(carte);
+		return true;
+	}
+	
 	/**
 	 * @return {@code int} le nombre de cartes.
 	 */
-	public int getNombreCartes() {
-		return cartes.size();
+	public int getNombreCartesDansMain() {
+		return cartesMain.size();
 	}
 
 	/**
 	 * 
 	 * @return Une {@link ArrayList} des cartes dans le main du joueur.
 	 */
-	public ArrayList<Carte> getCartes() {
-		return cartes;
+	public ArrayList<Carte> getCartesDansMain() {
+		return cartesMain;
 	}
 
 	/**
@@ -117,10 +133,6 @@ public class Joueur {
 		if (strategy.execute())
 			return true;
 		return false;
-	}
-
-	public enum Actions {
-		PiocherCarte, PoserCarte, DeplacerCarte
 	}
 
 	public String toString() {
