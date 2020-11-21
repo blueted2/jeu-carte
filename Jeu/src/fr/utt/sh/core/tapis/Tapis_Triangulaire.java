@@ -36,6 +36,13 @@ public class Tapis_Triangulaire extends Tapis {
 		}
 	}
 
+	/**
+	 * Construteur pour cloner un tapis.
+	 * 
+	 * @param cartes Une liste 2-dimmensionnelle, dont la longeur determine la
+	 *               taille du jeu. LA n-ieme sous-liste est de longueur n+1 ( si n
+	 *               commence a 0 ).
+	 */
 	public Tapis_Triangulaire(Carte[][] cartes) {
 		this.cartes = new Carte[cartes.length][];
 		for (int i = 0; i < cartes.length; i++) {
@@ -52,6 +59,12 @@ public class Tapis_Triangulaire extends Tapis {
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
+
+		if (!positionAVoisins(x, y))
+			if (premiereCartePosee)
+				return false;
+			else
+				premiereCartePosee = true;
 
 		if (positionJouable(x, y)) {
 			if (getCarteAt(x, y) != null)
@@ -73,7 +86,7 @@ public class Tapis_Triangulaire extends Tapis {
 			}
 			return false;
 
-		} else if (y >= taille) {
+		} else if (y >= taille) { // Carte en-dessous du tapis
 			if (decalerEnHaut()) {
 				setCarteAt(carte, x, taille - 1);
 				return true;
@@ -81,7 +94,7 @@ public class Tapis_Triangulaire extends Tapis {
 			return false;
 		}
 
-		// Si la carte est a droite du jeu.
+		// Carte a droite du tapis
 		else if (x > y) {
 			if (decalerAGauche()) {
 				setCarteAt(carte, y, y);
@@ -97,6 +110,26 @@ public class Tapis_Triangulaire extends Tapis {
 		}
 
 		return false;
+	}
+
+	// L'emplacement donné a-t-il une carte voisine ?.
+	boolean positionAVoisins(int x, int y) {
+
+		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
+
+		for (int[] decalage : decalages) {
+			int xVoisin = decalage[0] + x;
+			int yVoisin = decalage[1] + y;
+
+			if (positionJouable(xVoisin, yVoisin)) {
+				if (getCarteAt(xVoisin, yVoisin) != null) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+
 	}
 
 	@Override

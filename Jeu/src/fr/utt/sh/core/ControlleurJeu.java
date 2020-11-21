@@ -200,7 +200,6 @@ public class ControlleurJeu {
 		System.out.println();
 		System.out.println(String.format("%s a pioché un %s %s %s |%s|", joueur, forme, couleur, remplissage, carte));
 
-		afficherTapis();
 
 		joueurAPiocheCarteCeTour = true;
 		return c;

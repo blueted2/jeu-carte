@@ -1,9 +1,5 @@
 package fr.utt.sh.core;
 
-import fr.utt.sh.console_ui.VisitorAffichageString;
-import fr.utt.sh.core.tapis.Tapis;
-import fr.utt.sh.core.tapis.Tapis_Triangulaire;
-
 /**
  * 
  * 
@@ -14,8 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		ControlleurJeu c = ControlleurJeu.getInstance();
-		c.commencerNouvellePartie(0, 2);
-		
+		c.commencerNouvellePartie(1, 1);		
 		while (!c.tapisEstRempli()) {
 			c.jouer();
 		}
