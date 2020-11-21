@@ -39,9 +39,9 @@ public class ControlleurJeu {
 
 	boolean debutPartie;
 
-	boolean joueurAPoseCarteCeTour    = false;
-	boolean joueurAPiocheCarteCeTour  = false;
-	boolean joueurADeplaceCarteCeTour = false;
+	boolean joueurActuelAPoseCarteCeTour    = false;
+	boolean joueurActuelAPiocheCarteCeTour  = false;
+	boolean joueurActuelADeplaceCarteCeTour = false;
 
 	boolean cartesVictoiresDistribues = false;
 
@@ -100,25 +100,53 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Permet de commencer une nouvelle partie, et supprime celle deja en cours.
 	 * 
-	 * @param nombreDeJoueurs le nombre de joueurs dans la partie
+	 * Commencer une nouvelle partie, et supprime celle deja en cours. Le nombre
+	 * total de joueurs doit etre soit 2 ou 3, donc les combinaisons possibles de
+	 * joueurs humains et bots sonts:
+	 * 
+	 * <pre>
+	 * 0, 2
+	 * 0, 3
+	 * 1, 1
+	 * 1, 2
+	 * 2, 0
+	 * 2, 1
+	 * </pre>
+	 * 
+	 * Si incorrect, les nombres de joueurs seront corrigés.
+	 * 
+	 * 
+	 * 
+	 * @param nbHumains Le nombre de joueurs humains.
+	 * @param nbBots    Le nombre de joueurs bots.
 	 */
 	public void commencerNouvellePartie(int nbHumains, int nbBots) {
+
+		// Assurer que le nombre de joueurs soit correct.
+		nbHumains = Math.max(0, nbHumains);
+		nbHumains = Math.min(3, nbHumains);
+
+		nbBots = Math.max(0, nbBots);
+		nbBots = Math.min(3, nbBots);
+
+		if (nbBots + nbHumains > 3)
+			nbBots = 0;
+
+		if (nbBots + nbHumains < 2)
+			nbBots = 2 - (nbBots + nbHumains);
+
+		tapis = new Tapis_Triangulaire(5);
+
+		genererJoueurs(nbHumains, nbBots);
+		iteratorJoueurs = joueurs.iterator();
+
+		debutPartie               = true;
+		cartesVictoiresDistribues = false;
 
 		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
 		// recreers.
 		genererCartes();
-		genererJoueurs(nbHumains, nbBots);
-
-		cartesVictoiresDistribues = false;
-
-		iteratorJoueurs = joueurs.iterator();
-
-//		tapis       = new Tapis_5x3();
-		tapis       = new Tapis_Triangulaire(5);
-		debutPartie = true;
-
 		distribuerCartesVictoires();
 
 		passerAuJoueurSuivant();
@@ -134,11 +162,12 @@ public class ControlleurJeu {
 
 		// Si c'est le debut de la partie, on a pas besoin de verifier si le joueur
 		// actuel a deja pioché/poser une carte...
+		//
 		if (!debutPartie) {
-			if (!joueurAPiocheCarteCeTour)
+			if (!joueurActuelAPiocheCarteCeTour)
 				return false;
 
-			if (!joueurAPoseCarteCeTour)
+			if (!joueurActuelAPoseCarteCeTour)
 				return false;
 		} else
 			debutPartie = false;
@@ -149,9 +178,9 @@ public class ControlleurJeu {
 
 		joueurActuel = iteratorJoueurs.next();
 
-		joueurAPiocheCarteCeTour  = false;
-		joueurAPoseCarteCeTour    = false;
-		joueurADeplaceCarteCeTour = false;
+		joueurActuelAPiocheCarteCeTour  = false;
+		joueurActuelAPoseCarteCeTour    = false;
+		joueurActuelADeplaceCarteCeTour = false;
 
 		String stringCarte = VisitorAffichageString.getRepresentationStringStatic((joueurActuel.getCarteVictoire()));
 
@@ -165,9 +194,12 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Obtenir le {@link Joueur} actuel.
+	 * Obtenir une copie du {@link Joueur} actuel. Ce joueur est une copie pour la
+	 * meme raison qu'on ne peut seuelement obtenir une copie du tapis: pour
+	 * permettre un access et une modification du tapis de jeu actuel sans le risque
+	 * de perturber le jeu actuel.
 	 * 
-	 * @return Le {@link Joueur} actuel.
+	 * @return La copie {@link Joueur} actuel.
 	 */
 	public Joueur getJoueurActuel() {
 		return joueurActuel.getClone();
@@ -183,7 +215,7 @@ public class ControlleurJeu {
 		if (tapis.estRempli())
 			return false;
 
-		if (joueurAPiocheCarteCeTour)
+		if (joueurActuelAPiocheCarteCeTour)
 			return false;
 		if (!cartesVictoiresDistribues)
 			return false;
@@ -196,7 +228,7 @@ public class ControlleurJeu {
 		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, c.toString(), carteString));
 
 		joueurActuel.setCartePiochee(c);
-		joueurAPiocheCarteCeTour = true;
+		joueurActuelAPiocheCarteCeTour = true;
 
 		return true;
 	}
@@ -213,10 +245,13 @@ public class ControlleurJeu {
 		return joueurActuelPoseCarte(joueurActuel.getCartePiochee(), x, y);
 	}
 
+	// Poser une carte donnée. Cette méthode est privée car elle est plus generale.
+	// Les autres methodes comme joueurActuelPoseCartePiochee ou
+	// joueurActuelPoseCarteDansMain appelerons cette methode.
 	boolean joueurActuelPoseCarte(Carte carte, int x, int y) {
-		if (joueurAPoseCarteCeTour)
+		if (joueurActuelAPoseCarteCeTour)
 			return false;
-		if (!joueurAPiocheCarteCeTour)
+		if(carte == null)
 			return false;
 
 		if (!tapis.poserCarte(carte, x, y))
@@ -227,7 +262,7 @@ public class ControlleurJeu {
 		afficherPointsJoueurActuel();
 		afficherTapis();
 
-		joueurAPoseCarteCeTour = true;
+		joueurActuelAPoseCarteCeTour = true;
 		return true;
 	}
 
@@ -239,6 +274,8 @@ public class ControlleurJeu {
 		return c;
 	}
 
+	// Donner une carte victoire a chaque joueur. Seulement appelé en debut de
+	// partie.
 	boolean distribuerCartesVictoires() {
 		if (cartesVictoiresDistribues)
 			return false;
@@ -251,6 +288,9 @@ public class ControlleurJeu {
 	}
 
 	/**
+	 * Deplacer une carte sur le tapis, prennant en compte si le joueur actuel a
+	 * deja deplacé une carte, si la nouvelle position a des voisins...
+	 * 
 	 * @param x1 Abscisse de depart de la carte.
 	 * @param y1 Ordonnée de depart de la carte.
 	 * @param x2 Abscisse d'arrivée de la carte.
@@ -259,7 +299,7 @@ public class ControlleurJeu {
 	 *         sinon.
 	 */
 	public boolean joueurActuelDeplaceCarte(int x1, int y1, int x2, int y2) {
-		if (joueurADeplaceCarteCeTour)
+		if (joueurActuelADeplaceCarteCeTour)
 			return false;
 
 		if (!tapis.deplacerCarte(x1, y1, x2, y2))
@@ -271,12 +311,14 @@ public class ControlleurJeu {
 		afficherPointsJoueurActuel();
 		afficherTapis();
 
-		joueurADeplaceCarteCeTour = true;
+		joueurActuelADeplaceCarteCeTour = true;
 		return true;
 
 	}
 
 	/**
+	 * Est-ce-que le tapis du jeu actuel est rempli ?
+	 * 
 	 * @return {@code true} si le terrain ne peut plus accepter de cartes,
 	 *         {@code false} sinon
 	 */
@@ -291,7 +333,7 @@ public class ControlleurJeu {
 	 *         sinon.
 	 */
 	public boolean joueurActuelPeutFinir() {
-		return (joueurAPiocheCarteCeTour && joueurAPoseCarteCeTour);
+		return (joueurActuelAPiocheCarteCeTour && joueurActuelAPoseCarteCeTour);
 	}
 
 	/**
@@ -310,7 +352,12 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * @return Le {@link Tapis} du jeu actuel.
+	 * Obtenir une copie profonde du tapis, c'est-a-dire une copie de la liste des
+	 * cartes stockés par les tapis, et non seuelement une copie de la reference a
+	 * la liste. <br>
+	 * Cela permet de modifier le tapis, sans influencer le jeu actuel.
+	 * 
+	 * @return Le {@link Tapis} clone du jeu actuel.
 	 */
 	public Tapis getTapis() {
 		return tapis.getClone();
@@ -328,7 +375,7 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Permet d'obtenir le score d'une carte pour l'etat actuel du tapis.
+	 * Obtenir le score d'une carte pour l'etat actuel du tapis.
 	 * 
 	 * @param carte La {@link Carte} pour laquelle on veut calculer le score.
 	 * @return Le score pour la carte.
@@ -338,6 +385,10 @@ public class ControlleurJeu {
 		tapis.accept(v);
 
 		return v.getPoints();
+	}
+
+	public boolean joueurActuelAPiocheCarte() {
+		return joueurActuelAPiocheCarteCeTour;
 	}
 
 }
