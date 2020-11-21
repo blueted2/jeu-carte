@@ -12,9 +12,14 @@ public class StrategyJoueurConsole implements Strategy {
 
 	@Override
 	public boolean execute() {
-		Joueur joueur = c.getJoueurActuel();
 		
-		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x} {y} | finir");
+		if(!c.joueurActuelAPiocheCarte()) {
+			c.joueurActuelPiocheCarte();
+			return false;
+		}
+		
+		
+		System.out.println("Actions possibles: poser {x} {y} | deplacer {x} {y} | finir");
 		System.out.print("Action: ");
 		String[] mots = Utils.getLigneSeparee();
 		if (mots == null)
@@ -32,7 +37,7 @@ public class StrategyJoueurConsole implements Strategy {
 					int x = Integer.parseInt(mots[1]);
 					int y = Integer.parseInt(mots[2]);
 
-					if (!c.joueurActuelPoseCartePiochee(x, y));
+					if (!c.joueurActuelPoseCartePiochee(x, y))
 						System.out.println("Erreur: Pas pu poser carte!");
 				} catch (Exception e) {
 					System.out.println("Erreur: Coordonées incorectes!");
