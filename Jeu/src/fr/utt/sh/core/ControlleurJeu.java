@@ -36,6 +36,8 @@ public class ControlleurJeu {
 	Tapis tapis;
 
 	Joueur joueurActuel;
+	
+	Regles regles;
 
 	boolean debutPartie;
 
@@ -227,10 +229,22 @@ public class ControlleurJeu {
 		System.out.println();
 		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, c.toString(), carteString));
 
-		joueurActuel.setCartePiochee(c);
 		joueurActuelAPiocheCarteCeTour = true;
-
-		return true;
+		
+		switch(regles) {
+			case Autre:
+				break;
+			case Avanced:
+				
+				break;
+			case Standard:
+				joueurActuel.setCartePiochee(c);
+				return true;
+			default:
+				break;
+		}
+		
+		return false;
 	}
 
 	/**
@@ -251,11 +265,13 @@ public class ControlleurJeu {
 	boolean joueurActuelPoseCarte(Carte carte, int x, int y) {
 		if (joueurActuelAPoseCarteCeTour)
 			return false;
-		if(carte == null)
+		if (carte == null)
 			return false;
 
 		if (!tapis.poserCarte(carte, x, y))
 			return false;
+
+		joueurActuel.cartePiochee = null;
 
 		System.out.println();
 		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueurActuel, x, y));
@@ -391,4 +407,8 @@ public class ControlleurJeu {
 		return joueurActuelAPiocheCarteCeTour;
 	}
 
+	
+	public Regles getRegles() {
+		return regles;
+	}
 }

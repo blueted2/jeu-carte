@@ -132,7 +132,6 @@ public class Tapis_Triangulaire extends Tapis {
 
 	}
 
-
 	boolean decalerAGauche() {
 
 		// Verifier que colonne gauche est vide.
@@ -278,8 +277,8 @@ public class Tapis_Triangulaire extends Tapis {
 		v.visit(this);
 	}
 
-	public void accept(VisitorComptageScore visitorComptageScore) {
-		visitorComptageScore.visit(this);
+	public void accept(VisitorComptageScore v) {
+		v.visit(this);
 
 	}
 
