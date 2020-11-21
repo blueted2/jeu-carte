@@ -132,11 +132,6 @@ public class Tapis_Triangulaire extends Tapis {
 
 	}
 
-	@Override
-	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	boolean decalerAGauche() {
 

@@ -34,7 +34,35 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @param y2 Ordonnee arrivée de la carte.
 	 * @return {@code true} si l'échange a pu etre effectuer, {@code false} sinon.
 	 */
-	public abstract boolean deplacerCarte(int x1, int y1, int x2, int y2);
+	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
+		if (!positionLegale(x1, y1))
+			return false;
+		if (!positionLegale(x2, y2))
+			return false;
+
+		if (getCarteAt(x1, y1) == null)
+			return false;
+
+		if (positionJouable(x2, y2)) {
+			if (getCarteAt(x2, y2) != null) {
+				// Si la positoin d'arrivée est jouable et contient une carte, retournée false;
+				return false;
+			}
+
+			setCarteAt(getCarteAt(x1, y1), x2, y2);
+			setCarteAt(null, x1, y1);
+			return true;
+		}
+
+		Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
+		setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
+
+		if (poserCarte(carteDeplacee, x2, y2)) // Essayer de la poser
+			return true;
+
+		setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, le remettre d'ou elle vient.
+		return false;
+	}
 
 	/**
 	 * Obtenir la {@link Carte} a une position donnée.
@@ -45,6 +73,8 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 *         carte a la position spécifiée , sinon une {@link Carte}.
 	 */
 	public abstract Carte getCarteAt(int x, int y);
+	
+	abstract boolean setCarteAt(Carte carte, int x, int y);
 
 	/**
 	 * Poser une {@link Carte} a une certaine position.
@@ -81,7 +111,6 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @return {@code true} si la position est legale, {@code false} sinon.
 	 */
 	public abstract boolean positionLegale(int x, int y);
-
 	
 	/**
 	 * Determiner si a la position donnée, une carte peut etre posée, n'incluant pas les bords.
