@@ -116,8 +116,6 @@ public class Tapis_Rectangulaire extends Tapis {
 		return cartes[x][y];
 	}
 
-
-	// Pas de vérification
 	boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
@@ -125,14 +123,6 @@ public class Tapis_Rectangulaire extends Tapis {
 		return true;
 	}
 
-	/**
-	 * 
-	 * {@inheritDoc}
-	 * 
-	 * @param carte {@inheritDoc}
-	 * @param x     de -1 a largeur inclu
-	 * @param y     de -1 a hauteur inclu
-	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 

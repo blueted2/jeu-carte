@@ -43,7 +43,7 @@ public class ControlleurJeu {
 	boolean joueurAPiocheCarteCeTour  = false;
 	boolean joueurADeplaceCarteCeTour = false;
 
-	HashMap<Joueur, Boolean> joueursAyantPiocheeCarteVictoire;
+	boolean cartesVictoiresDistribues = false;
 
 	ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
@@ -105,12 +105,13 @@ public class ControlleurJeu {
 	 * @param nombreDeJoueurs le nombre de joueurs dans la partie
 	 */
 	public void commencerNouvellePartie(int nbHumains, int nbBots) {
+
+		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
+		// recreers.
 		genererCartes();
 		genererJoueurs(nbHumains, nbBots);
 
-		joueursAyantPiocheeCarteVictoire = new HashMap<Joueur, Boolean>();
-		for (Joueur joueur : joueurs)
-			joueursAyantPiocheeCarteVictoire.put(joueur, false);
+		cartesVictoiresDistribues = false;
 
 		iteratorJoueurs = joueurs.iterator();
 
@@ -118,8 +119,8 @@ public class ControlleurJeu {
 		tapis       = new Tapis_Triangulaire(5);
 		debutPartie = true;
 
-		for (Joueur joueur : joueurs)
-			joueur.piocherCarteVicoire();
+		distribuerCartesVictoires();
+
 		passerAuJoueurSuivant();
 	}
 
@@ -169,40 +170,65 @@ public class ControlleurJeu {
 	 * @return Le {@link Joueur} actuel.
 	 */
 	public Joueur getJoueurActuel() {
-		return joueurActuel;
+		return joueurActuel.getClone();
 	}
 
 	/**
-	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le
-	 * la list des cartes restantes/non piochées.
+	 * Faire piocher une carte au joueur actuel.
 	 * 
-	 * @param joueur Le joueur voulant piocher une carte.
-	 * @return Si le joueur a le droit de piocher une carte, une {@link Carte},
-	 *         sinon {@code null}.
+	 * @return Si le joueur actuel a le droit de piocher une carte, {@code true},
+	 *         sinon {@code false}.
 	 */
-	public Carte piocherCarte(Joueur joueur) {
+	public boolean joueurActuelPiocheCarte() {
 		if (tapis.estRempli())
-			return null;
-		if (joueurActuel != joueur)
-			return null;
+			return false;
+
 		if (joueurAPiocheCarteCeTour)
-			return null;
-		if (!toutJoueurAPiocheCarteVictoire())
-			return null;
+			return false;
+		if (!cartesVictoiresDistribues)
+			return false;
 
 		Carte c = popCarteAleatoire();
 
-		String carte       = VisitorAffichageString.getRepresentationStringStatic(c);
-		String forme       = c.getForme().name();
-		String couleur     = c.getCouleur().name();
-		String remplissage = c.getRemplissage().name();
+		String carteString = VisitorAffichageString.getRepresentationStringStatic(c);
 
 		System.out.println();
-		System.out.println(String.format("%s a pioché un %s %s %s |%s|", joueur, forme, couleur, remplissage, carte));
+		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, c.toString(), carteString));
 
-
+		joueurActuel.setCartePiochee(c);
 		joueurAPiocheCarteCeTour = true;
-		return c;
+
+		return true;
+	}
+
+	/**
+	 * Fait poser la carte piochee du joueur actuel (en verifiant si il a deja
+	 * pioché une carte ce tour).
+	 * 
+	 * @param x Abscisse de la postion de la carte.
+	 * @param y Ordonné de la postion de la carte.
+	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
+	 */
+	public boolean joueurActuelPoseCartePiochee(int x, int y) {
+		return joueurActuelPoseCarte(joueurActuel.getCartePiochee(), x, y);
+	}
+
+	boolean joueurActuelPoseCarte(Carte carte, int x, int y) {
+		if (joueurAPoseCarteCeTour)
+			return false;
+		if (!joueurAPiocheCarteCeTour)
+			return false;
+
+		if (!tapis.poserCarte(carte, x, y))
+			return false;
+
+		System.out.println();
+		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueurActuel, x, y));
+		afficherPointsJoueurActuel();
+		afficherTapis();
+
+		joueurAPoseCarteCeTour = true;
+		return true;
 	}
 
 	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
@@ -213,71 +239,26 @@ public class ControlleurJeu {
 		return c;
 	}
 
-	boolean toutJoueurAPiocheCarteVictoire() {
-		for (Joueur joueur : joueurs)
-			if (!joueursAyantPiocheeCarteVictoire.get(joueur))
-				return false;
+	boolean distribuerCartesVictoires() {
+		if (cartesVictoiresDistribues)
+			return false;
 
+		for (Joueur joueur : joueurs) {
+			joueur.setCarteVictoire(popCarteAleatoire());
+		}
+		cartesVictoiresDistribues = true;
 		return true;
 	}
 
 	/**
-	 * Essayer de piocher une carte victoire. Donnera null si le joueur a deja
-	 * pioché une carte victoire.
-	 * 
-	 * @param joueur
-	 * @return Une carte.
-	 */
-	public Carte piocherCarteVictoire(Joueur joueur) {
-		if (joueursAyantPiocheeCarteVictoire.get(joueur))
-			return null;
-
-		joueursAyantPiocheeCarteVictoire.put(joueur, true);
-		return popCarteAleatoire();
-	}
-
-	/**
-	 * Appelle a son tour {@link Tapis#poserCarte} dans le tapis du jeu, mais prend
-	 * comme paramètre supplémentaire le joueur qui veux poser une carte, afin de
-	 * verifier si le joueur a le droit de poser une carte.
-	 * 
-	 * @see Tapis#poserCarte
-	 * @param joueur Le {@link Joueur} qui veux poser une carte.
-	 * @param carte  La carte a poser.
-	 * @param x      Abscisse de la carte.
-	 * @param y      Ordonnée de la carte.
-	 * @return {@code true} si la carte a pu être posée, {@code false} sinon
-	 */
-	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
-		if (joueur != joueurActuel)
-			return false;
-		if (joueurAPoseCarteCeTour)
-			return false;
-		if (!joueurAPiocheCarteCeTour)
-			return false;
-
-		if (!tapis.poserCarte(carte, x, y))
-			return false;
-
-		System.out.println();
-		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueur, x, y));
-		afficherPointsJoueurActuel();
-		afficherTapis();
-
-		joueurAPoseCarteCeTour = true;
-		return true;
-	}
-
-	/**
-	 * @param joueur Le joueur essayant de deplacer une carte.
-	 * @param x1     Abscisse de depart de la carte.
-	 * @param y1     Ordonnée de depart de la carte.
-	 * @param x2     Abscisse d'arrivée de la carte.
-	 * @param y2     Ordonnée d'arrivée de la carte.
+	 * @param x1 Abscisse de depart de la carte.
+	 * @param y1 Ordonnée de depart de la carte.
+	 * @param x2 Abscisse d'arrivée de la carte.
+	 * @param y2 Ordonnée d'arrivée de la carte.
 	 * @return {@code true} si le deplacement a pu etre effectué, {@code false}
 	 *         sinon.
 	 */
-	public boolean deplacerCarte(Joueur joueur, int x1, int y1, int x2, int y2) {
+	public boolean joueurActuelDeplaceCarte(int x1, int y1, int x2, int y2) {
 		if (joueurADeplaceCarteCeTour)
 			return false;
 
@@ -285,7 +266,8 @@ public class ControlleurJeu {
 			return false;
 
 		System.out.println();
-		System.out.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueur, x1, y1, x2, y2));
+		System.out
+				.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueurActuel, x1, y1, x2, y2));
 		afficherPointsJoueurActuel();
 		afficherTapis();
 

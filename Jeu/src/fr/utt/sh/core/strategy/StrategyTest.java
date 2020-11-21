@@ -22,12 +22,18 @@ public class StrategyTest implements Strategy {
 	ControlleurJeu c = ControlleurJeu.getInstance();
 
 	@Override
-	public boolean execute(Joueur joueur) {
+	public boolean execute() {
+		
+		c.joueurActuelPiocheCarte();
+		
+		
+		
 		Tapis tapisTemp = c.getTapis();
 		int   lTapis    = tapisTemp.getLargeur();
 		int   hTapis    = tapisTemp.getHauteur();
 
-		joueur.piocherCarte();
+		Joueur joueurActuel = c.getJoueurActuel();
+		Carte cartePiochee = joueurActuel.getCartePiochee();
 
 		int posXMax  = -2; // Position invalide, pour tester si la valeur a été changée.
 		int posYMax  = -2;
@@ -37,7 +43,6 @@ public class StrategyTest implements Strategy {
 			for (int x = 0; x < lTapis; x++) {
 
 				if (tapisTemp.positionJouable(x, y)) {
-					Carte cartePiochee = joueur.getCartePiochee();
 					if (tapisTemp.poserCarte(cartePiochee, x, y)) {
 
 						VisitorComptageScore v = new VisitorComptageScoreStandard(cartePiochee);
@@ -49,15 +54,13 @@ public class StrategyTest implements Strategy {
 							posXMax  = x;
 							posYMax  = y;
 						}
-
 						tapisTemp.retirerCarte(x, y);
 					}
 				}
-
 			}
 		}
 
-		joueur.poserCarte(posXMax, posYMax);
+		c.joueurActuelPoseCartePiochee(posXMax, posYMax);
 		return true;
 	}
 }

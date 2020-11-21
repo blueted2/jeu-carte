@@ -8,10 +8,12 @@ import fr.utt.sh.core.Joueur;
 
 public class StrategyJoueurConsole implements Strategy {
 
-	ControlleurJeu cj = ControlleurJeu.getInstance();
+	ControlleurJeu c = ControlleurJeu.getInstance();
 
 	@Override
-	public boolean execute(Joueur joueur) {
+	public boolean execute() {
+		Joueur joueur = c.getJoueurActuel();
+		
 		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x} {y} | finir");
 		System.out.print("Action: ");
 		String[] mots = Utils.getLigneSeparee();
@@ -20,7 +22,7 @@ public class StrategyJoueurConsole implements Strategy {
 
 		switch (mots[0]) {
 			case "piocher":
-				if (!joueur.piocherCarte())
+				if (!c.joueurActuelPiocheCarte())
 					System.out.println("Erreur: Pas pu piocher carte!");
 
 				return false;
@@ -30,7 +32,7 @@ public class StrategyJoueurConsole implements Strategy {
 					int x = Integer.parseInt(mots[1]);
 					int y = Integer.parseInt(mots[2]);
 
-					if (!joueur.poserCarte(x, y))
+					if (!c.joueurActuelPoseCartePiochee(x, y));
 						System.out.println("Erreur: Pas pu poser carte!");
 				} catch (Exception e) {
 					System.out.println("Erreur: Coordonées incorectes!");
@@ -45,7 +47,7 @@ public class StrategyJoueurConsole implements Strategy {
 					int x2 = Integer.parseInt(mots[3]);
 					int y2 = Integer.parseInt(mots[4]);
 
-					if (!joueur.deplacerCarte(x1, y1, x2, y2))
+					if (!c.joueurActuelDeplaceCarte(x1, y1, x2, y2))
 						System.out.println("Erreur: Pas pu déplacer carte!");
 
 				} catch (Exception e) {
@@ -54,7 +56,7 @@ public class StrategyJoueurConsole implements Strategy {
 				return false;
 
 			case "finir":
-				if (cj.joueurActuelPeutFinir()) {
+				if (c.joueurActuelPeutFinir()) {
 					return true;
 				}
 

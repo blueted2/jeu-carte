@@ -1,21 +1,17 @@
 package fr.utt.sh.core.strategy;
-
-import fr.utt.sh.core.Joueur;
-
 /**
  * Classe interface de strategy. Lorsque le joueur veux jouer, elle appelle la
- * méthode {@link #execute} avec lui même comme paramètre. La méthode
- * {@link #execute} décide ensuite quelles actions seront prises en fonction de
- * l'etat du joueur et le tapis.
+ * méthode {@link #execute}. La méthode {@link #execute} décide ensuite quelles
+ * actions seront prises en fonction de l'etat du joueur et le tapis.
  * 
  * @author grego
  *
  */
 public interface Strategy {
 	/**
-	 * Appelé quand le joueur doit jouer. Prend en paramètre un {@link Joueur}. 
-	 * @param joueur Le {@link Joueur} auquel cette strategy va s'appliquer. 
+	 * Appelé quand le joueur doit jouer.
+	 * 
 	 * @return {@code true} si la strategy a pu être effectuée, {@code false} sinon.
 	 */
-	public boolean execute(Joueur joueur);
+	public boolean execute();
 }
