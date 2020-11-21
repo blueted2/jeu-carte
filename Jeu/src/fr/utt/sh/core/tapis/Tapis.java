@@ -128,7 +128,9 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @param x
 	 * @param y
 	 */
-	public abstract void retirerCarte(int x, int y);
+	public void retirerCarte(int x, int y) {
+		setCarteAt(null, x, y);
+	}
 	
 	/**Obtenir la largeur du tapis.
 	 * @return {@code int}.

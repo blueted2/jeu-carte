@@ -116,10 +116,6 @@ public class Tapis_Rectangulaire extends Tapis {
 		return cartes[x][y];
 	}
 
-	@Override
-	public void retirerCarte(int x, int y) {
-		setCarteAt(null, x, y);
-	}
 
 	// Pas de vérification
 	boolean setCarteAt(Carte carte, int x, int y) {
