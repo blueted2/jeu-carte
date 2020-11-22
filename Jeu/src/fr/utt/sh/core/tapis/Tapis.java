@@ -49,9 +49,14 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 				return false;
 			}
 
-			setCarteAt(getCarteAt(x1, y1), x2, y2);
-			setCarteAt(null, x1, y1);
-			return true;
+			Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
+			setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
+
+			if (poserCarte(carteDeplacee, x2, y2))
+				return true;
+
+			setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, le remettre d'ou elle vient.
+			return false;
 		}
 
 		Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
@@ -73,7 +78,7 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 *         carte a la position spécifiée , sinon une {@link Carte}.
 	 */
 	public abstract Carte getCarteAt(int x, int y);
-	
+
 	abstract boolean setCarteAt(Carte carte, int x, int y);
 
 	/**
@@ -111,11 +116,12 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @return {@code true} si la position est legale, {@code false} sinon.
 	 */
 	public abstract boolean positionLegale(int x, int y);
-	
+
 	/**
-	 * Determiner si a la position donnée, une carte peut etre posée, n'incluant pas les bords.
-	 * <br> 
-	 * Different de {@link #positionLegale(int, int)}. 
+	 * Determiner si a la position donnée, une carte peut etre posée, n'incluant pas
+	 * les bords. <br>
+	 * Different de {@link #positionLegale(int, int)}.
+	 * 
 	 * @param x Abscisse de la position.
 	 * @param y Ordonnée de la position.
 	 * @return {@code true} si la position est jouable, {@code false} sinon.
@@ -131,13 +137,17 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	public void retirerCarte(int x, int y) {
 		setCarteAt(null, x, y);
 	}
-	
-	/**Obtenir la largeur du tapis.
+
+	/**
+	 * Obtenir la largeur du tapis.
+	 * 
 	 * @return {@code int}.
 	 */
 	public abstract int getLargeur();
-	
-	/**Obtenir la hauteur du tapis.
+
+	/**
+	 * Obtenir la hauteur du tapis.
+	 * 
 	 * @return {@code int}.
 	 */
 	public abstract int getHauteur();

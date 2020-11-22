@@ -9,17 +9,33 @@ import fr.utt.sh.core.Joueur;
 public class StrategyJoueurConsole implements Strategy {
 
 	ControlleurJeu c = ControlleurJeu.getInstance();
+	
+	Joueur joueurActuel;
 
 	@Override
 	public boolean execute() {
 		
-		if(!c.joueurActuelAPiocheCarte()) {
-			c.joueurActuelPiocheCarte();
-			return false;
+		
+		joueurActuel = c.getJoueurActuel();
+		switch (c.getRegles()) {
+
+			case Standard:
+				return executeStandard();
+			case Advanced:
+				return executeAdvanced();
+
+			case Autre:
+				break;
+			default:
+				break;
 		}
-		
-		
-		System.out.println("Actions possibles: poser {x} {y} | deplacer {x} {y} | finir");
+
+		return false;
+
+	}
+
+	private boolean executeStandard() {
+		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x} {y} | finir");
 		System.out.print("Action: ");
 		String[] mots = Utils.getLigneSeparee();
 		if (mots == null)
@@ -73,4 +89,70 @@ public class StrategyJoueurConsole implements Strategy {
 				return false;
 		}
 	}
+
+	private boolean executeAdvanced() {
+		System.out.println("Actions possibles: piocher | poser {i} {x} {y} | deplacer {x} {y} | finir");
+		System.out.print("Action: ");
+		String[] mots = Utils.getLigneSeparee();
+		if (mots == null)
+			return false;
+
+		switch (mots[0]) {
+			case "piocher":
+				if (!c.joueurActuelPiocheCarte())
+					System.out.println("Erreur: Pas pu piocher carte!");
+
+				return false;
+
+			case "poser":
+				try {
+					int i = Integer.parseInt(mots[1]);
+					int x = Integer.parseInt(mots[2]);
+					int y = Integer.parseInt(mots[3]);
+					
+					Carte carte = joueurActuel.getCarteDansMain(i);
+					
+					if (!c.joueurActuelPoseCarteDansMain(carte, x, y))
+						System.out.println("Erreur: Pas pu poser carte!");
+					
+				} catch (Exception e) {
+					System.out.println("Erreur: Index ou Coordonées incorectes!");
+				}
+
+				return false;
+
+			case "deplacer":
+				
+				int x1, x2, y1, y2;
+				try {
+					x1 = Integer.parseInt(mots[1]);
+					y1 = Integer.parseInt(mots[2]);
+					x2 = Integer.parseInt(mots[3]);
+					y2 = Integer.parseInt(mots[4]);
+					
+				} catch (Exception e) {
+					System.out.println(e);
+					System.out.println("Erreur: Coordonées incorectes!");
+					return false;
+				}
+				
+				if (!c.joueurActuelDeplaceCarte(x1, y1, x2, y2))
+					System.out.println("Erreur: Pas pu déplacer carte!");
+				
+				return false;
+
+			case "finir":
+				if (c.joueurActuelPeutFinir()) {
+					return true;
+				}
+
+				System.out.println("Erreur: Joueur ne peut pas finir a ce moment!");
+				return false;
+
+			default:
+				System.out.println("Erreur: Commande incorrecte!");
+				return false;
+		}
+	}
+
 }

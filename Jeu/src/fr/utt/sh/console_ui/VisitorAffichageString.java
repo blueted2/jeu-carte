@@ -2,6 +2,7 @@ package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Carte.Remplissage;
+import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
@@ -88,7 +89,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 		int largeurTapis = tapis.getLargeur();
 		int hauteurTapis = tapis.getHauteur();
 
-		String ligneNombres = "   0  ";
+		String ligneNombres    = "   0  ";
 		String ligneHaut       = "  ┌──┐ \n";
 		String ligneSeparateur = "  ├──┼──";
 		String ligneBas        = "  └──";
@@ -98,7 +99,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 			ligneBas     += "┴──";
 		}
 		ligneNombres += "\n";
-		ligneBas += "┘ \n";
+		ligneBas     += "┘ \n";
 
 		representationString += ligneNombres;
 		representationString += ligneHaut;
@@ -135,6 +136,25 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	}
 
+	public void visit(Joueur joueur) {
+		representationString = "";
+
+		String ligneHaut = "       ";
+		String ligneBas  = "Main: |";
+
+
+		int i = 0;
+		for (Carte carte : joueur.getCartesDansMain()) {
+			String carteString = getRepresentationStringStatic(carte);
+			ligneBas += carteString + "|";
+			ligneHaut += i + "  ";
+			i++;
+		}
+		
+		representationString += ligneHaut + "\n";
+		representationString += ligneBas + "\n";
+	}
+
 	/**
 	 * Raccourcis pour:
 	 * 
@@ -151,6 +171,9 @@ public class VisitorAffichageString implements VisitorAffichage {
 	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
 	 */
 	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
+		if (visitable == null)
+			return "";
+
 		VisitorAffichageString vis = new VisitorAffichageString();
 		visitable.accept(vis);
 		return vis.representationString;

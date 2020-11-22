@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import fr.utt.sh.console_ui.VisitableAffichage;
+import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 
@@ -20,7 +22,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  * @author grego
  *
  */
-public class Joueur {
+public class Joueur implements VisitableAffichage {
 
 	ArrayList<Carte> cartesMain = new ArrayList<>();
 
@@ -55,6 +57,7 @@ public class Joueur {
 		this.strategy      = joueur.strategy;
 		this.cartePiochee  = joueur.cartePiochee;
 		this.carteVictoire = joueur.carteVictoire;
+		this.cartesMain = new ArrayList<Carte>(joueur.cartesMain);
 	}
 
 	/**
@@ -97,18 +100,23 @@ public class Joueur {
 		return cartesMain.get(index);
 	}
 
+	public boolean hasCarte(Carte carte) {
+		return cartesMain.contains(carte);
+	}
+	
+	
 	public void ajouterCarteDansMain(Carte carte) {
 		cartesMain.add(carte);
 	}
-	
+
 	public boolean retirerCarteDansMain(Carte carte) {
-		if(!cartesMain.contains(carte))
+		if (!cartesMain.contains(carte))
 			return false;
-		
+
 		cartesMain.remove(carte);
 		return true;
 	}
-	
+
 	/**
 	 * @return {@code int} le nombre de cartes.
 	 */
@@ -142,4 +150,11 @@ public class Joueur {
 	public Joueur getClone() {
 		return new Joueur(this);
 	}
+
+	@Override
+	public void accept(VisitorAffichage v) {
+		v.visit(this);
+	}
+
+	
 }
