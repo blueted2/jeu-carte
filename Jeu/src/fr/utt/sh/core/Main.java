@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		ControlleurJeu c = ControlleurJeu.getInstance();
-		c.commencerNouvellePartie(2, 0, Regles.Advanced);		
+		c.commencerNouvellePartie(0, 3, Regles.Advanced);		
 		
 		
 		

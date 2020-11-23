@@ -22,7 +22,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  * @author grego
  *
  */
-public class Joueur implements VisitableAffichage {
+public class Joueur {
 
 	ArrayList<Carte> cartesMain = new ArrayList<>();
 
@@ -57,7 +57,7 @@ public class Joueur implements VisitableAffichage {
 		this.strategy      = joueur.strategy;
 		this.cartePiochee  = joueur.cartePiochee;
 		this.carteVictoire = joueur.carteVictoire;
-		this.cartesMain = new ArrayList<Carte>(joueur.cartesMain);
+		this.cartesMain    = new ArrayList<Carte>(joueur.cartesMain);
 	}
 
 	/**
@@ -103,8 +103,7 @@ public class Joueur implements VisitableAffichage {
 	public boolean hasCarte(Carte carte) {
 		return cartesMain.contains(carte);
 	}
-	
-	
+
 	public void ajouterCarteDansMain(Carte carte) {
 		cartesMain.add(carte);
 	}
@@ -151,10 +150,18 @@ public class Joueur implements VisitableAffichage {
 		return new Joueur(this);
 	}
 
-	@Override
-	public void accept(VisitorAffichage v) {
-		v.visit(this);
+	public String getStringCartesDansMain() {
+		String ligneHaut = " ";
+		String ligneBas  = "|";
+
+		int i = 0;
+		for (Carte carte : cartesMain) {
+			ligneHaut += i + "  ";
+			ligneBas  += carte.getStringCarte() + "|";
+			i++;
+		}
+		
+		return ligneHaut + "\n" + ligneBas;
 	}
 
-	
 }

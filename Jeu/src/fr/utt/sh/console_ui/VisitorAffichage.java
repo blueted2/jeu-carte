@@ -20,13 +20,5 @@ public interface VisitorAffichage {
 	 * @param tapis {@link Tapis_Triangulaire}
 	 */
 	public void visit(Tapis_Triangulaire tapis);
-	
-	/**
-	 * Visiter une {@link Carte}, pour pouvoir créer une version affichable.
-	 * @param carte {@link Carte}
-	 */
-	public void visit(Carte carte);
 
-	public void visit(Joueur joueur);
-	
 }

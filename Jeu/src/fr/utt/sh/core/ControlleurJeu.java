@@ -151,7 +151,7 @@ public class ControlleurJeu {
 		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
 		// recreers.
 		genererCartes();
-		
+
 		// Au debut de la partie, il faut jeter une carte.
 		popCarteAleatoire();
 
@@ -208,7 +208,7 @@ public class ControlleurJeu {
 		switch (regles) {
 			case Standard:
 				Carte carteVictoire = joueurActuel.getCarteVictoire();
-				String stringCarte = VisitorAffichageString.getRepresentationStringStatic(carteVictoire);
+				String stringCarte = carteVictoire.getStringCarte();
 
 				System.out.println(String.format("Carte victoire: |%s|", stringCarte));
 				break;
@@ -216,7 +216,7 @@ public class ControlleurJeu {
 				break;
 			case Advanced:
 				System.out.println();
-				System.out.println(VisitorAffichageString.getRepresentationStringStatic(joueurActuel));
+				System.out.println(joueurActuel.getStringCartesDansMain());
 
 				break;
 			default:
@@ -263,7 +263,7 @@ public class ControlleurJeu {
 
 		Carte c = popCarteAleatoire();
 
-		String carteString = VisitorAffichageString.getRepresentationStringStatic(c);
+		String carteString = c.getStringCarte();
 
 		System.out.println();
 		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, c.toString(), carteString));
@@ -276,7 +276,7 @@ public class ControlleurJeu {
 			case Advanced:
 				joueurActuel.ajouterCarteDansMain(c);
 				System.out.println();
-				System.out.println(VisitorAffichageString.getRepresentationStringStatic(joueurActuel));
+				System.out.println(joueurActuel.getStringCartesDansMain());
 				return true;
 			case Standard:
 				joueurActuel.setCartePiochee(c);
@@ -300,10 +300,9 @@ public class ControlleurJeu {
 	 */
 	public boolean joueurActuelPoseCarteDansMain(Carte carte, int x, int y) {
 
-		
-		if(joueurActuel.getNombreCartesDansMain() == 1)
+		if (joueurActuel.getNombreCartesDansMain() == 1)
 			return false;
-		
+
 		if (!joueurActuel.hasCarte(carte))
 			return false;
 
@@ -468,9 +467,7 @@ public class ControlleurJeu {
 	}
 
 	private void afficherPointsJoueurActuel() {
-		String stringCarteVictoire = VisitorAffichageString
-				.getRepresentationStringStatic(joueurActuel.getCarteVictoire());
-
+		String stringCarteVictoire = joueurActuel.getCarteVictoire().getStringCarte();
 		if (regles == Regles.Standard)
 			System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
 					getScorePourCarte(joueurActuel.getCarteVictoire())));

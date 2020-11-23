@@ -5,28 +5,64 @@ package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.console_ui.VisitorAffichage;
+import fr.utt.sh.core.Carte.Remplissage;
 
 /**
- * Une implementation de {@link VisitableAffichage}. 
+ * Une implementation de {@link VisitableAffichage}.
+ * 
  * @author grego
  *
  */
-public class Carte implements VisitableAffichage {
+public class Carte {
 
-	Couleur couleur;
-	Remplissage remplissage;
-	Forme forme;
+	private Couleur     couleur;
+	private Remplissage remplissage;
+	private Forme       forme;
+
+	private String stringCarte;
 
 	/**
 	 * Constructeur {@link Carte}.
-	 * @param couleurCarte La {@link Couleur} de la forme sur la carte.
+	 * 
+	 * @param couleurCarte     La {@link Couleur} de la forme sur la carte.
 	 * @param remplissageCarte Le {@link Remplissage} de la forme de la carte.
-	 * @param formeCarte La {@link forme} sur la carte.
+	 * @param formeCarte       La {@link forme} sur la carte.
 	 */
 	public Carte(Couleur couleurCarte, Remplissage remplissageCarte, Forme formeCarte) {
-		couleur = couleurCarte;
+		couleur     = couleurCarte;
 		remplissage = remplissageCarte;
-		forme = formeCarte;
+		forme       = formeCarte;
+
+		char   charCouleur = getCouleur().name().charAt(0);
+		String charForme   = getCharForme();
+		stringCarte = String.format("%s%s", charCouleur, charForme);
+	}
+	
+	private String getCharForme() {
+		if (getRemplissage() == Remplissage.Rempli)
+			switch (getForme()) {
+				case Carre:
+					return "■";
+				case Cercle:
+					return "▲";
+				case Triangle:
+					return "●";
+				default:
+					return "?";
+			}
+
+		else
+			switch (getForme()) {
+				case Carre:
+					return "□";
+				case Cercle:
+					return "○";
+				case Triangle:
+					return "△";
+				default:
+					return "?";
+			}
+
 	}
 
 	/**
@@ -72,6 +108,7 @@ public class Carte implements VisitableAffichage {
 
 	/**
 	 * Formes possibles sur une carte.
+	 * 
 	 * @author grego
 	 *
 	 */
@@ -79,11 +116,12 @@ public class Carte implements VisitableAffichage {
 		Triangle, Carre, Cercle
 	}
 
-	public void accept(VisitorAffichage v) {
-		v.visit(this);
-	}
-	
 	public String toString() {
 		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}
+	
+	public String getStringCarte() {
+		return stringCarte;
+	}
+
 }

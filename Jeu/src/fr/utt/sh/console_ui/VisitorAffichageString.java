@@ -17,12 +17,6 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
 
-	public void visit(Carte carte) {
-		char   charCouleur = carte.getCouleur().name().charAt(0);
-		String charForme   = getCharForme(carte);
-		representationString = String.format("%s%s", charCouleur, charForme);
-	}
-
 	public void visit(Tapis_Rectangulaire tapis) {
 
 		representationString = "";
@@ -66,7 +60,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = getRepresentationStringStatic(carte);
+					strCarte = carte.getStringCarte();
 				}
 
 				ligne += strCarte + "│";
@@ -115,7 +109,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = getRepresentationStringStatic(carte);
+					strCarte = carte.getStringCarte();
 				}
 
 				ligne += strCarte + "│";
@@ -136,24 +130,6 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	}
 
-	public void visit(Joueur joueur) {
-		representationString = "";
-
-		String ligneHaut = "       ";
-		String ligneBas  = "Main: |";
-
-
-		int i = 0;
-		for (Carte carte : joueur.getCartesDansMain()) {
-			String carteString = getRepresentationStringStatic(carte);
-			ligneBas += carteString + "|";
-			ligneHaut += i + "  ";
-			i++;
-		}
-		
-		representationString += ligneHaut + "\n";
-		representationString += ligneBas + "\n";
-	}
 
 	/**
 	 * Raccourcis pour:
@@ -186,30 +162,5 @@ public class VisitorAffichageString implements VisitorAffichage {
 		return representationString;
 	}
 
-	String getCharForme(Carte carte) {
-		if (carte.getRemplissage() == Remplissage.Rempli)
-			switch (carte.getForme()) {
-				case Carre:
-					return "■";
-				case Cercle:
-					return "▲";
-				case Triangle:
-					return "●";
-				default:
-					return "?";
-			}
-
-		else
-			switch (carte.getForme()) {
-				case Carre:
-					return "□";
-				case Cercle:
-					return "○";
-				case Triangle:
-					return "△";
-				default:
-					return "?";
-			}
-
-	}
+	
 }
