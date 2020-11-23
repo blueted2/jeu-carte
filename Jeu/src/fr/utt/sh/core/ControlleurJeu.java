@@ -82,12 +82,12 @@ public class ControlleurJeu {
 
 		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
 			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
-				joueurs.add(new Joueur("Bot", new StrategyTest()));
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
 				nombreBotsAjoutes++;
 			}
 
 			if (nombreHumainsAjoutes < nombreDeJoueursHumains) {
-				joueurs.add(new Joueur("Humain", new StrategyJoueurConsole()));
+				joueurs.add(new Joueur("Humain_" + nombreHumainsAjoutes, new StrategyJoueurConsole()));
 				nombreHumainsAjoutes++;
 			}
 		}
@@ -151,6 +151,9 @@ public class ControlleurJeu {
 		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
 		// recreers.
 		genererCartes();
+		
+		// Au debut de la partie, il faut jeter une carte.
+		popCarteAleatoire();
 
 		switch (regles) {
 			case Standard:
@@ -181,7 +184,7 @@ public class ControlleurJeu {
 		// actuel a deja pioché/poser une carte...
 		//
 		if (!debutPartie) {
-			if (!joueurActuelAPiocheCarteCeTour)
+			if (!joueurActuelAPiocheCarteCeTour && cartesRestantes.size() > 0)
 				return false;
 
 			if (!joueurActuelAPoseCarteCeTour)
@@ -255,6 +258,9 @@ public class ControlleurJeu {
 												// piocher une.
 				return false;
 
+		if (cartesRestantes.size() == 0)
+			return false;
+
 		Carte c = popCarteAleatoire();
 
 		String carteString = VisitorAffichageString.getRepresentationStringStatic(c);
@@ -293,6 +299,11 @@ public class ControlleurJeu {
 	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
 	 */
 	public boolean joueurActuelPoseCarteDansMain(Carte carte, int x, int y) {
+
+		
+		if(joueurActuel.getNombreCartesDansMain() == 1)
+			return false;
+		
 		if (!joueurActuel.hasCarte(carte))
 			return false;
 
@@ -347,6 +358,8 @@ public class ControlleurJeu {
 
 	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
 	private Carte popCarteAleatoire() {
+		if (cartesRestantes.size() == 0)
+			return null;
 		int   i = new Random().nextInt(cartesRestantes.size());
 		Carte c = cartesRestantes.get(i);
 		cartesRestantes.remove(i);
