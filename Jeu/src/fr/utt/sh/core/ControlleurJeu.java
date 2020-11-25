@@ -202,6 +202,8 @@ public class ControlleurJeu {
 		System.out.println("-------------------------------------");
 		System.out.println(String.format("A %s de jouer.", joueurActuel));
 
+		afficherTapis();
+
 		switch (regles) {
 			case Standard:
 				Carte carteVictoire = joueurActuel.getCarteVictoire();
@@ -219,8 +221,6 @@ public class ControlleurJeu {
 			default:
 				break;
 		}
-
-		afficherTapis();
 
 		return true;
 	}
