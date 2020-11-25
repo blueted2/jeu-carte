@@ -44,6 +44,7 @@ public class ControlleurJeu {
 	private boolean joueurActuelAPoseCarteCeTour    = false;
 	private boolean joueurActuelAPiocheCarteCeTour  = false;
 	private boolean joueurActuelADeplaceCarteCeTour = false;
+	private boolean cartesVictoiresDistribues       = false;
 
 	private boolean cartesVictoiresDistribues = false;
 
@@ -145,8 +146,7 @@ public class ControlleurJeu {
 		genererJoueurs(nbHumains, nbBots);
 		iteratorJoueurs = joueurs.iterator();
 
-		debutPartie               = true;
-		cartesVictoiresDistribues = false;
+		debutPartie = true;
 
 		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
 		// recreers.
