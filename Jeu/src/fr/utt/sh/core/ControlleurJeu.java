@@ -29,23 +29,23 @@ public class ControlleurJeu {
 
 	private static ControlleurJeu instance;
 
-	ArrayList<Carte>  cartesRestantes;
-	ArrayList<Joueur> joueurs;
-	Iterator<Joueur>  iteratorJoueurs;
+	private ArrayList<Carte>  cartesRestantes;
+	private ArrayList<Joueur> joueurs;
+	private Iterator<Joueur>  iteratorJoueurs;
 
-	Tapis tapis;
+	private Tapis tapis;
 
-	Joueur joueurActuel;
+	private Joueur joueurActuel;
 
-	boolean debutPartie;
+	private Regles regles;
 
-	boolean joueurAPoseCarteCeTour    = false;
-	boolean joueurAPiocheCarteCeTour  = false;
-	boolean joueurADeplaceCarteCeTour = false;
+	private boolean debutPartie                     = false;
+	private boolean joueurActuelAPoseCarteCeTour    = false;
+	private boolean joueurActuelAPiocheCarteCeTour  = false;
+	private boolean joueurActuelADeplaceCarteCeTour = false;
+	private boolean cartesVictoiresDistribues       = false;
 
-	HashMap<Joueur, Boolean> joueursAyantPiocheeCarteVictoire;
-
-	ControlleurJeu() {
+	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
 		joueurs         = new ArrayList<Joueur>();
 	}
@@ -61,7 +61,7 @@ public class ControlleurJeu {
 
 	}
 
-	void genererCartes() {
+	private void genererCartes() {
 		cartesRestantes = new ArrayList<Carte>();
 		for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
 			for (Carte.Couleur couleur : Carte.Couleur.values()) {
@@ -72,13 +72,29 @@ public class ControlleurJeu {
 		}
 	}
 
-	void genererJoueurs(int nombreDeJoueurs) {
-		if (nombreDeJoueurs == 2) {
-			joueurs = new ArrayList<Joueur>();
-			joueurs.add(new Joueur("Humain", new StrategyJoueurConsole()));
-			joueurs.add(new Joueur("Bot", new StrategyTest()));
+	private void genererJoueurs(int nombreDeJoueursHumains, int nombreDeJoueuersBots) {
+		joueurs = new ArrayList<Joueur>();
 
+		int nombreBotsAjoutes    = 0;
+		int nombreHumainsAjoutes = 0;
+
+		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
+			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
+				nombreBotsAjoutes++;
+			}
+
+			if (nombreHumainsAjoutes < nombreDeJoueursHumains) {
+				joueurs.add(new Joueur("Humain_" + nombreHumainsAjoutes, new StrategyJoueurConsole()));
+				nombreHumainsAjoutes++;
+			}
+
+			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
+				nombreBotsAjoutes++;
+			}
 		}
+
 		return;
 //		joueurs = new ArrayList<Joueur>();
 //		for (int i = 0; i < nombreDeJoueurs; i++) {
@@ -89,26 +105,73 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Permet de commencer une nouvelle partie, et supprime celle deja en cours.
 	 * 
-	 * @param nombreDeJoueurs le nombre de joueurs dans la partie
+	 * Commencer une nouvelle partie, et supprime celle deja en cours. Le nombre
+	 * total de joueurs doit etre soit 2 ou 3, donc les combinaisons possibles de
+	 * joueurs humains et bots sonts:
+	 * 
+	 * <pre>
+	 * 0, 2
+	 * 0, 3
+	 * 1, 1
+	 * 1, 2
+	 * 2, 0
+	 * 2, 1
+	 * </pre>
+	 * 
+	 * Si incorrect, les nombres de joueurs seront corrigés.
+	 * 
+	 * 
+	 * 
+	 * @param nbHumains Le nombre de joueurs humains.
+	 * @param nbBots    Le nombre de joueurs bots.
 	 */
-	public void commencerNouvellePartie(int nombreDeJoueurs) {
-		genererCartes();
-		genererJoueurs(nombreDeJoueurs);
+	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles) {
 
-		joueursAyantPiocheeCarteVictoire = new HashMap<Joueur, Boolean>();
-		for (Joueur joueur : joueurs)
-			joueursAyantPiocheeCarteVictoire.put(joueur, false);
+		// Assurer que le nombre de joueurs soit correct.
+		nbHumains = Math.max(0, nbHumains);
+		nbHumains = Math.min(3, nbHumains);
 
+		nbBots = Math.max(0, nbBots);
+		nbBots = Math.min(3, nbBots);
+
+		if (nbBots + nbHumains > 3)
+			nbBots = 0;
+
+		if (nbBots + nbHumains < 2)
+			nbBots = 2 - (nbBots + nbHumains);
+
+		this.regles = regles;
+
+		tapis = new Tapis_Triangulaire(5);
+//		tapis = new Tapis_5x3();
+
+		genererJoueurs(nbHumains, nbBots);
 		iteratorJoueurs = joueurs.iterator();
 
-//		tapis       = new Tapis_5x3();
-		tapis = new Tapis_Triangulaire(5);
 		debutPartie = true;
 
-		for (Joueur joueur : joueurs)
-			joueur.piocherCarteVicoire();
+		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
+		// recreers.
+		genererCartes();
+
+		// Au debut de la partie, il faut jeter une carte.
+		popCarteAleatoire();
+
+		switch (regles) {
+			case Standard:
+				distribuerCartesVictoires();
+				break;
+			case Advanced:
+				distribuerCartesDansMain();
+				break;
+			case Autre:
+				throw new UnsupportedOperationException("regles par implémenté");
+			default:
+				break;
+
+		}
+
 		passerAuJoueurSuivant();
 	}
 
@@ -122,15 +185,15 @@ public class ControlleurJeu {
 
 		// Si c'est le debut de la partie, on a pas besoin de verifier si le joueur
 		// actuel a deja pioché/poser une carte...
+		//
 		if (!debutPartie) {
-			if (!joueurAPiocheCarteCeTour)
+			if (!joueurActuelAPiocheCarteCeTour && ilResteDesCartes())
 				return false;
 
-			if (!joueurAPoseCarteCeTour)
+			if (!joueurActuelAPoseCarteCeTour)
 				return false;
 		} else
 			debutPartie = false;
-		
 
 		// Si on est a la fin de l'iterator, en créer un nouveau.
 		if (!iteratorJoueurs.hasNext())
@@ -138,159 +201,246 @@ public class ControlleurJeu {
 
 		joueurActuel = iteratorJoueurs.next();
 
-		joueurAPiocheCarteCeTour  = false;
-		joueurAPoseCarteCeTour    = false;
-		joueurADeplaceCarteCeTour = false;
-
-		String stringCarte = VisitorAffichageString.getRepresentationStringStatic((joueurActuel.getCarteVictoire()));
+		joueurActuelAPiocheCarteCeTour  = false;
+		joueurActuelAPoseCarteCeTour    = false;
+		joueurActuelADeplaceCarteCeTour = false;
 
 		System.out.println("-------------------------------------");
-		System.out.println(String.format("A %s de jouer", joueurActuel));
-		System.out.println(String.format("Carte victoire: |%s|", stringCarte));
+		System.out.println(String.format("A %s de jouer.", joueurActuel));
 
 		afficherTapis();
+
+		switch (regles) {
+			case Standard:
+				Carte carteVictoire = joueurActuel.getCarteVictoire();
+				String stringCarte = carteVictoire.getStringCarte();
+
+				System.out.println(String.format("Carte victoire: |%s|", stringCarte));
+				break;
+
+			case Advanced:
+				afficherMainJoueurActuel();
+				break;
+
+			case Autre:
+				break;
+			default:
+				break;
+		}
 
 		return true;
 	}
 
 	/**
-	 * Obtenir le {@link Joueur} actuel.
+	 * Obtenir une copie du {@link Joueur} actuel. Ce joueur est une copie pour la
+	 * meme raison qu'on ne peut seuelement obtenir une copie du tapis: pour
+	 * permettre un access et une modification du tapis de jeu actuel sans le risque
+	 * de perturber le jeu actuel.
 	 * 
-	 * @return Le {@link Joueur} actuel.
+	 * @return La copie {@link Joueur} actuel.
 	 */
 	public Joueur getJoueurActuel() {
-		return joueurActuel;
+		return joueurActuel.getClone();
+	}
+
+	public ArrayList<Joueur> getJoueurs() {
+		ArrayList<Joueur> j = new ArrayList<>();
+
+		for (Joueur joueur : joueurs) {
+			j.add(joueur.getClone());
+		}
+
+		return j;
 	}
 
 	/**
-	 * Permet a un joueur de piocher une carte. Donne une nouvelle, en l'elevant le
-	 * la list des cartes restantes/non piochées.
+	 * Faire piocher une carte au joueur actuel.
 	 * 
-	 * @param joueur Le joueur voulant piocher une carte.
-	 * @return Si le joueur a le droit de piocher une carte, une {@link Carte},
-	 *         sinon {@code null}.
+	 * @return Si le joueur actuel a le droit de piocher une carte, {@code true},
+	 *         sinon {@code false}.
 	 */
-	public Carte piocherCarte(Joueur joueur) {
+	public boolean joueurActuelPiocheCarte() {
 		if (tapis.estRempli())
-			return null;
-		if (joueurActuel != joueur)
-			return null;
-		if (joueurAPiocheCarteCeTour)
-			return null;
-		if (!toutJoueurAPiocheCarteVictoire())
-			return null;
+			return false;
+
+		if (joueurActuelAPiocheCarteCeTour)
+			return false;
+
+		if (regles == Regles.Advanced)
+			// En advanced, le joueur doit poser une carte avant de pouvoir en piocher une.
+			if (!joueurActuelAPoseCarteCeTour)
+				return false;
+
+		if (!ilResteDesCartes())
+			return false;
 
 		Carte c = popCarteAleatoire();
 
-		String carte       = VisitorAffichageString.getRepresentationStringStatic(c);
-		String forme       = c.getForme().name();
-		String couleur     = c.getCouleur().name();
-		String remplissage = c.getRemplissage().name();
+		String carteString = c.getStringCarte();
 
 		System.out.println();
-		System.out.println(String.format("%s a piocher un %s %s %s |%s|", joueur, forme, couleur, remplissage, carte));
+		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, c.toString(), carteString));
 
-		afficherTapis();
+		joueurActuelAPiocheCarteCeTour = true;
 
-		joueurAPiocheCarteCeTour = true;
-		return c;
+		switch (regles) {
+			case Autre:
+				break;
+			case Advanced:
+				joueurActuel.ajouterCarteDansMain(c);
+				afficherMainJoueurActuel();
+				return true;
+			case Standard:
+				joueurActuel.setCartePiochee(c);
+				return true;
+			default:
+				break;
+		}
+
+		throw new UnsupportedOperationException("Regles non implémentéés");
 	}
 
-	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
-	Carte popCarteAleatoire() {
-		int   i = new Random().nextInt(cartesRestantes.size());
-		Carte c = cartesRestantes.get(i);
-		cartesRestantes.remove(i);
-		return c;
-	}
+	/**
+	 * Le joueur actuel tente de poser une carte dans sa main. Si la carte peut etre
+	 * posé a l'emplacement indiqué, la carte sera enlevée de la main du joueur, et
+	 * posée sur le tapis.
+	 * 
+	 * @param carte La {@link Carte} du joueur a poser.
+	 * @param x     Abscisse de l'emplacement voulu.
+	 * @param y     Ordonnée de l'emplacement voulu.
+	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
+	 */
+	public boolean joueurActuelPoseCarteDansMain(Carte carte, int x, int y) {
 
-	boolean toutJoueurAPiocheCarteVictoire() {
-		for (Joueur joueur : joueurs)
-			if (!joueursAyantPiocheeCarteVictoire.get(joueur))
-				return false;
+		if (joueurActuel.getNombreCartesDansMain() == 1)
+			return false;
 
+		if (!joueurActuel.hasCarte(carte))
+			return false;
+
+		if (!joueurActuelPoseCarte(carte, x, y))
+			return false;
+
+		joueurActuel.retirerCarteDansMain(carte);
 		return true;
 	}
 
 	/**
-	 * Essayer de piocher une carte victoire. Donnera null si le joueur a deja
-	 * pioché une carte victoire.
+	 * Fait poser la carte piochee du joueur actuel (en verifiant si il a deja
+	 * pioché une carte ce tour).
 	 * 
-	 * @param joueur
-	 * @return Une carte.
+	 * @param x Abscisse de la postion de la carte.
+	 * @param y Ordonné de la postion de la carte.
+	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
 	 */
-	public Carte piocherCarteVictoire(Joueur joueur) {
-		if (joueursAyantPiocheeCarteVictoire.get(joueur))
-			return null;
+	public boolean joueurActuelPoseCartePiochee(int x, int y) {
+		if (!joueurActuelPoseCarte(joueurActuel.getCartePiochee(), x, y))
+			return false;
 
-		joueursAyantPiocheeCarteVictoire.put(joueur, true);
-		return popCarteAleatoire();
+		joueurActuel.setCartePiochee(null);
+		return true;
+
 	}
 
-	/**
-	 * Appelle a son tour {@link Tapis#poserCarte} dans le tapis du jeu, mais prend
-	 * comme paramètre supplémentaire le joueur qui veux poser une carte, afin de
-	 * verifier si le joueur a le droit de poser une carte.
-	 * 
-	 * @see Tapis#poserCarte
-	 * @param joueur Le {@link Joueur} qui veux poser une carte.
-	 * @param carte  La carte a poser.
-	 * @param x      Abscisse de la carte.
-	 * @param y      Ordonnée de la carte.
-	 * @return {@code true} si la carte a pu être posée, {@code false} sinon
+	/*
+	 * Poser une carte donnée. Cette méthode est privée car elle est plus generale.
+	 * Les autres methodes comme joueurActuelPoseCartePiochee ou
+	 * joueurActuelPoseCarteDansMain appelerons cette methode.
 	 */
-	public boolean poserCarte(Joueur joueur, Carte carte, int x, int y) {
-		if (joueur != joueurActuel)
+	private boolean joueurActuelPoseCarte(Carte carte, int x, int y) {
+		if (joueurActuelAPoseCarteCeTour)
 			return false;
-		if (joueurAPoseCarteCeTour)
-			return false;
-		if (!joueurAPiocheCarteCeTour)
+
+		if (carte == null)
 			return false;
 
 		if (!tapis.poserCarte(carte, x, y))
 			return false;
 
 		System.out.println();
-		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueur, x, y));
-		afficherPointsJoueurActuel();
+		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueurActuel, x, y));
+
+		if (regles == Regles.Standard)
+			afficherPointsJoueurActuel();
+
 		afficherTapis();
 
-		joueurAPoseCarteCeTour = true;
+		joueurActuelAPoseCarteCeTour = true;
 		return true;
 	}
 
+	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
+	private Carte popCarteAleatoire() {
+		if (!ilResteDesCartes())
+			return null;
+		int   i = new Random().nextInt(cartesRestantes.size());
+		Carte c = cartesRestantes.get(i);
+		cartesRestantes.remove(i);
+		return c;
+	}
+
+	// Donner une carte victoire a chaque joueur. Seulement appelé en debut de
+	// partie, et pour les regles standard.
+	private boolean distribuerCartesVictoires() {
+		if (cartesVictoiresDistribues)
+			return false;
+
+		for (Joueur joueur : joueurs) {
+			joueur.setCarteVictoire(popCarteAleatoire());
+		}
+		cartesVictoiresDistribues = true;
+		return true;
+	}
+
+	private void distribuerCartesDansMain() {
+		for (Joueur joueur : joueurs) {
+			for (int i = 0; i < 3; i++) {
+				joueur.ajouterCarteDansMain(popCarteAleatoire());
+			}
+		}
+	}
+
 	/**
-	 * @param joueur Le joueur essayant de deplacer une carte.
-	 * @param x1     Abscisse de depart de la carte.
-	 * @param y1     Ordonnée de depart de la carte.
-	 * @param x2     Abscisse d'arrivée de la carte.
-	 * @param y2     Ordonnée d'arrivée de la carte.
+	 * Deplacer une carte sur le tapis, prennant en compte si le joueur actuel a
+	 * deja deplacé une carte, si la nouvelle position a des voisins...
+	 * 
+	 * @param x1 Abscisse de depart de la carte.
+	 * @param y1 Ordonnée de depart de la carte.
+	 * @param x2 Abscisse d'arrivée de la carte.
+	 * @param y2 Ordonnée d'arrivée de la carte.
 	 * @return {@code true} si le deplacement a pu etre effectué, {@code false}
 	 *         sinon.
 	 */
-	public boolean deplacerCarte(Joueur joueur, int x1, int y1, int x2, int y2) {
-		if (joueurADeplaceCarteCeTour)
+	public boolean joueurActuelDeplaceCarte(int x1, int y1, int x2, int y2) {
+		if (joueurActuelADeplaceCarteCeTour)
 			return false;
 
 		if (!tapis.deplacerCarte(x1, y1, x2, y2))
 			return false;
 
 		System.out.println();
-		System.out.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueur, x1, y1, x2, y2));
-		afficherPointsJoueurActuel();
+		System.out
+				.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueurActuel, x1, y1, x2, y2));
+
 		afficherTapis();
 
-		joueurADeplaceCarteCeTour = true;
+		joueurActuelADeplaceCarteCeTour = true;
 		return true;
 
 	}
 
 	/**
+	 * Est-ce-que le tapis du jeu actuel est rempli ?
+	 * 
 	 * @return {@code true} si le terrain ne peut plus accepter de cartes,
 	 *         {@code false} sinon
 	 */
 	public boolean tapisEstRempli() {
 		return tapis.estRempli();
+	}
+
+	public boolean tapisEstVide() {
+		return tapis.estVide();
 	}
 
 	/**
@@ -300,7 +450,7 @@ public class ControlleurJeu {
 	 *         sinon.
 	 */
 	public boolean joueurActuelPeutFinir() {
-		return (joueurAPiocheCarteCeTour && joueurAPoseCarteCeTour);
+		return (joueurActuelAPiocheCarteCeTour && joueurActuelAPoseCarteCeTour);
 	}
 
 	/**
@@ -312,31 +462,51 @@ public class ControlleurJeu {
 	 */
 	public boolean jouer() {
 		if (joueurActuel.jouer()) {
+			if (jeuTermine()) {
+				calculerScoresDesJoueurs();
+				return false;
+			}
+
 			passerAuJoueurSuivant();
-			return true;
 		}
-		return false;
+
+		return true;
 	}
 
 	/**
-	 * @return Le {@link Tapis} du jeu actuel.
+	 * Obtenir une copie profonde du tapis, c'est-a-dire une copie de la liste des
+	 * cartes stockés par les tapis, et non seuelement une copie de la reference a
+	 * la liste. <br>
+	 * Cela permet de modifier le tapis, sans influencer le jeu actuel.
+	 * 
+	 * @return Le {@link Tapis} clone du jeu actuel.
 	 */
 	public Tapis getTapis() {
-		System.out.println(tapis.getClone() == tapis);
 		return tapis.getClone();
 	}
 
-	void afficherTapis() {
+	private void afficherTapis() {
 		System.out.print(VisitorAffichageString.getRepresentationStringStatic(tapis));
 	}
 
-	void afficherPointsJoueurActuel() {
-		String stringCarteVictoire = VisitorAffichageString.getRepresentationStringStatic(joueurActuel.getCarteVictoire());
-		System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire, getScorePourCarte(joueurActuel.getCarteVictoire())));
+	private void afficherPointsJoueurActuel() {
+
+		if (regles == Regles.Standard) {
+			String stringCarteVictoire = joueurActuel.getCarteVictoire().getStringCarte();
+			System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
+					getScorePourCarte(joueurActuel.getCarteVictoire())));
+		}
+
 	}
-	
+
+	private void afficherMainJoueurActuel() {
+		System.out.println("Main:");
+		System.out.println(joueurActuel.getStringCartesDansMain());
+		System.out.println();
+	}
+
 	/**
-	 * Permet d'obtenir le score d'une carte pour l'etat actuel du tapis.
+	 * Obtenir le score d'une carte pour l'etat actuel du tapis.
 	 * 
 	 * @param carte La {@link Carte} pour laquelle on veut calculer le score.
 	 * @return Le score pour la carte.
@@ -346,6 +516,77 @@ public class ControlleurJeu {
 		tapis.accept(v);
 
 		return v.getPoints();
+	}
+
+	private void calculerScoresDesJoueurs() {
+		for (Joueur joueur : joueurs) {
+			Carte carteVictoire = null;
+
+			switch (regles) {
+				case Standard:
+					carteVictoire = joueur.getCarteVictoire();
+					break;
+				case Advanced:
+					carteVictoire = joueur.getCarteDansMain(0);
+					break;
+				case Autre:
+					break;
+				default:
+					break;
+			}
+
+			int score = getScorePourCarte(carteVictoire);
+			joueur.setScore(score);
+		}
+	}
+
+	public boolean joueurActuelAPoseCarteCeTour() {
+		return joueurActuelAPoseCarteCeTour;
+	}
+
+	public boolean joueurActuelAPiocheCarteCeTour() {
+		return joueurActuelAPiocheCarteCeTour;
+	}
+
+	public boolean joueurActuelADeplaceCarteCeTour() {
+		return joueurActuelADeplaceCarteCeTour;
+	}
+
+	public boolean ilResteDesCartes() {
+		return cartesRestantes.size() != 0;
+	}
+
+	public boolean jeuTermine() {
+		if (tapisEstRempli())
+			return true;
+
+		switch (regles) {
+			case Standard:
+				if (ilResteDesCartes())
+					return false;
+
+				return true;
+			case Advanced:
+				if (ilResteDesCartes())
+					return false;
+
+				for (Joueur joueur : joueurs) {
+					if (joueur.getNombreCartesDansMain() > 1)
+						return false;
+				}
+
+				return true;
+			case Autre:
+				break;
+			default:
+				break;
+		}
+		return false;
+
+	}
+
+	public Regles getRegles() {
+		return regles;
 	}
 
 }
