@@ -39,16 +39,13 @@ public class ControlleurJeu {
 
 	private Regles regles;
 
-	private boolean debutPartie;
-
+	private boolean debutPartie                     = false;
 	private boolean joueurActuelAPoseCarteCeTour    = false;
 	private boolean joueurActuelAPiocheCarteCeTour  = false;
 	private boolean joueurActuelADeplaceCarteCeTour = false;
 	private boolean cartesVictoiresDistribues       = false;
 
-	private boolean cartesVictoiresDistribues = false;
-
-	ControlleurJeu() {
+	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
 		joueurs         = new ArrayList<Joueur>();
 	}
@@ -254,8 +251,8 @@ public class ControlleurJeu {
 			return false;
 
 		if (regles == Regles.Advanced)
-			if (!joueurActuelAPoseCarteCeTour) // En advanced, le joueur doit poser une carte avant de pouvoir en
-												// piocher une.
+			// En advanced, le joueur doit poser une carte avant de pouvoir en piocher une.
+			if (!joueurActuelAPoseCarteCeTour)
 				return false;
 
 		if (cartesRestantes.size() == 0)
@@ -330,9 +327,11 @@ public class ControlleurJeu {
 
 	}
 
-	// Poser une carte donnée. Cette méthode est privée car elle est plus generale.
-	// Les autres methodes comme joueurActuelPoseCartePiochee ou
-	// joueurActuelPoseCarteDansMain appelerons cette methode.
+	/*
+	 * Poser une carte donnée. Cette méthode est privée car elle est plus generale.
+	 * Les autres methodes comme joueurActuelPoseCartePiochee ou
+	 * joueurActuelPoseCarteDansMain appelerons cette methode.
+	 */
 	private boolean joueurActuelPoseCarte(Carte carte, int x, int y) {
 		if (joueurActuelAPoseCarteCeTour)
 			return false;
