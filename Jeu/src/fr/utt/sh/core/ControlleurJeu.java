@@ -211,12 +211,12 @@ public class ControlleurJeu {
 
 				System.out.println(String.format("Carte victoire: |%s|", stringCarte));
 				break;
-			case Autre:
-				break;
+
 			case Advanced:
 				System.out.println();
 				System.out.println(joueurActuel.getStringCartesDansMain());
 
+			case Autre:
 				break;
 			default:
 				break;
