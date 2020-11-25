@@ -81,14 +81,14 @@ public class ControlleurJeu {
 		int nombreHumainsAjoutes = 0;
 
 		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
-			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
-				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
-				nombreBotsAjoutes++;
-			}
-
 			if (nombreHumainsAjoutes < nombreDeJoueursHumains) {
 				joueurs.add(new Joueur("Humain_" + nombreHumainsAjoutes, new StrategyJoueurConsole()));
 				nombreHumainsAjoutes++;
+			}
+
+			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
+				nombreBotsAjoutes++;
 			}
 		}
 
