@@ -151,4 +151,6 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @return {@code int}.
 	 */
 	public abstract int getHauteur();
+
+	public abstract boolean estVide();
 }

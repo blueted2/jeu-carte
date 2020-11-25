@@ -24,16 +24,18 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  */
 public class Joueur {
 
-	ArrayList<Carte> cartesMain = new ArrayList<>();
+	private ArrayList<Carte> cartesMain = new ArrayList<>();
 
-	Carte cartePiochee;
-	Carte carteVictoire;
+	private Carte cartePiochee;
+	private Carte carteVictoire;
 
-	ControlleurJeu cj = ControlleurJeu.getInstance();
+	private ControlleurJeu cj = ControlleurJeu.getInstance();
 
-	String id;
+	private String id;
 
-	Strategy strategy = new StrategyJoueurConsole();
+	private Strategy strategy = new StrategyJoueurConsole();
+
+	private int score = 0;
 
 	/**
 	 * Constructeur par défaut.
@@ -58,6 +60,7 @@ public class Joueur {
 		this.cartePiochee  = joueur.cartePiochee;
 		this.carteVictoire = joueur.carteVictoire;
 		this.cartesMain    = new ArrayList<Carte>(joueur.cartesMain);
+		this.score         = joueur.score;
 	}
 
 	/**
@@ -160,8 +163,16 @@ public class Joueur {
 			ligneBas  += carte.getStringCarte() + "|";
 			i++;
 		}
-		
+
 		return ligneHaut + "\n" + ligneBas;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 }

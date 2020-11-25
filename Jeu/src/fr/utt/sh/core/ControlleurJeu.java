@@ -79,6 +79,11 @@ public class ControlleurJeu {
 		int nombreHumainsAjoutes = 0;
 
 		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
+			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
+				nombreBotsAjoutes++;
+			}
+
 			if (nombreHumainsAjoutes < nombreDeJoueursHumains) {
 				joueurs.add(new Joueur("Humain_" + nombreHumainsAjoutes, new StrategyJoueurConsole()));
 				nombreHumainsAjoutes++;
@@ -139,6 +144,7 @@ public class ControlleurJeu {
 		this.regles = regles;
 
 		tapis = new Tapis_Triangulaire(5);
+//		tapis = new Tapis_5x3();
 
 		genererJoueurs(nbHumains, nbBots);
 		iteratorJoueurs = joueurs.iterator();
@@ -181,7 +187,7 @@ public class ControlleurJeu {
 		// actuel a deja pioché/poser une carte...
 		//
 		if (!debutPartie) {
-			if (!joueurActuelAPiocheCarteCeTour && cartesRestantes.size() > 0)
+			if (!joueurActuelAPiocheCarteCeTour && ilResteDesCartes())
 				return false;
 
 			if (!joueurActuelAPoseCarteCeTour)
@@ -213,8 +219,8 @@ public class ControlleurJeu {
 				break;
 
 			case Advanced:
-				System.out.println();
-				System.out.println(joueurActuel.getStringCartesDansMain());
+				afficherMainJoueurActuel();
+				break;
 
 			case Autre:
 				break;
@@ -237,6 +243,16 @@ public class ControlleurJeu {
 		return joueurActuel.getClone();
 	}
 
+	public ArrayList<Joueur> getJoueurs() {
+		ArrayList<Joueur> j = new ArrayList<>();
+
+		for (Joueur joueur : joueurs) {
+			j.add(joueur.getClone());
+		}
+
+		return j;
+	}
+
 	/**
 	 * Faire piocher une carte au joueur actuel.
 	 * 
@@ -255,7 +271,7 @@ public class ControlleurJeu {
 			if (!joueurActuelAPoseCarteCeTour)
 				return false;
 
-		if (cartesRestantes.size() == 0)
+		if (!ilResteDesCartes())
 			return false;
 
 		Carte c = popCarteAleatoire();
@@ -272,8 +288,7 @@ public class ControlleurJeu {
 				break;
 			case Advanced:
 				joueurActuel.ajouterCarteDansMain(c);
-				System.out.println();
-				System.out.println(joueurActuel.getStringCartesDansMain());
+				afficherMainJoueurActuel();
 				return true;
 			case Standard:
 				joueurActuel.setCartePiochee(c);
@@ -322,7 +337,7 @@ public class ControlleurJeu {
 		if (!joueurActuelPoseCarte(joueurActuel.getCartePiochee(), x, y))
 			return false;
 
-		joueurActuel.cartePiochee = null;
+		joueurActuel.setCartePiochee(null);
 		return true;
 
 	}
@@ -356,7 +371,7 @@ public class ControlleurJeu {
 
 	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
 	private Carte popCarteAleatoire() {
-		if (cartesRestantes.size() == 0)
+		if (!ilResteDesCartes())
 			return null;
 		int   i = new Random().nextInt(cartesRestantes.size());
 		Carte c = cartesRestantes.get(i);
@@ -365,7 +380,7 @@ public class ControlleurJeu {
 	}
 
 	// Donner une carte victoire a chaque joueur. Seulement appelé en debut de
-	// partie.
+	// partie, et pour les regles standard.
 	private boolean distribuerCartesVictoires() {
 		if (cartesVictoiresDistribues)
 			return false;
@@ -406,7 +421,7 @@ public class ControlleurJeu {
 		System.out.println();
 		System.out
 				.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueurActuel, x1, y1, x2, y2));
-		afficherPointsJoueurActuel();
+
 		afficherTapis();
 
 		joueurActuelADeplaceCarteCeTour = true;
@@ -422,6 +437,10 @@ public class ControlleurJeu {
 	 */
 	public boolean tapisEstRempli() {
 		return tapis.estRempli();
+	}
+
+	public boolean tapisEstVide() {
+		return tapis.estVide();
 	}
 
 	/**
@@ -443,10 +462,15 @@ public class ControlleurJeu {
 	 */
 	public boolean jouer() {
 		if (joueurActuel.jouer()) {
+			if (jeuTermine()) {
+				calculerScoresDesJoueurs();
+				return false;
+			}
+
 			passerAuJoueurSuivant();
-			return true;
 		}
-		return false;
+
+		return true;
 	}
 
 	/**
@@ -466,10 +490,19 @@ public class ControlleurJeu {
 	}
 
 	private void afficherPointsJoueurActuel() {
-		String stringCarteVictoire = joueurActuel.getCarteVictoire().getStringCarte();
-		if (regles == Regles.Standard)
+
+		if (regles == Regles.Standard) {
+			String stringCarteVictoire = joueurActuel.getCarteVictoire().getStringCarte();
 			System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
 					getScorePourCarte(joueurActuel.getCarteVictoire())));
+		}
+
+	}
+
+	private void afficherMainJoueurActuel() {
+		System.out.println("Main:");
+		System.out.println(joueurActuel.getStringCartesDansMain());
+		System.out.println();
 	}
 
 	/**
@@ -485,11 +518,75 @@ public class ControlleurJeu {
 		return v.getPoints();
 	}
 
-	public boolean joueurActuelAPiocheCarte() {
+	private void calculerScoresDesJoueurs() {
+		for (Joueur joueur : joueurs) {
+			Carte carteVictoire = null;
+
+			switch (regles) {
+				case Standard:
+					carteVictoire = joueur.getCarteVictoire();
+					break;
+				case Advanced:
+					carteVictoire = joueur.getCarteDansMain(0);
+					break;
+				case Autre:
+					break;
+				default:
+					break;
+			}
+
+			int score = getScorePourCarte(carteVictoire);
+			joueur.setScore(score);
+		}
+	}
+
+	public boolean joueurActuelAPoseCarteCeTour() {
+		return joueurActuelAPoseCarteCeTour;
+	}
+
+	public boolean joueurActuelAPiocheCarteCeTour() {
 		return joueurActuelAPiocheCarteCeTour;
+	}
+
+	public boolean joueurActuelADeplaceCarteCeTour() {
+		return joueurActuelADeplaceCarteCeTour;
+	}
+
+	public boolean ilResteDesCartes() {
+		return cartesRestantes.size() != 0;
+	}
+
+	public boolean jeuTermine() {
+		if (tapisEstRempli())
+			return true;
+
+		switch (regles) {
+			case Standard:
+				if (ilResteDesCartes())
+					return false;
+
+				return true;
+			case Advanced:
+				if (ilResteDesCartes())
+					return false;
+
+				for (Joueur joueur : joueurs) {
+					if (joueur.getNombreCartesDansMain() > 1)
+						return false;
+				}
+
+				return true;
+			case Autre:
+				break;
+			default:
+				break;
+		}
+		return false;
+
 	}
 
 	public Regles getRegles() {
 		return regles;
 	}
+
 }

@@ -95,7 +95,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	}
 
 	// Calculer les points pour une ligne / colonne donnée.
-	int getPointsDansListe(LinkedList<Carte> cartes) {
+	int getPointsDansListe(LinkedList<Carte> listeCartes) {
 
 		int formeALaSuite       = 0;
 		int couleurALaSuite     = 0;
@@ -105,9 +105,9 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		int maxFormeALaSuite       = 0;
 		int maxRemplissageALaSuite = 0;
 
-		for (Carte carteTapis : cartes) {
+		for (Carte carte : listeCartes) {
 
-			if (carteTapis == null) {
+			if (carte == null) {
 				maxCouleurALaSuite = Math.max(couleurALaSuite, maxCouleurALaSuite);
 				couleurALaSuite    = 0;
 
@@ -119,21 +119,21 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 			} else {
 
-				if (carteTapis.getCouleur() == couleur)
+				if (carte.getCouleur() == couleur)
 					couleurALaSuite++;
 				else {
 					maxCouleurALaSuite = Math.max(couleurALaSuite, maxCouleurALaSuite);
 					couleurALaSuite    = 0;
 				}
 
-				if (carteTapis.getForme() == forme)
+				if (carte.getForme() == forme)
 					formeALaSuite++;
 				else {
 					maxFormeALaSuite = Math.max(formeALaSuite, maxFormeALaSuite);
 					formeALaSuite    = 0;
 				}
 
-				if (carteTapis.getRemplissage() == remplissage)
+				if (carte.getRemplissage() == remplissage)
 					remplissageALaSuite++;
 				else {
 					maxRemplissageALaSuite = Math.max(remplissageALaSuite, maxRemplissageALaSuite);

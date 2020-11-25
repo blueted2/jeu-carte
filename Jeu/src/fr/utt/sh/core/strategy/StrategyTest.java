@@ -37,8 +37,6 @@ public class StrategyTest implements Strategy {
 		lTapis    = tapisTemp.getLargeur();
 		hTapis    = tapisTemp.getHauteur();
 
-		joueurActuel = c.getJoueurActuel();
-
 		switch (c.getRegles()) {
 			case Standard:
 				return executeStandard();
@@ -54,11 +52,17 @@ public class StrategyTest implements Strategy {
 
 	private boolean executeStandard() {
 		c.joueurActuelPiocheCarte();
+		
+		if(c.tapisEstVide()) {
+			c.joueurActuelPoseCartePiochee(2, 1);
+			return true;
+		}
+
+		joueurActuel = c.getJoueurActuel();
 
 		Carte carteVictoire = joueurActuel.getCarteVictoire();
-
-		Carte cartePiochee = joueurActuel.getCartePiochee();
-
+		Carte cartePiochee  = joueurActuel.getCartePiochee();
+		
 		Position meilleurePosition = getMeilleurePosition(carteVictoire, cartePiochee);
 
 		int x = meilleurePosition.getX();
@@ -79,7 +83,7 @@ public class StrategyTest implements Strategy {
 
 		c.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
 		c.joueurActuelPiocheCarte();
-		
+
 		return true;
 	}
 

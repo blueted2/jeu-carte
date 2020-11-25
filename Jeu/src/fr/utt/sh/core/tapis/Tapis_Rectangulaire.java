@@ -38,18 +38,20 @@ public class Tapis_Rectangulaire extends Tapis {
 	 * 
 	 * @param cartes Une liste 2d des cartes deja jouées.
 	 */
-	public Tapis_Rectangulaire(Carte[][] cartes) {
-		this.cartes = new Carte[cartes.length][];
-		for (int i = 0; i < cartes.length; i++) {
-			this.cartes[i] = new Carte[cartes[i].length];
+	public Tapis_Rectangulaire(Tapis_Rectangulaire tapis) {
+		this.cartes = new Carte[tapis.cartes.length][];
+		
+		for (int i = 0; i < tapis.cartes.length; i++) {
+			this.cartes[i] = new Carte[tapis.cartes[i].length];
 			
-			for(int j =0; j<cartes[i].length; j++) {
-				this.cartes[i][j] = cartes[i][j];
+			for(int j =0; j<tapis.cartes[i].length; j++) {
+				this.cartes[i][j] = tapis.cartes[i][j];
 			}
 		}
 
-		largeur = cartes.length;
-		hauteur = cartes[0].length;
+		largeur = tapis.cartes.length;
+		hauteur = tapis.cartes[0].length;
+		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
 	/**
@@ -248,9 +250,19 @@ public class Tapis_Rectangulaire extends Tapis {
 		return true;
 	}
 
+	public boolean estVide() {
+		for (int y = 0; y < hauteur; y++) {
+			for (int x = 0; x < largeur; x++) {
+				if (getCarteAt(x, y) != null)
+					return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public Tapis getClone() {
-		return new Tapis_Rectangulaire(cartes);
+		return new Tapis_Rectangulaire(this);
 	}
 
 	@Override

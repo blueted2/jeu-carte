@@ -43,16 +43,20 @@ public class Tapis_Triangulaire extends Tapis {
 	 *               taille du jeu. LA n-ieme sous-liste est de longueur n+1 ( si n
 	 *               commence a 0 ).
 	 */
-	public Tapis_Triangulaire(Carte[][] cartes) {
-		this.cartes = new Carte[cartes.length][];
-		for (int i = 0; i < cartes.length; i++) {
-			this.cartes[i] = new Carte[cartes[i].length];
+	public Tapis_Triangulaire(Tapis_Triangulaire tapis) {
+		
+		
+		this.cartes = new Carte[tapis.cartes.length][];
+		for (int i = 0; i < tapis.cartes.length; i++) {
+			this.cartes[i] = new Carte[tapis.cartes[i].length];
 
-			for (int j = 0; j < cartes[i].length; j++) {
-				this.cartes[i][j] = cartes[i][j];
+			for (int j = 0; j < tapis.cartes[i].length; j++) {
+				this.cartes[i][j] = tapis.cartes[i][j];
 			}
 		}
-		this.taille = cartes.length;
+		
+		this.taille = tapis.cartes.length;
+		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
 	@Override
@@ -220,13 +224,32 @@ public class Tapis_Triangulaire extends Tapis {
 
 	@Override
 	public boolean estRempli() {
-		// TODO Auto-generated method stub
-		return false;
+		for (int x = 0; x < taille; x++) {
+			for (int y = 0; y <= x; y++) {
+				if (getCarteAt(x, y) == null) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public boolean estVide() {
+		for (int x = 0; x < taille; x++) {
+			for (int y = 0; y <= x; y++) {
+				if (getCarteAt(x, y) != null) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override
 	public Tapis getClone() {
-		return new Tapis_Triangulaire(cartes);
+		return new Tapis_Triangulaire(this);
 	}
 
 	@Override
