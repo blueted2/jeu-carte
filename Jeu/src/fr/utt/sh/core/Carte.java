@@ -37,16 +37,16 @@ public class Carte {
 		String charForme   = getCharForme();
 		stringCarte = String.format("%s%s", charCouleur, charForme);
 	}
-	
+
 	private String getCharForme() {
 		if (getRemplissage() == Remplissage.Rempli)
 			switch (getForme()) {
 				case Carre:
 					return "■";
 				case Cercle:
-					return "▲";
-				case Triangle:
 					return "●";
+				case Triangle:
+					return "▲";
 				default:
 					return "?";
 			}
@@ -119,7 +119,7 @@ public class Carte {
 	public String toString() {
 		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}
-	
+
 	public String getStringCarte() {
 		return stringCarte;
 	}
