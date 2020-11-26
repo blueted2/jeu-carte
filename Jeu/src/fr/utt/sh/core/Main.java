@@ -23,6 +23,7 @@ public class Main {
 		int nbHumains = Integer.parseInt(input[0]);
 		int nbBots    = Integer.parseInt(input[1]);
 		Regles regles;
+		String[] tapis;
 
 		while (!ControlleurJeu.nombreDeJoueursValide(nbHumains, nbBots)) {
 			System.out.println(
@@ -33,7 +34,7 @@ public class Main {
 			nbBots    = Integer.parseInt(input[1]);
 		}
 		
-		System.out.println("Quelles regles ? (s. Standard, a. Advanced)");
+		System.out.println("Quelles règles ? (s. Standard, a. Advanced)");
 		input = Utils.getLigneSeparee();
 		switch(input[0]) {
 			case "s":
@@ -46,8 +47,11 @@ public class Main {
 				regles = Regles.Standard;
 				break;
 		}
+		
+		System.out.println("Quel tapis ? (t. Triangle - précisez la taille, r. Rectangle - précisez les dimensions)");
+		tapis = Utils.getLigneSeparee();
 
-		c.commencerNouvellePartie(nbHumains, nbBots, regles);
+		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis);
 
 		while (!c.jeuTermine()) {
 			c.jouer();
