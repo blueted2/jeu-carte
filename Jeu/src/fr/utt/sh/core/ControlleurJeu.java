@@ -162,7 +162,7 @@ public class ControlleurJeu {
 
 		switch(inputTapis[0]) {
 		case "t":
-			tapis = new Tapis_Triangulaire(5);
+			tapis = new Tapis_Triangulaire(Integer.parseInt(inputTapis[1]));
 			break;
 		case "r":
 			tapis = new Tapis_Rectangulaire(Integer.parseInt(inputTapis[1]), Integer.parseInt(inputTapis[2]));

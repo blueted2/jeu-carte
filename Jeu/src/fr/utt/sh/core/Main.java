@@ -34,7 +34,7 @@ public class Main {
 			nbBots    = Integer.parseInt(input[1]);
 		}
 		
-		System.out.println("Quelles regles ? (s. Standard, a. Advanced)");
+		System.out.println("Quelles règles ? (s. Standard, a. Advanced)");
 		input = Utils.getLigneSeparee();
 		switch(input[0]) {
 			case "s":
@@ -48,7 +48,7 @@ public class Main {
 				break;
 		}
 		
-		System.out.println("Quel tapis ? (t. Triangle, r. Rectangle - précisez les dimensions)");
+		System.out.println("Quel tapis ? (t. Triangle - précisez la taille, r. Rectangle - précisez les dimensions)");
 		tapis = Utils.getLigneSeparee();
 
 		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis);
