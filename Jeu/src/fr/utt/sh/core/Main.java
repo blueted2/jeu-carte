@@ -1,7 +1,6 @@
 package fr.utt.sh.core;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import fr.utt.sh.console_ui.Utils;
 
