@@ -521,6 +521,12 @@ public class ControlleurJeu {
 		System.out.println();
 	}
 
+	public void afficherScoresDesJoueurs() {
+		joueurs.forEach(j -> {
+			System.out.println(String.format("Score de %s: %d", j, j.getScore()));
+		});
+	}
+
 	/**
 	 * Obtenir le score d'une carte pour l'etat actuel du tapis.
 	 * 
@@ -579,6 +585,9 @@ public class ControlleurJeu {
 		switch (regles) {
 			case Standard:
 				if (ilResteDesCartes())
+					return false;
+				
+				if(!joueurActuelAPoseCarteCeTour)
 					return false;
 
 				return true;
