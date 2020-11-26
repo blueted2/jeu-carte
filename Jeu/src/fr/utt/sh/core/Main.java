@@ -22,6 +22,7 @@ public class Main {
 
 		int nbHumains = Integer.parseInt(input[0]);
 		int nbBots    = Integer.parseInt(input[1]);
+		Regles regles;
 
 		while (!ControlleurJeu.nombreDeJoueursValide(nbHumains, nbBots)) {
 			System.out.println(
@@ -31,8 +32,22 @@ public class Main {
 			nbHumains = Integer.parseInt(input[0]);
 			nbBots    = Integer.parseInt(input[1]);
 		}
+		
+		System.out.println("Quelles regles ? (s. Standard, a. Advanced)");
+		input = Utils.getLigneSeparee();
+		switch(input[0]) {
+			case "s":
+				regles = Regles.Standard;
+				break;
+			case "a":
+				regles = Regles.Advanced;
+				break;
+			default:
+				regles = Regles.Standard;
+				break;
+		}
 
-		c.commencerNouvellePartie(nbHumains, nbBots, Regles.Standard);
+		c.commencerNouvellePartie(nbHumains, nbBots, regles);
 
 		while (!c.jeuTermine()) {
 			c.jouer();
