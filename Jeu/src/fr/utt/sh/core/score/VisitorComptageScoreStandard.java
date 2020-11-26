@@ -1,5 +1,7 @@
 package fr.utt.sh.core.score;
 
+import java.util.LinkedList;
+
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Carte.Couleur;
 import fr.utt.sh.core.Carte.Forme;
@@ -38,9 +40,9 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 		// Calcule des lignes
 		for (int y = 0; y < hauteurTapis; y++) {
-			Carte[] ligneCartes = new Carte[largeurTapis];
+			LinkedList<Carte> ligneCartes = new LinkedList<Carte>();
 			for (int x = 0; x < largeurTapis; x++) {
-				ligneCartes[x] = tapis.getCarteAt(x, y);
+				ligneCartes.add(tapis.getCarteAt(x, y));
 			}
 
 			points += getPointsDansListe(ligneCartes);
@@ -48,9 +50,9 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 		// Calcule des colonnes
 		for (int x = 0; x < largeurTapis; x++) {
-			Carte[] colonneCartes = new Carte[hauteurTapis];
+			LinkedList<Carte> colonneCartes = new LinkedList<Carte>();
 			for (int y = 0; y < hauteurTapis; y++) {
-				colonneCartes[y] = tapis.getCarteAt(x, y);
+				colonneCartes.add(tapis.getCarteAt(x, y));
 			}
 
 			points += getPointsDansListe(colonneCartes);
@@ -58,10 +60,31 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	}
 
 	@Override
-	public void visit(Tapis_Triangulaire tapis_Triangulaire) {
-		points = 0;
+	public void visit(Tapis_Triangulaire tapis) {
+		int tailleTapis = tapis.getHauteur(); // Hauteur et largeur sont les meme pour un tapis triangulaire.
+
+		// Calcule des lingnes
+		for (int y = 0; y < tailleTapis; y++) {
+
+			LinkedList<Carte> ligneCartes = new LinkedList<Carte>();
+			for (int x = 0; x < y + 1; x++) {
+				ligneCartes.add(tapis.getCarteAt(x, y));
+			}
+			points += getPointsDansListe(ligneCartes);
+
+		}
+
+		// Calcule des colonnes
+		for (int x = 0; x < tailleTapis; x++) {
+			LinkedList<Carte> colonneCartes = new LinkedList<Carte>();
+			for (int y = x; y < tailleTapis; y++) {
+				colonneCartes.add(tapis.getCarteAt(x, y));
+			}
+
+			points += getPointsDansListe(colonneCartes);
+		}
 	}
-	
+
 	/**
 	 * Permet d'obtenir le nombre de points APRES avoir visiter le tapis.
 	 * 
@@ -72,7 +95,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	}
 
 	// Calculer les points pour une ligne / colonne donnée.
-	int getPointsDansListe(Carte[] cartes) {
+	int getPointsDansListe(LinkedList<Carte> listeCartes) {
 
 		int formeALaSuite       = 0;
 		int couleurALaSuite     = 0;
@@ -82,9 +105,9 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		int maxFormeALaSuite       = 0;
 		int maxRemplissageALaSuite = 0;
 
-		for (Carte carteTapis : cartes) {
+		for (Carte carte : listeCartes) {
 
-			if (carteTapis == null) {
+			if (carte == null) {
 				maxCouleurALaSuite = Math.max(couleurALaSuite, maxCouleurALaSuite);
 				couleurALaSuite    = 0;
 
@@ -96,21 +119,21 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 			} else {
 
-				if (carteTapis.getCouleur() == couleur)
+				if (carte.getCouleur() == couleur)
 					couleurALaSuite++;
 				else {
 					maxCouleurALaSuite = Math.max(couleurALaSuite, maxCouleurALaSuite);
 					couleurALaSuite    = 0;
 				}
 
-				if (carteTapis.getForme() == forme)
+				if (carte.getForme() == forme)
 					formeALaSuite++;
 				else {
 					maxFormeALaSuite = Math.max(formeALaSuite, maxFormeALaSuite);
 					formeALaSuite    = 0;
 				}
 
-				if (carteTapis.getRemplissage() == remplissage)
+				if (carte.getRemplissage() == remplissage)
 					remplissageALaSuite++;
 				else {
 					maxRemplissageALaSuite = Math.max(remplissageALaSuite, maxRemplissageALaSuite);
@@ -118,11 +141,10 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 				}
 			}
 		}
-		
-		maxCouleurALaSuite = Math.max(couleurALaSuite, maxCouleurALaSuite);
-		maxFormeALaSuite = Math.max(formeALaSuite, maxFormeALaSuite);
-		maxRemplissageALaSuite = Math.max(remplissageALaSuite, maxRemplissageALaSuite);
 
+		maxCouleurALaSuite     = Math.max(couleurALaSuite, maxCouleurALaSuite);
+		maxFormeALaSuite       = Math.max(formeALaSuite, maxFormeALaSuite);
+		maxRemplissageALaSuite = Math.max(remplissageALaSuite, maxRemplissageALaSuite);
 
 		int score = 0;
 		if (maxFormeALaSuite > 1)
@@ -136,7 +158,5 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 		return score;
 	}
-
-	
 
 }

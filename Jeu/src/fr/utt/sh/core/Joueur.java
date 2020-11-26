@@ -4,7 +4,12 @@
 package fr.utt.sh.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import fr.utt.sh.console_ui.VisitableAffichage;
+import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 
@@ -19,15 +24,18 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  */
 public class Joueur {
 
-	ArrayList<Carte> cartes = new ArrayList<Carte>();
-	Carte cartePiochee;
-	Carte carteVictoire;
+	private ArrayList<Carte> cartesMain = new ArrayList<>();
 
-	ControlleurJeu cj = ControlleurJeu.getInstance();
+	private Carte cartePiochee;
+	private Carte carteVictoire;
 
-	String id;
+	private ControlleurJeu cj = ControlleurJeu.getInstance();
 
-	Strategy strategy = new StrategyJoueurConsole();
+	private String id;
+
+	private Strategy strategy = new StrategyJoueurConsole();
+
+	private int score = 0;
 
 	/**
 	 * Constructeur par défaut.
@@ -36,15 +44,23 @@ public class Joueur {
 		this.id = "defaut";
 	}
 
-	/**
-	 * Constructeur avec un id, pour l'affichaige dans la console.
-	 * 
-	 * @param id Un {@code String} pour l'affichage dans la console.
-	 * @param strategy La {@link Strategy} que le joueur va utiliser.
-	 */
 	public Joueur(String id, Strategy strategy) {
-		this.id = id;
+		this.id       = id;
 		this.strategy = strategy;
+	}
+
+	/**
+	 * Constructeur clonage.
+	 * 
+	 * @param joueur Le {@link Joueur} a cloner.
+	 */
+	public Joueur(Joueur joueur) {
+		this.id            = joueur.id;
+		this.strategy      = joueur.strategy;
+		this.cartePiochee  = joueur.cartePiochee;
+		this.carteVictoire = joueur.carteVictoire;
+		this.cartesMain    = new ArrayList<Carte>(joueur.cartesMain);
+		this.score         = joueur.score;
 	}
 
 	/**
@@ -56,6 +72,10 @@ public class Joueur {
 		return cartePiochee;
 	}
 
+	public void setCartePiochee(Carte carte) {
+		cartePiochee = carte;
+	}
+
 	/**
 	 * Seulement utilisé pour les règles standards.
 	 * 
@@ -65,118 +85,94 @@ public class Joueur {
 		return carteVictoire;
 	}
 
+	public void setCarteVictoire(Carte carte) {
+		carteVictoire = carte;
+	}
+
 	/**
 	 * Donne la carte a l'index donné.
 	 * 
 	 * @param index L'indice de la carte demandée.
 	 * @return {@link Carte}
 	 */
-	public Carte getCarte(int index) {
-		if (cartes.size() <= index) {
+	public Carte getCarteDansMain(int index) {
+		if (cartesMain.size() <= index) {
 			return null;
 		}
 
-		return cartes.get(index);
+		return cartesMain.get(index);
+	}
+
+	public boolean hasCarte(Carte carte) {
+		return cartesMain.contains(carte);
+	}
+
+	public void ajouterCarteDansMain(Carte carte) {
+		cartesMain.add(carte);
+	}
+
+	public boolean retirerCarteDansMain(Carte carte) {
+		if (!cartesMain.contains(carte))
+			return false;
+
+		cartesMain.remove(carte);
+		return true;
 	}
 
 	/**
 	 * @return {@code int} le nombre de cartes.
 	 */
-	public int getNombreCartes() {
-		return cartes.size();
+	public int getNombreCartesDansMain() {
+		return cartesMain.size();
 	}
 
 	/**
-	 * Seulement utiliser avec les règles standards.
 	 * 
 	 * @return Une {@link ArrayList} des cartes dans le main du joueur.
 	 */
-	public ArrayList<Carte> getCartes() {
-		return cartes;
+	public ArrayList<Carte> getCartesDansMain() {
+		return cartesMain;
 	}
-	
-	/**
-	 * @return {@code true} si une carte a pu être piochée, {@code false} sinon.
-	 */
-	public boolean piocherCarte() {
-		Carte carte = cj.piocherCarte(this);
-		if(carte == null) {
-			return false;
-		}
-		cartePiochee = carte; 
-		return true;
-	}
-
-	/**Essayer de piocher un carte victoire.
-	 * @return {@code true} si la carte victoire a pu etre posé, {@code false} sinon.
-	 */
-	public boolean piocherCarteVicoire() {
-		Carte carte = cj.piocherCarteVictoire(this);
-		if(carte == null)
-			return false;
-		carteVictoire = carte;
-		return true;
-	}
-	
-	/**
-	 * Pose la carte qui vient d'être piochée. Doit seulement être utilisé pour les
-	 * règles normales.
-	 * 
-	 * @param x Abscisse de la carte.
-	 * @param y Ordonnée de la carte.
-	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon
-	 */
-	public boolean poserCarte(int x, int y) {
-		if (cartePiochee == null)
-			return false;
-
-		if (!cj.poserCarte(this, cartePiochee, x, y))
-			return false;
-
-		cartePiochee = null;
-		return true;
-	}
-
-	/**
-	 * Poser une carte dans la main du joueur. .
-	 * 
-	 * @param i L'index de la carte a poser.
-	 * @param x Abscisse de la carte.
-	 * @param y Ordonnée de la carte.
-	 * @return {@code true} si la carte a pu être posée, {@code false} sinon.
-	 */
-	public boolean poserCarte(int i, int x, int y) {
-		return false;
-	}
-
-	/**
-	 * Le joueur essaye de deplacer une carte.
-	 * @param x1 Abscisse de depart de la carte.
-	 * @param y1 Ordonnée de depart de la carte.
-	 * @param x2 Abscisse d'arrivée de la carte.
-	 * @param y2 Ordonnée d'arrivée de la carte.
-	 * @return {@code true} si le deplacement a pu etre effectué, {@code false} sinon.
-	 */
-	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
-		return cj.deplacerCarte(this, x1, y1, x2, y2);
-	}
-	
 
 	/**
 	 * Exécute la strategy donné lors de la construction du joueur.
+	 * 
 	 * @return {@code true} si le joueur a fini son tour, {@code false} sinon.
 	 */
 	public boolean jouer() {
-		if (strategy.execute(this))
+		if (strategy.execute())
 			return true;
 		return false;
-	}
-	
-	public enum Actions {
-		PiocherCarte, PoserCarte, DeplacerCarte
 	}
 
 	public String toString() {
 		return "Joueur_" + id;
 	}
+
+	public Joueur getClone() {
+		return new Joueur(this);
+	}
+
+	public String getStringCartesDansMain() {
+		String ligneHaut = " ";
+		String ligneBas  = "|";
+
+		int i = 0;
+		for (Carte carte : cartesMain) {
+			ligneHaut += i + "  ";
+			ligneBas  += carte.getStringCarte() + "|";
+			i++;
+		}
+
+		return ligneHaut + "\n" + ligneBas;
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 }

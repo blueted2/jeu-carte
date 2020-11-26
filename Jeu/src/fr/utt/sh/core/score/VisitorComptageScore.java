@@ -23,7 +23,7 @@ public interface VisitorComptageScore {
 	 * @param tapis Le {@link Tapis_Rectangulaire} a visiter.
 	 */
 	public abstract void visit(Tapis_Rectangulaire tapis);
-	public abstract void visit(Tapis_Triangulaire tapis_Triangulaire);
+	public abstract void visit(Tapis_Triangulaire tapis);
 
 	public abstract int getPoints();
 

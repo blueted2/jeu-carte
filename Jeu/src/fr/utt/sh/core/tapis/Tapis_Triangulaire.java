@@ -36,23 +36,39 @@ public class Tapis_Triangulaire extends Tapis {
 		}
 	}
 
-	
-	public Tapis_Triangulaire(Carte[][] cartes) {
-		this.cartes = new Carte[cartes.length][];
-		for (int i = 0; i < cartes.length; i++) {
-			this.cartes[i] = new Carte[cartes[i].length];
-			
-			for(int j =0; j<cartes[i].length; j++) {
-				this.cartes[i][j] = cartes[i][j];
+	/**
+	 * Construteur pour cloner un tapis.
+	 * 
+	 * @param cartes Une liste 2-dimmensionnelle, dont la longeur determine la
+	 *               taille du jeu. LA n-ieme sous-liste est de longueur n+1 ( si n
+	 *               commence a 0 ).
+	 */
+	public Tapis_Triangulaire(Tapis_Triangulaire tapis) {
+		
+		
+		this.cartes = new Carte[tapis.cartes.length][];
+		for (int i = 0; i < tapis.cartes.length; i++) {
+			this.cartes[i] = new Carte[tapis.cartes[i].length];
+
+			for (int j = 0; j < tapis.cartes[i].length; j++) {
+				this.cartes[i][j] = tapis.cartes[i][j];
 			}
 		}
-		this.taille = cartes.length;
+		
+		this.taille = tapis.cartes.length;
+		premiereCartePosee = tapis.premiereCartePosee;
 	}
-	
+
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
+
+		if (!positionAVoisins(x, y))
+			if (premiereCartePosee)
+				return false;
+			else
+				premiereCartePosee = true;
 
 		if (positionJouable(x, y)) {
 			if (getCarteAt(x, y) != null)
@@ -73,8 +89,8 @@ public class Tapis_Triangulaire extends Tapis {
 				return true;
 			}
 			return false;
-			
-		} else if (y >= taille) {
+
+		} else if (y >= taille) { // Carte en-dessous du tapis
 			if (decalerEnHaut()) {
 				setCarteAt(carte, x, taille - 1);
 				return true;
@@ -82,13 +98,12 @@ public class Tapis_Triangulaire extends Tapis {
 			return false;
 		}
 
-		// Si la carte est a droite du jeu.
+		// Carte a droite du tapis
 		else if (x > y) {
 			if (decalerAGauche()) {
 				setCarteAt(carte, y, y);
 				return true;
 			}
-			
 
 			if (decalerEnBas()) {
 				setCarteAt(carte, x, x);
@@ -96,16 +111,29 @@ public class Tapis_Triangulaire extends Tapis {
 			}
 			return false;
 
-		} 
-		
+		}
 
 		return false;
 	}
 
-	@Override
-	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
-		// TODO Auto-generated method stub
+	// L'emplacement donné a-t-il une carte voisine ?.
+	boolean positionAVoisins(int x, int y) {
+
+		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
+
+		for (int[] decalage : decalages) {
+			int xVoisin = decalage[0] + x;
+			int yVoisin = decalage[1] + y;
+
+			if (positionJouable(xVoisin, yVoisin)) {
+				if (getCarteAt(xVoisin, yVoisin) != null) {
+					return true;
+				}
+			}
+		}
+
 		return false;
+
 	}
 
 	boolean decalerAGauche() {
@@ -196,18 +224,37 @@ public class Tapis_Triangulaire extends Tapis {
 
 	@Override
 	public boolean estRempli() {
-		// TODO Auto-generated method stub
-		return false;
+		for (int x = 0; x < taille; x++) {
+			for (int y = 0; y <= x; y++) {
+				if (getCarteAt(x, y) == null) {
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	public boolean estVide() {
+		for (int x = 0; x < taille; x++) {
+			for (int y = 0; y <= x; y++) {
+				if (getCarteAt(x, y) != null) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	@Override
 	public Tapis getClone() {
-		return new Tapis_Triangulaire(cartes);
+		return new Tapis_Triangulaire(this);
 	}
 
 	@Override
 	public void retirerCarte(int x, int y) {
-
+		setCarteAt(null, x, y);
 	}
 
 	@Override
@@ -253,8 +300,8 @@ public class Tapis_Triangulaire extends Tapis {
 		v.visit(this);
 	}
 
-	public void accept(VisitorComptageScore visitorComptageScore) {
-		visitorComptageScore.visit(this);
+	public void accept(VisitorComptageScore v) {
+		v.visit(this);
 
 	}
 

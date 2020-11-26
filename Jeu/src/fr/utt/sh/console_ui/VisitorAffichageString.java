@@ -2,6 +2,7 @@ package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Carte.Remplissage;
+import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
@@ -15,12 +16,6 @@ import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
-
-	public void visit(Carte carte) {
-		char   charCouleur = carte.getCouleur().name().charAt(0);
-		String charForme   = getCharForme(carte);
-		representationString = String.format("%s%s", charCouleur, charForme);
-	}
 
 	public void visit(Tapis_Rectangulaire tapis) {
 
@@ -65,7 +60,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = getRepresentationStringStatic(carte);
+					strCarte = carte.getStringCarte();
 				}
 
 				ligne += strCarte + "│";
@@ -88,7 +83,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 		int largeurTapis = tapis.getLargeur();
 		int hauteurTapis = tapis.getHauteur();
 
-		String ligneNombres = "   0  ";
+		String ligneNombres    = "   0  ";
 		String ligneHaut       = "  ┌──┐ \n";
 		String ligneSeparateur = "  ├──┼──";
 		String ligneBas        = "  └──";
@@ -98,7 +93,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 			ligneBas     += "┴──";
 		}
 		ligneNombres += "\n";
-		ligneBas += "┘ \n";
+		ligneBas     += "┘ \n";
 
 		representationString += ligneNombres;
 		representationString += ligneHaut;
@@ -114,7 +109,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = getRepresentationStringStatic(carte);
+					strCarte = carte.getStringCarte();
 				}
 
 				ligne += strCarte + "│";
@@ -135,6 +130,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	}
 
+
 	/**
 	 * Raccourcis pour:
 	 * 
@@ -151,6 +147,9 @@ public class VisitorAffichageString implements VisitorAffichage {
 	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
 	 */
 	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
+		if (visitable == null)
+			return "";
+
 		VisitorAffichageString vis = new VisitorAffichageString();
 		visitable.accept(vis);
 		return vis.representationString;
@@ -163,30 +162,5 @@ public class VisitorAffichageString implements VisitorAffichage {
 		return representationString;
 	}
 
-	String getCharForme(Carte carte) {
-		if (carte.getRemplissage() == Remplissage.Rempli)
-			switch (carte.getForme()) {
-				case Carre:
-					return "■";
-				case Cercle:
-					return "▲";
-				case Triangle:
-					return "●";
-				default:
-					return "?";
-			}
-
-		else
-			switch (carte.getForme()) {
-				case Carre:
-					return "□";
-				case Cercle:
-					return "△";
-				case Triangle:
-					return "○";
-				default:
-					return "?";
-			}
-
-	}
+	
 }
