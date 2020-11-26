@@ -73,6 +73,9 @@ public class StrategyTest implements Strategy {
 	}
 
 	private boolean executeAdvanced() {
+		
+		joueurActuel = c.getJoueurActuel();
+		
 		Carte carteVictoire = joueurActuel.getCarteDansMain(0);
 		Carte carteAPoser   = joueurActuel.getCarteDansMain(1);
 
