@@ -52,12 +52,7 @@ public class Main {
 		while (!c.jeuTermine()) {
 			c.jouer();
 		}
-
-		ArrayList<Joueur> joueurs = c.getJoueurs();
-
-		joueurs.forEach(j -> {
-			System.out.println(j.getScore());
-		});
-
+		
+		c.afficherScoresDesJoueurs();
 	}
 }
