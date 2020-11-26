@@ -15,6 +15,7 @@ import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 import java.util.HashMap;
 
@@ -142,7 +143,7 @@ public class ControlleurJeu {
 	 * @param nbHumains Le nombre de joueurs humains.
 	 * @param nbBots    Le nombre de joueurs bots.
 	 */
-	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles) {
+	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, String[] inputTapis) {
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -159,8 +160,17 @@ public class ControlleurJeu {
 
 		this.regles = regles;
 
-		tapis = new Tapis_Triangulaire(5);
-//		tapis = new Tapis_5x3();
+		switch(inputTapis[0]) {
+		case "t":
+			tapis = new Tapis_Triangulaire(5);
+			break;
+		case "r":
+			tapis = new Tapis_Rectangulaire(Integer.parseInt(inputTapis[1]), Integer.parseInt(inputTapis[2]));
+			break;
+		default:
+			tapis = new Tapis_5x3();
+			break;
+		}
 
 		genererJoueurs(nbHumains, nbBots);
 		iteratorJoueurs = joueurs.iterator();
