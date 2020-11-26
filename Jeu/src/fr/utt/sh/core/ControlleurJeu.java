@@ -50,6 +50,22 @@ public class ControlleurJeu {
 		joueurs         = new ArrayList<Joueur>();
 	}
 
+	public static boolean nombreDeJoueursValide(int joueursHumains, int joueursBots) {
+		if (joueursHumains < 0 || joueursBots < 0)
+			return false;
+
+		if (joueursHumains > 3 || joueursBots > 3)
+			return false;
+
+		if (joueursBots + joueursHumains > 3)
+			return false;
+
+		if (joueursBots + joueursHumains < 2)
+			return false;
+
+		return true;
+	}
+
 	/**
 	 * @return Donne l'instance de {@link ControlleurJeu}.
 	 */
