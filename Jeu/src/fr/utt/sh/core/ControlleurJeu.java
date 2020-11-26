@@ -586,6 +586,9 @@ public class ControlleurJeu {
 			case Standard:
 				if (ilResteDesCartes())
 					return false;
+				
+				if(!joueurActuelAPoseCarteCeTour)
+					return false;
 
 				return true;
 			case Advanced:
