@@ -3,6 +3,7 @@ package fr.utt.sh.core;
 import java.util.ArrayList;
 
 import fr.utt.sh.console_ui.Utils;
+import fr.utt.sh.core.tapis.Tapis.TypeTapis;
 
 /**
  * 
@@ -23,7 +24,9 @@ public class Main {
 		int nbHumains = Integer.parseInt(input[0]);
 		int nbBots    = Integer.parseInt(input[1]);
 		Regles regles;
-		String[] tapis;
+		TypeTapis tapis;
+		int largeur;
+		int hauteur;
 
 		while (!ControlleurJeu.nombreDeJoueursValide(nbHumains, nbBots)) {
 			System.out.println(
@@ -49,9 +52,26 @@ public class Main {
 		}
 		
 		System.out.println("Quel tapis ? (t. Triangle - précisez la taille, r. Rectangle - précisez les dimensions)");
-		tapis = Utils.getLigneSeparee();
+		input = Utils.getLigneSeparee();		
+		switch(input[0]) {
+		case "t":
+			tapis = TypeTapis.Triangulaire;
+			largeur = Integer.parseInt(input[1]);
+			hauteur = Integer.parseInt(input[1]);
+			break;
+		case "r":
+			tapis = TypeTapis.Rectangulaire;
+			largeur = Integer.parseInt(input[1]);
+			hauteur = Integer.parseInt(input[2]);
+			break;
+		default:
+			tapis = TypeTapis.Rectangulaire;
+			largeur = 5;
+			hauteur = 3;
+			break;
+		}
 
-		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis);
+		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
 
 		while (!c.jeuTermine()) {
 			c.jouer();

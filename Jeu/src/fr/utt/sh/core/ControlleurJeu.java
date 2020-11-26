@@ -13,6 +13,7 @@ import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
+import fr.utt.sh.core.tapis.Tapis.TypeTapis;
 import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
@@ -143,7 +144,7 @@ public class ControlleurJeu {
 	 * @param nbHumains Le nombre de joueurs humains.
 	 * @param nbBots    Le nombre de joueurs bots.
 	 */
-	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, String[] inputTapis) {
+	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur, int hauteur) {
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -160,12 +161,12 @@ public class ControlleurJeu {
 
 		this.regles = regles;
 
-		switch(inputTapis[0]) {
-		case "t":
-			tapis = new Tapis_Triangulaire(Integer.parseInt(inputTapis[1]));
+		switch(typeTapis) {
+		case Triangulaire:
+			tapis = new Tapis_Triangulaire(largeur);
 			break;
-		case "r":
-			tapis = new Tapis_Rectangulaire(Integer.parseInt(inputTapis[1]), Integer.parseInt(inputTapis[2]));
+		case Rectangulaire:
+			tapis = new Tapis_Rectangulaire(largeur, hauteur);
 			break;
 		default:
 			tapis = new Tapis_5x3();
