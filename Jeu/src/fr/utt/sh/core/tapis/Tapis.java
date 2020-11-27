@@ -153,4 +153,8 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	public abstract int getHauteur();
 
 	public abstract boolean estVide();
+	
+	public enum TypeTapis {
+		Triangulaire, Rectangulaire
+	}
 }
