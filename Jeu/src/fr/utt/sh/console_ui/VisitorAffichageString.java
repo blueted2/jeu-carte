@@ -130,32 +130,6 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	}
 
-
-	
-	/**
-	 * Raccourcis pour:
-	 * 
-	 * <pre>
-	 * {
-	 * 	&#64;code
-	 * 	VisitorAffichageString visitor = new VisitorAffichageString();
-	 * 	visitable.accept(visitor);
-	 * 	return visitor.getRepresentationString();
-	 * }
-	 * </pre>
-	 * 
-	 * @param visitable Un object implementant {@link VisitableAffichage}.
-	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
-	 */
-//	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
-//		if (visitable == null)
-//			return "";
-//
-//		VisitorAffichageString vis = new VisitorAffichageString();
-//		visitable.accept(vis);
-//		return vis.representationString;
-//	}
-
 	/**
 	 * @return La representation string d'un {@link VisitableAffichage}.
 	 */
@@ -163,5 +137,4 @@ public class VisitorAffichageString implements VisitorAffichage {
 		return representationString;
 	}
 
-	
 }

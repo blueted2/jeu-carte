@@ -13,6 +13,12 @@ import fr.utt.sh.core.tapis.Tapis;
  */
 public class GenerateurString {
 
+	/**
+	 * Obtenir une représentation string d'un tapis.
+	 * 
+	 * @param tapis {@link Tapis}
+	 * @return String
+	 */
 	public static String getStringTapis(Tapis tapis) {
 		if (tapis == null)
 			return "";
@@ -22,15 +28,21 @@ public class GenerateurString {
 		return vis.getRepresentationString();
 	}
 
+	/**
+	 * Obtenir une représentation string d'une carte.
+	 * 
+	 * @param carte {@link Carte}
+	 * @return String
+	 */
 	public static String getStringCarte(Carte carte) {
 		if (carte == null)
 			return "";
-		
+
 		char   charCouleur = carte.getCouleur().name().charAt(0);
 		String charForme   = getCharForme(carte);
 		return String.format("%s%s", charCouleur, charForme);
 	}
-	
+
 	private static String getCharForme(Carte carte) {
 		if (carte.getRemplissage() == Remplissage.Rempli)
 			switch (carte.getForme()) {
@@ -57,7 +69,15 @@ public class GenerateurString {
 			}
 
 	}
-	
+
+	/**
+	 * Obtenir une représentation string des cartes dans la main d'un Joueur. Cette
+	 * représentaion tient sur deux lignes, la premiere pour l'indice de la carte,
+	 * la deuxieme pour la representaion de la carte.
+	 * 
+	 * @param joueur {@link Joueur}
+	 * @return String de deux lignes.
+	 */
 	public static String getStringCartesDansMainJoueur(Joueur joueur) {
 		String ligneHaut = " ";
 		String ligneBas  = "|";
