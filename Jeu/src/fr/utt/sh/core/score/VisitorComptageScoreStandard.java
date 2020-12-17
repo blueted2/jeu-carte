@@ -9,6 +9,20 @@ import fr.utt.sh.core.Carte.Remplissage;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
+/**
+ * <pre>
+ * Cette implementation de {@link VisitorComptageScore} compte les points pour
+ * une certaine carte dans la facon decrite par le projet.
+ * 
+ * La carte pour laquelle le score sera calculé doit etre donné dans le
+ * constructeur, et pour effectuer le comptage du score, la methode
+ * {@link VisitorComptageScore#visit} doit etre appelé avec un tapis comme
+ * parametre.
+ *</pre>
+ * 
+ * @author grego
+ *
+ */
 public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 	Carte             carte;
@@ -19,7 +33,10 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	int points = 0;
 
 	/**
-	 * @param carte
+	 * Ce constructeur demande de spécifier initialement la carte pour laquelle le
+	 * score sera compté.
+	 * 
+	 * @param carte La carte
 	 */
 	public VisitorComptageScoreStandard(Carte carte) {
 		setCarte(carte);
@@ -85,11 +102,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		}
 	}
 
-	/**
-	 * Permet d'obtenir le nombre de points APRES avoir visiter le tapis.
-	 * 
-	 * @return Le nombre de points pour la carte.
-	 */
+	
 	public int getPoints() {
 		return points;
 	}

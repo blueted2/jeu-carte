@@ -42,8 +42,6 @@ public class StrategyTest implements Strategy {
 				return executeStandard();
 			case Advanced:
 				return executeAdvanced();
-			case Autre:
-				break;
 			default:
 				break;
 		}

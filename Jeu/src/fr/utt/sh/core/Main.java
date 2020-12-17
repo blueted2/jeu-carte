@@ -1,7 +1,5 @@
 package fr.utt.sh.core;
 
-import java.util.ArrayList;
-
 import fr.utt.sh.console_ui.Utils;
 import fr.utt.sh.core.tapis.Tapis.TypeTapis;
 
@@ -13,6 +11,11 @@ import fr.utt.sh.core.tapis.Tapis.TypeTapis;
  */
 public class Main {
 
+	/**
+	 * Methode main, executant le jeu.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		ControlleurJeu c = ControlleurJeu.getInstance();
 
@@ -21,12 +24,12 @@ public class Main {
 		System.out.println("Combien de joueurs humains et de bots ? (total entre 2 et 3)");
 		String[] input = Utils.getLigneSeparee();
 
-		int nbHumains = Integer.parseInt(input[0]);
-		int nbBots    = Integer.parseInt(input[1]);
-		Regles regles;
+		int       nbHumains = Integer.parseInt(input[0]);
+		int       nbBots    = Integer.parseInt(input[1]);
+		Regles    regles;
 		TypeTapis tapis;
-		int largeur;
-		int hauteur;
+		int       largeur;
+		int       hauteur;
 
 		while (!ControlleurJeu.nombreDeJoueursValide(nbHumains, nbBots)) {
 			System.out.println(
@@ -36,10 +39,10 @@ public class Main {
 			nbHumains = Integer.parseInt(input[0]);
 			nbBots    = Integer.parseInt(input[1]);
 		}
-		
+
 		System.out.println("Quelles règles ? (s. Standard, a. Advanced)");
 		input = Utils.getLigneSeparee();
-		switch(input[0]) {
+		switch (input[0]) {
 			case "s":
 				regles = Regles.Standard;
 				break;
@@ -50,25 +53,25 @@ public class Main {
 				regles = Regles.Standard;
 				break;
 		}
-		
+
 		System.out.println("Quel tapis ? (t. Triangle - précisez la taille, r. Rectangle - précisez les dimensions)");
-		input = Utils.getLigneSeparee();		
-		switch(input[0]) {
-		case "t":
-			tapis = TypeTapis.Triangulaire;
-			largeur = Integer.parseInt(input[1]);
-			hauteur = Integer.parseInt(input[1]);
-			break;
-		case "r":
-			tapis = TypeTapis.Rectangulaire;
-			largeur = Integer.parseInt(input[1]);
-			hauteur = Integer.parseInt(input[2]);
-			break;
-		default:
-			tapis = TypeTapis.Rectangulaire;
-			largeur = 5;
-			hauteur = 3;
-			break;
+		input = Utils.getLigneSeparee();
+		switch (input[0]) {
+			case "t":
+				tapis = TypeTapis.Triangulaire;
+				largeur = Integer.parseInt(input[1]);
+				hauteur = Integer.parseInt(input[1]);
+				break;
+			case "r":
+				tapis = TypeTapis.Rectangulaire;
+				largeur = Integer.parseInt(input[1]);
+				hauteur = Integer.parseInt(input[2]);
+				break;
+			default:
+				tapis = TypeTapis.Rectangulaire;
+				largeur = 5;
+				hauteur = 3;
+				break;
 		}
 
 		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
@@ -76,7 +79,7 @@ public class Main {
 		while (!c.jeuTermine()) {
 			c.jouer();
 		}
-		
+
 		c.afficherScoresDesJoueurs();
 	}
 }

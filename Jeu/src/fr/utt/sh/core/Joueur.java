@@ -14,10 +14,23 @@ import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 
 /**
+ * <pre>
  * Cette classe représente un joueur. Elle implémente le patron de conception
  * {@code Strategy}. Chaque tour, ControlleurJeu appelle la méthode
  * {@link Joueur#jouer()}, ce qui en tour appelle la méthode exécute d'une
  * {@link Strategy}.
+ * 
+ * Les attributs du joueur comme cartePiochee, carteVictoire ... sont tous
+ * accessibles par des getters et setters, afin d'etre controllés de
+ * l'exterieur, c'est-a-dire la classe {@code Joueur} n'est pas responsable pour
+ * ses actions, c'est simplement un rassemblement de cartes. 
+ * Par exemple, pour piocher une carte, la {@link Strategy} du joueur appelle la methode
+ * {@link ControlleurJeu#joueurActuelPiocheCarte()}, qui, apres avoir fait
+ * certains verifications, va enlever une carte du tas de cartes restantes, et
+ * la mettre dans {@code cartePioche} si les regles sont standard, ou a la fin de
+ * {@code cartesDansMain} si les regles sont Advanced.
+ * 
+ * </pre>
  * 
  * @author grego
  *
@@ -29,8 +42,6 @@ public class Joueur {
 	private Carte cartePiochee;
 	private Carte carteVictoire;
 
-	private ControlleurJeu cj = ControlleurJeu.getInstance();
-
 	private String id;
 
 	private Strategy strategy = new StrategyJoueurConsole();
@@ -38,12 +49,11 @@ public class Joueur {
 	private int score = 0;
 
 	/**
-	 * Constructeur par défaut.
+	 * Constructeur pour un {@code Joueur}.
+	 * 
+	 * @param id       Un {@code String} pour donner un nom / identifiant au joueur.
+	 * @param strategy La {@link Strategy} que ce joueur va implémenter.
 	 */
-	public Joueur() {
-		this.id = "defaut";
-	}
-
 	public Joueur(String id, Strategy strategy) {
 		this.id       = id;
 		this.strategy = strategy;
@@ -72,6 +82,11 @@ public class Joueur {
 		return cartePiochee;
 	}
 
+	/**
+	 * Attribuer une carte a cartePiochee.
+	 * 
+	 * @param carte {@link Carte}.
+	 */
 	public void setCartePiochee(Carte carte) {
 		cartePiochee = carte;
 	}
@@ -79,12 +94,17 @@ public class Joueur {
 	/**
 	 * Seulement utilisé pour les règles standards.
 	 * 
-	 * @return La {@link Carte} victoire.
+	 * @return La {@link Carte} victoire du joueur.
 	 */
 	public Carte getCarteVictoire() {
 		return carteVictoire;
 	}
 
+	/**
+	 * Attribuer une carte a carteVictoire.
+	 * 
+	 * @param carte {@link Carte}.
+	 */
 	public void setCarteVictoire(Carte carte) {
 		carteVictoire = carte;
 	}
@@ -103,14 +123,32 @@ public class Joueur {
 		return cartesMain.get(index);
 	}
 
+	/**
+	 * Indiquer si le joueur a la carte indiquée.
+	 * 
+	 * @param carte {@link Carte}.
+	 * @return {@code true} si le joueur a la carte, {@code false} sinon.
+	 */
 	public boolean hasCarte(Carte carte) {
 		return cartesMain.contains(carte);
 	}
 
+	/**
+	 * Ajouter une nouvelle carte dans le set {@code cartesDansMain}.
+	 * 
+	 * @param carte La {@link Carte} a ajouter.
+	 */
 	public void ajouterCarteDansMain(Carte carte) {
 		cartesMain.add(carte);
 	}
 
+	/**
+	 * Enlever la carte du set {@code cartesDansMain}.
+	 * 
+	 * @param carte La {@link Carte} a retirer.
+	 * @return {@code true} si la carte etait dans le set et a pu etre retirée,
+	 *         {@code false}.
+	 */
 	public boolean retirerCarteDansMain(Carte carte) {
 		if (!cartesMain.contains(carte))
 			return false;
@@ -149,10 +187,19 @@ public class Joueur {
 		return "Joueur_" + id;
 	}
 
+	/**
+	 * Donne un clone du joueur.
+	 * @return {@link Joueur}
+	 */
 	public Joueur getClone() {
 		return new Joueur(this);
 	}
 
+	/**
+	 * TODO: Enlever de cette classe.
+	 * 
+	 * @return {@code String}
+	 */
 	public String getStringCartesDansMain() {
 		String ligneHaut = " ";
 		String ligneBas  = "|";
@@ -167,10 +214,19 @@ public class Joueur {
 		return ligneHaut + "\n" + ligneBas;
 	}
 
+	/**
+	 * TODO : Retirer
+	 * @return int
+	 * 
+	 */
 	public int getScore() {
 		return score;
 	}
 
+	/**
+	 * TODO : Retirer
+	 * @param score int
+	 */
 	public void setScore(int score) {
 		this.score = score;
 	}
