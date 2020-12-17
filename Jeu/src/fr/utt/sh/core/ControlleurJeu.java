@@ -140,11 +140,15 @@ public class ControlleurJeu {
 	 * Si incorrect, les nombres de joueurs seront corrigés.
 	 * 
 	 * 
-	 * 
 	 * @param nbHumains Le nombre de joueurs humains.
 	 * @param nbBots    Le nombre de joueurs bots.
+	 * @param regles
+	 * @param typeTapis
+	 * @param largeur
+	 * @param hauteur
 	 */
-	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur, int hauteur) {
+	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur,
+			int hauteur) {
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -161,16 +165,16 @@ public class ControlleurJeu {
 
 		this.regles = regles;
 
-		switch(typeTapis) {
-		case Triangulaire:
-			tapis = new Tapis_Triangulaire(largeur);
-			break;
-		case Rectangulaire:
-			tapis = new Tapis_Rectangulaire(largeur, hauteur);
-			break;
-		default:
-			tapis = new Tapis_5x3();
-			break;
+		switch (typeTapis) {
+			case Triangulaire:
+				tapis = new Tapis_Triangulaire(largeur);
+				break;
+			case Rectangulaire:
+				tapis = new Tapis_Rectangulaire(largeur, hauteur);
+				break;
+			default:
+				tapis = new Tapis_5x3();
+				break;
 		}
 
 		genererJoueurs(nbHumains, nbBots);
@@ -597,8 +601,8 @@ public class ControlleurJeu {
 			case Standard:
 				if (ilResteDesCartes())
 					return false;
-				
-				if(!joueurActuelAPoseCarteCeTour)
+
+				if (!joueurActuelAPoseCarteCeTour)
 					return false;
 
 				return true;
