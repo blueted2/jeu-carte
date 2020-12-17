@@ -60,7 +60,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = carte.getStringCarte();
+					strCarte = GenerateurString.getStringCarte(carte);
 				}
 
 				ligne += strCarte + "│";
@@ -109,7 +109,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 				if (carte == null) {
 					strCarte = "  ";
 				} else {
-					strCarte = carte.getStringCarte();
+					strCarte = GenerateurString.getStringCarte(carte);
 				}
 
 				ligne += strCarte + "│";
@@ -131,6 +131,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 	}
 
 
+	
 	/**
 	 * Raccourcis pour:
 	 * 
@@ -146,17 +147,17 @@ public class VisitorAffichageString implements VisitorAffichage {
 	 * @param visitable Un object implementant {@link VisitableAffichage}.
 	 * @return Une representaion {@code String} du {@link VisitableAffichage} donné.
 	 */
-	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
-		if (visitable == null)
-			return "";
-
-		VisitorAffichageString vis = new VisitorAffichageString();
-		visitable.accept(vis);
-		return vis.representationString;
-	}
+//	public static String getRepresentationStringStatic(VisitableAffichage visitable) {
+//		if (visitable == null)
+//			return "";
+//
+//		VisitorAffichageString vis = new VisitorAffichageString();
+//		visitable.accept(vis);
+//		return vis.representationString;
+//	}
 
 	/**
-	 * @return La representation string d'un{@link VisitableAffichage}.
+	 * @return La representation string d'un {@link VisitableAffichage}.
 	 */
 	public String getRepresentationString() {
 		return representationString;

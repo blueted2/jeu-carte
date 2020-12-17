@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import fr.utt.sh.console_ui.GenerateurString;
 import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.strategy.Strategy;
@@ -193,25 +194,6 @@ public class Joueur {
 	 */
 	public Joueur getClone() {
 		return new Joueur(this);
-	}
-
-	/**
-	 * TODO: Enlever de cette classe.
-	 * 
-	 * @return {@code String}
-	 */
-	public String getStringCartesDansMain() {
-		String ligneHaut = " ";
-		String ligneBas  = "|";
-
-		int i = 0;
-		for (Carte carte : cartesMain) {
-			ligneHaut += i + "  ";
-			ligneBas  += carte.getStringCarte() + "|";
-			i++;
-		}
-
-		return ligneHaut + "\n" + ligneBas;
 	}
 
 	/**

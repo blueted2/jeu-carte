@@ -16,8 +16,6 @@ public class Carte {
 	private Remplissage remplissage;
 	private Forme       forme;
 
-	private String stringCarte;
-
 	/**
 	 * Constructeur {@link Carte}.
 	 * 
@@ -29,38 +27,9 @@ public class Carte {
 		couleur     = couleurCarte;
 		remplissage = remplissageCarte;
 		forme       = formeCarte;
-
-		char   charCouleur = getCouleur().name().charAt(0);
-		String charForme   = getCharForme();
-		stringCarte = String.format("%s%s", charCouleur, charForme);
 	}
 
-	private String getCharForme() {
-		if (getRemplissage() == Remplissage.Rempli)
-			switch (getForme()) {
-				case Carre:
-					return "■";
-				case Cercle:
-					return "●";
-				case Triangle:
-					return "▲";
-				default:
-					return "?";
-			}
-
-		else
-			switch (getForme()) {
-				case Carre:
-					return "□";
-				case Cercle:
-					return "○";
-				case Triangle:
-					return "△";
-				default:
-					return "?";
-			}
-
-	}
+	
 
 	/**
 	 * @return La {@link Couleur} de la carte
@@ -146,13 +115,5 @@ public class Carte {
 		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}
 
-	/**
-	 * TODO Enlever de cette classe
-	 * 
-	 * @return quelquechose
-	 */
-	public String getStringCarte() {
-		return stringCarte;
-	}
 
 }

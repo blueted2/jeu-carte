@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import fr.utt.sh.console_ui.GenerateurString;
 import fr.utt.sh.console_ui.VisitorAffichageString;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
@@ -250,7 +251,7 @@ public class ControlleurJeu {
 		switch (regles) {
 			case Standard:
 				Carte carteVictoire = joueurActuel.getCarteVictoire();
-				String stringCarte = carteVictoire.getStringCarte();
+				String stringCarte = GenerateurString.getStringCarte(carteVictoire);
 
 				System.out.println(String.format("Carte victoire: |%s|", stringCarte));
 				break;
@@ -316,22 +317,22 @@ public class ControlleurJeu {
 		if (!ilResteDesCartes())
 			return false;
 
-		Carte c = popCarteAleatoire();
+		Carte nouvelleCarte = popCarteAleatoire();
 
-		String carteString = c.getStringCarte();
+		String carteString = GenerateurString.getStringCarte(nouvelleCarte);
 
 		System.out.println();
-		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, c.toString(), carteString));
+		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, nouvelleCarte.toString(), carteString));
 
 		joueurActuelAPiocheCarteCeTour = true;
 
 		switch (regles) {
 			case Advanced:
-				joueurActuel.ajouterCarteDansMain(c);
+				joueurActuel.ajouterCarteDansMain(nouvelleCarte);
 				afficherMainJoueurActuel();
 				return true;
 			case Standard:
-				joueurActuel.setCartePiochee(c);
+				joueurActuel.setCartePiochee(nouvelleCarte);
 				return true;
 			default:
 				break;
@@ -532,13 +533,13 @@ public class ControlleurJeu {
 	}
 
 	private void afficherTapis() {
-		System.out.print(VisitorAffichageString.getRepresentationStringStatic(tapis));
+		System.out.print(GenerateurString.getStringTapis(tapis));
 	}
 
 	private void afficherPointsJoueurActuel() {
 
 		if (regles == Regles.Standard) {
-			String stringCarteVictoire = joueurActuel.getCarteVictoire().getStringCarte();
+			String stringCarteVictoire = GenerateurString.getStringCarte(joueurActuel.getCarteVictoire());
 			System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
 					getScorePourCarte(joueurActuel.getCarteVictoire())));
 		}
@@ -547,7 +548,7 @@ public class ControlleurJeu {
 
 	private void afficherMainJoueurActuel() {
 		System.out.println("Main:");
-		System.out.println(joueurActuel.getStringCartesDansMain());
+		System.out.println(GenerateurString.getStringCartesDansMainJoueur(joueurActuel));
 		System.out.println();
 	}
 
