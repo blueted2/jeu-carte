@@ -34,9 +34,8 @@ public class Tapis_Rectangulaire extends Tapis {
 	}
 
 	/**
-	 * Constructeur pour cloner un tapis.
-	 * 
-	 * @param cartes Une liste 2d des cartes deja jouées.
+	 * Constructeur pour cloner un tapis. Prendre comme paramtre le tapis a cloner.
+	 * @param tapis Le {@code Tapis} a cloner.
 	 */
 	public Tapis_Rectangulaire(Tapis_Rectangulaire tapis) {
 		this.cartes = new Carte[tapis.cartes.length][];

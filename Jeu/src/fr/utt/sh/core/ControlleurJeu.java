@@ -52,6 +52,14 @@ public class ControlleurJeu {
 		joueurs         = new ArrayList<Joueur>();
 	}
 
+	/**
+	 * Une methodes utilitaire statique permettant de determiner si une certaine
+	 * configuration du nombre de joueurs humains et oridnateur est valide.
+	 * 
+	 * @param joueursHumains Le nombre de joueurs humains dans la partie.
+	 * @param joueursBots    Le nombre de joueurs bots dans la partie.
+	 * @return {@code true} si la configuration est valide, {@code false} sinon.
+	 */
 	public static boolean nombreDeJoueursValide(int joueursHumains, int joueursBots) {
 		if (joueursHumains < 0 || joueursBots < 0)
 			return false;
@@ -140,11 +148,15 @@ public class ControlleurJeu {
 	 * Si incorrect, les nombres de joueurs seront corrigés.
 	 * 
 	 * 
-	 * 
 	 * @param nbHumains Le nombre de joueurs humains.
 	 * @param nbBots    Le nombre de joueurs bots.
+	 * @param regles    Les regles de jeu a utiliser
+	 * @param typeTapis Le type de tapis a utiliser
+	 * @param largeur   TODO
+	 * @param hauteur   TODO
 	 */
-	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur, int hauteur) {
+	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur,
+			int hauteur) {
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -161,16 +173,16 @@ public class ControlleurJeu {
 
 		this.regles = regles;
 
-		switch(typeTapis) {
-		case Triangulaire:
-			tapis = new Tapis_Triangulaire(largeur);
-			break;
-		case Rectangulaire:
-			tapis = new Tapis_Rectangulaire(largeur, hauteur);
-			break;
-		default:
-			tapis = new Tapis_5x3();
-			break;
+		switch (typeTapis) {
+			case Triangulaire:
+				tapis = new Tapis_Triangulaire(largeur);
+				break;
+			case Rectangulaire:
+				tapis = new Tapis_Rectangulaire(largeur, hauteur);
+				break;
+			default:
+				tapis = new Tapis_5x3();
+				break;
 		}
 
 		genererJoueurs(nbHumains, nbBots);
@@ -192,10 +204,8 @@ public class ControlleurJeu {
 			case Advanced:
 				distribuerCartesDansMain();
 				break;
-			case Autre:
-				throw new UnsupportedOperationException("regles par implémenté");
 			default:
-				break;
+				throw new UnsupportedOperationException("regles par implémenté");
 
 		}
 
@@ -249,8 +259,6 @@ public class ControlleurJeu {
 				afficherMainJoueurActuel();
 				break;
 
-			case Autre:
-				break;
 			default:
 				break;
 		}
@@ -270,6 +278,13 @@ public class ControlleurJeu {
 		return joueurActuel.getClone();
 	}
 
+	/**
+	 * Donne une {@code ArrayList} de <u> clones </u> des joueurs. Les jouers sont
+	 * clonés afin de permettre une lecture de leurs états, sans que les etats des
+	 * vraies joueurs puisse etre modifié par une source exterieure.
+	 * 
+	 * @return Les joueurs en {@code ArrayList<Joueur>}
+	 */
 	public ArrayList<Joueur> getJoueurs() {
 		ArrayList<Joueur> j = new ArrayList<>();
 
@@ -311,8 +326,6 @@ public class ControlleurJeu {
 		joueurActuelAPiocheCarteCeTour = true;
 
 		switch (regles) {
-			case Autre:
-				break;
 			case Advanced:
 				joueurActuel.ajouterCarteDansMain(c);
 				afficherMainJoueurActuel();
@@ -466,6 +479,12 @@ public class ControlleurJeu {
 		return tapis.estRempli();
 	}
 
+	/**
+	 * Est-ce-que le tapis du jeu actuel est vide ?
+	 * 
+	 * @return {@code true} si le tapis ne contient pas de cartes, {@code false}
+	 *         sinon.
+	 */
 	public boolean tapisEstVide() {
 		return tapis.estVide();
 	}
@@ -532,8 +551,12 @@ public class ControlleurJeu {
 		System.out.println();
 	}
 
+	/**
+	 * Afficher le score de tout les jouers a la console.
+	 */
 	public void afficherScoresDesJoueurs() {
 		joueurs.forEach(j -> {
+			
 			System.out.println(String.format("Score de %s: %d", j, j.getScore()));
 		});
 	}
@@ -562,8 +585,6 @@ public class ControlleurJeu {
 				case Advanced:
 					carteVictoire = joueur.getCarteDansMain(0);
 					break;
-				case Autre:
-					break;
 				default:
 					break;
 			}
@@ -573,22 +594,46 @@ public class ControlleurJeu {
 		}
 	}
 
+	/**
+	 * @return {@code true} si le joueur actuel a deja posé une carte ce tour,
+	 *         {@code false} sinon.
+	 */
 	public boolean joueurActuelAPoseCarteCeTour() {
 		return joueurActuelAPoseCarteCeTour;
 	}
 
+	/**
+	 * @return {@code true} si le joueur actuel a deja pioché une carte ce tour,
+	 *         {@code false} sinon.
+	 */
 	public boolean joueurActuelAPiocheCarteCeTour() {
 		return joueurActuelAPiocheCarteCeTour;
 	}
 
+	/**
+	 * @return {@code true} si le joueur a deja déplacé une carte ce tour,
+	 *         {@code false} sinon.
+	 */
 	public boolean joueurActuelADeplaceCarteCeTour() {
 		return joueurActuelADeplaceCarteCeTour;
 	}
 
+	/**
+	 * Determiner si il reste des cartes non-piochées / dans le tas.
+	 * 
+	 * @return {@code true} si il reste des cartes, {@code false} sinon.
+	 */
 	public boolean ilResteDesCartes() {
 		return cartesRestantes.size() != 0;
 	}
 
+	/**
+	 * Determiner si le jeu en cours est terminé, en regardant si le tapis est
+	 * rempli, si il reste des cartes non piochés, si le joueur actuel a fini son
+	 * tour ...
+	 * 
+	 * @return {@code true} si le jeu est terminé, {@code false} sinon.
+	 */
 	public boolean jeuTermine() {
 		if (tapisEstRempli())
 			return true;
@@ -597,8 +642,8 @@ public class ControlleurJeu {
 			case Standard:
 				if (ilResteDesCartes())
 					return false;
-				
-				if(!joueurActuelAPoseCarteCeTour)
+
+				if (!joueurActuelAPoseCarteCeTour)
 					return false;
 
 				return true;
@@ -612,8 +657,6 @@ public class ControlleurJeu {
 				}
 
 				return true;
-			case Autre:
-				break;
 			default:
 				break;
 		}
@@ -621,6 +664,11 @@ public class ControlleurJeu {
 
 	}
 
+	/**
+	 * Obtenir le type {@link Regles} du jeu en cours.
+	 * 
+	 * @return Les regles.
+	 */
 	public Regles getRegles() {
 		return regles;
 	}

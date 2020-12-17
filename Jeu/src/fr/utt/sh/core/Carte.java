@@ -3,12 +3,9 @@
  */
 package fr.utt.sh.core;
 
-import fr.utt.sh.console_ui.VisitableAffichage;
-import fr.utt.sh.console_ui.VisitorAffichage;
-import fr.utt.sh.core.Carte.Remplissage;
-
 /**
- * Une implementation de {@link VisitableAffichage}.
+ * Une classe pour représenter toutes les cartes du jeu. Une {@code Carte} est
+ * immutable, son etat pouvant seulement etre définie lors de sa création.
  * 
  * @author grego
  *
@@ -26,7 +23,7 @@ public class Carte {
 	 * 
 	 * @param couleurCarte     La {@link Couleur} de la forme sur la carte.
 	 * @param remplissageCarte Le {@link Remplissage} de la forme de la carte.
-	 * @param formeCarte       La {@link forme} sur la carte.
+	 * @param formeCarte       La {@link Forme} sur la carte.
 	 */
 	public Carte(Couleur couleurCarte, Remplissage remplissageCarte, Forme formeCarte) {
 		couleur     = couleurCarte;
@@ -80,46 +77,80 @@ public class Carte {
 	}
 
 	/**
-	 * @return La {@link forme} de la carte
+	 * @return La {@link Forme} de la carte
 	 */
 	public Forme getForme() {
 		return forme;
 	}
 
 	/**
-	 * Couleurs possible d'une carte.
+	 * Les couleurs possibles qu'une {@code Carte} peut avoir.
 	 * 
 	 * @author grego
 	 *
 	 */
 	public enum Couleur {
-		Rouge, Bleu, Vert
+		/**
+		 * Couleur rouge.
+		 */
+		Rouge,
+		/**
+		 * Couleur bleu.
+		 */
+		Bleu,
+		/**
+		 * Couleur vert.
+		 */
+		Vert
 	}
 
 	/**
-	 * Remplissages possibles de la forme sur une carte.
+	 * Les remplissages possibles de la forme sur une carte.
 	 * 
 	 * @author grego
 	 *
 	 */
 	public enum Remplissage {
-		Rempli, Vide
+		/**
+		 * Une forme remplie.
+		 */
+		Rempli,
+		/**
+		 * Une forme vide.
+		 */
+		Vide
 	}
 
 	/**
-	 * Formes possibles sur une carte.
+	 * Les formes possibles sur une carte.
 	 * 
 	 * @author grego
 	 *
 	 */
 	public enum Forme {
-		Triangle, Carre, Cercle
+		/**
+		 * Forme triangle.
+		 */
+		Triangle,
+		/**
+		 * Forme carré.
+		 */
+		Carre,
+		/**
+		 * Forme cercle.
+		 */
+		Cercle
 	}
 
 	public String toString() {
 		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}
 
+	/**
+	 * TODO Enlever de cette classe
+	 * 
+	 * @return quelquechose
+	 */
 	public String getStringCarte() {
 		return stringCarte;
 	}

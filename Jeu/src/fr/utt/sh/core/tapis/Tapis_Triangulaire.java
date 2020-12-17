@@ -24,7 +24,7 @@ public class Tapis_Triangulaire extends Tapis {
 	/**
 	 * Créer un tapis triangulaire de taille {@code taille}.
 	 * 
-	 * @param taille
+	 * @param taille La taille du tapis triangulaire a créer.
 	 */
 	public Tapis_Triangulaire(int taille) {
 		this.taille = taille;
@@ -37,11 +37,9 @@ public class Tapis_Triangulaire extends Tapis {
 	}
 
 	/**
-	 * Construteur pour cloner un tapis.
+	 * Construteur pour cloner un tapis. Prendre comme parametre le tapis a cloner. 
+	 * @param tapis Le tapis a etre cloné. 
 	 * 
-	 * @param cartes Une liste 2-dimmensionnelle, dont la longeur determine la
-	 *               taille du jeu. LA n-ieme sous-liste est de longueur n+1 ( si n
-	 *               commence a 0 ).
 	 */
 	public Tapis_Triangulaire(Tapis_Triangulaire tapis) {
 		

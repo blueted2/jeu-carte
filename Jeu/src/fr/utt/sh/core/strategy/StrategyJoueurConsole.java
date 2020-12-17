@@ -6,6 +6,13 @@ import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 
+/**
+ * Une implementation de {@link Strategy} demandant a un joueur humain les
+ * actions a efectuer avec la console.
+ * 
+ * @author grego
+ *
+ */
 public class StrategyJoueurConsole implements Strategy {
 
 	private ControlleurJeu c = ControlleurJeu.getInstance();
@@ -22,9 +29,6 @@ public class StrategyJoueurConsole implements Strategy {
 				return executeStandard();
 			case Advanced:
 				return executeAdvanced();
-
-			case Autre:
-				break;
 			default:
 				break;
 		}

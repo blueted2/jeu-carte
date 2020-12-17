@@ -129,10 +129,10 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	public abstract boolean positionJouable(int x, int y);
 
 	/**
-	 * Retire une carte.
+	 * Retire une carte du tapis a la position specifié.
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x Abscisse de la carte.
+	 * @param y Ordonnée de la carte.
 	 */
 	public void retirerCarte(int x, int y) {
 		setCarteAt(null, x, y);
@@ -152,9 +152,27 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 */
 	public abstract int getHauteur();
 
+	/**
+	 * Indique sur le tapis est completement vide.
+	 * 
+	 * @return Boolean
+	 */
 	public abstract boolean estVide();
-	
+
+	/**
+	 * Une enumeration de types de tapis valides.
+	 * 
+	 * @author grego
+	 *
+	 */
 	public enum TypeTapis {
-		Triangulaire, Rectangulaire
+		/**
+		 * Une tapis triangulaire de taille 5.
+		 */
+		Triangulaire,
+		/**
+		 * Un tapis rectangulaire de taille 5x3.
+		 */
+		Rectangulaire
 	}
 }
