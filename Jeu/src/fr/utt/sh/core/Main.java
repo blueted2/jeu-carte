@@ -2,6 +2,7 @@ package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.Utils;
 import fr.utt.sh.core.tapis.Tapis.TypeTapis;
+import fr.utt.sh.gui.InterfaceJeu;
 
 /**
  * 
@@ -17,6 +18,7 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		ControlleurJeu c = ControlleurJeu.getInstance();
 
 		// Sélection du nombre de joueurs (humains et bots)
@@ -74,6 +76,7 @@ public class Main {
 				break;
 		}
 
+		
 		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
 
 		while (!c.jeuTermine()) {
