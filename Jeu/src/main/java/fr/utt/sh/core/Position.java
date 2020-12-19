@@ -3,7 +3,7 @@ package fr.utt.sh.core;
 /**
  * Cette classe sert a représenter une position sur un tapis avec deux
  * coordonnées. Elle est imuttable, ses valeurs pouvant seulement etre attribué
- * lors sa création.
+ * lors de sa création.
  * 
  * @author grego
  *
@@ -39,5 +39,10 @@ public class Position {
 	 */
 	public int getY() {
 		return y;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("( %d, %d )", x, y);
 	}
 }

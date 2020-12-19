@@ -2,8 +2,9 @@ package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.core.Carte;
+import fr.utt.sh.core.Position;
 import fr.utt.sh.core.score.VisitableComptageScore;
-import fr.utt.sh.core.score.VisitorComptageScore;
+import java.util.Observable;
 
 /**
  * {@link Tapis} est une classe abstraite de base pour toutes les variantes de
@@ -22,7 +23,8 @@ import fr.utt.sh.core.score.VisitorComptageScore;
  * @author grego
  *
  */
-public abstract class Tapis implements VisitableAffichage, VisitableComptageScore {
+@SuppressWarnings("deprecation")
+public abstract class Tapis extends Observable implements VisitableAffichage, VisitableComptageScore {
 
 	/**
 	 * Echanger la position de deux cartes posées sur le tapis. Cette méthode prend
@@ -52,8 +54,11 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 			Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
 			setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
 
-			if (poserCarte(carteDeplacee, x2, y2))
+			if (poserCarte(carteDeplacee, x2, y2)) {
+				this.setChanged();
+				this.notifyObservers();
 				return true;
+			}
 
 			setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, le remettre d'ou elle vient.
 			return false;
@@ -62,8 +67,11 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 		Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
 		setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
 
-		if (poserCarte(carteDeplacee, x2, y2)) // Essayer de la poser
+		if (poserCarte(carteDeplacee, x2, y2)) { // Essayer de la poser
+			this.setChanged();
+			this.notifyObservers();
 			return true;
+		}
 
 		setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, le remettre d'ou elle vient.
 		return false;
@@ -135,7 +143,7 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 	 * @param y Ordonnée de la carte.
 	 */
 	public void retirerCarte(int x, int y) {
-		setCarteAt(null, x, y);
+		setCarteAt(null, x, y);		
 	}
 
 	/**
@@ -174,5 +182,10 @@ public abstract class Tapis implements VisitableAffichage, VisitableComptageScor
 		 * Un tapis rectangulaire de taille 5x3.
 		 */
 		Rectangulaire
+	}
+
+	
+	public Carte getCarteAt(Position posCarte) {
+		return getCarteAt(posCarte.getX(), posCarte.getY());
 	}
 }

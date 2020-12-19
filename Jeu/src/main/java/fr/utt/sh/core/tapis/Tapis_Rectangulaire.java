@@ -121,6 +121,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		if (!positionLegale(x, y))
 			return false;
 		cartes[x][y] = carte;
+		
 		return true;
 	}
 
@@ -141,6 +142,9 @@ public class Tapis_Rectangulaire extends Tapis {
 				return false;
 			setCarteAt(carte, x, y);
 			premiereCartePosee = true;
+			
+			this.setChanged();
+			this.notifyObservers();
 			return true;
 		}
 
@@ -164,6 +168,9 @@ public class Tapis_Rectangulaire extends Tapis {
 		}
 
 		premiereCartePosee = true;
+		this.setChanged();
+		this.notifyObservers();
+		
 		return true;
 	}
 

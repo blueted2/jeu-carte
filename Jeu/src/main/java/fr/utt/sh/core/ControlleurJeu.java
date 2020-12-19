@@ -15,6 +15,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.tapis.Tapis.TypeTapis;
+import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
@@ -32,6 +33,7 @@ public class ControlleurJeu {
 
 	private static ControlleurJeu instance;
 
+	private ArrayList<Carte>  toutesCartes;
 	private ArrayList<Carte>  cartesRestantes;
 	private ArrayList<Joueur> joueurs;
 	private Iterator<Joueur>  iteratorJoueurs;
@@ -88,14 +90,23 @@ public class ControlleurJeu {
 
 	}
 
-	private void genererCartes() {
-		cartesRestantes = new ArrayList<Carte>();
-		for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
-			for (Carte.Couleur couleur : Carte.Couleur.values()) {
-				for (Carte.Forme forme : Carte.Forme.values()) {
-					cartesRestantes.add(new Carte(couleur, remplissage, forme));
+	private void initialiserCartes() {
+		if (toutesCartes == null) {
+
+			toutesCartes = new ArrayList<Carte>();
+			for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
+				for (Carte.Couleur couleur : Carte.Couleur.values()) {
+					for (Carte.Forme forme : Carte.Forme.values()) {
+						Carte nouvelleCarte = new Carte(couleur, remplissage, forme);
+						toutesCartes.add(nouvelleCarte);
+					}
 				}
 			}
+		}
+
+		cartesRestantes = new ArrayList<Carte>();
+		for (Carte carte : toutesCartes) {
+			cartesRestantes.add(carte);
 		}
 	}
 
@@ -193,7 +204,9 @@ public class ControlleurJeu {
 
 		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
 		// recreers.
-		genererCartes();
+		initialiserCartes();
+
+		InterfaceJeu j = new InterfaceJeu(tapis);
 
 		// Au debut de la partie, il faut jeter une carte.
 		popCarteAleatoire();
@@ -322,7 +335,8 @@ public class ControlleurJeu {
 		String carteString = GenerateurString.getStringCarte(nouvelleCarte);
 
 		System.out.println();
-		System.out.println(String.format("%s a pioché un %s |%s|", joueurActuel, nouvelleCarte.toString(), carteString));
+		System.out
+				.println(String.format("%s a pioché un %s |%s|", joueurActuel, nouvelleCarte.toString(), carteString));
 
 		joueurActuelAPiocheCarteCeTour = true;
 
@@ -532,6 +546,10 @@ public class ControlleurJeu {
 		return tapis.getClone();
 	}
 
+	public ArrayList<Carte> getToutesCartes(){
+		return toutesCartes;
+	}
+	
 	private void afficherTapis() {
 		System.out.print(GenerateurString.getStringTapis(tapis));
 	}
@@ -557,7 +575,7 @@ public class ControlleurJeu {
 	 */
 	public void afficherScoresDesJoueurs() {
 		joueurs.forEach(j -> {
-			
+
 			System.out.println(String.format("Score de %s: %d", j, j.getScore()));
 		});
 	}
