@@ -3,9 +3,6 @@ package fr.utt.sh.core.score;
 import java.util.LinkedList;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.Carte.Couleur;
-import fr.utt.sh.core.Carte.Forme;
-import fr.utt.sh.core.Carte.Remplissage;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 
@@ -18,7 +15,7 @@ import fr.utt.sh.core.tapis.Tapis_Triangulaire;
  * constructeur, et pour effectuer le comptage du score, la methode
  * {@link VisitorComptageScore#visit} doit etre appelé avec un tapis comme
  * parametre.
- *</pre>
+ * </pre>
  * 
  * @author grego
  *
@@ -102,7 +99,6 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		}
 	}
 
-	
 	public int getPoints() {
 		return points;
 	}

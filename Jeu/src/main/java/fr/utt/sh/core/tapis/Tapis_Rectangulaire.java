@@ -35,21 +35,22 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	/**
 	 * Constructeur pour cloner un tapis. Prendre comme paramtre le tapis a cloner.
+	 * 
 	 * @param tapis Le {@code Tapis} a cloner.
 	 */
 	public Tapis_Rectangulaire(Tapis_Rectangulaire tapis) {
 		this.cartes = new Carte[tapis.cartes.length][];
-		
+
 		for (int i = 0; i < tapis.cartes.length; i++) {
 			this.cartes[i] = new Carte[tapis.cartes[i].length];
-			
-			for(int j =0; j<tapis.cartes[i].length; j++) {
+
+			for (int j = 0; j < tapis.cartes[i].length; j++) {
 				this.cartes[i][j] = tapis.cartes[i][j];
 			}
 		}
 
-		largeur = tapis.cartes.length;
-		hauteur = tapis.cartes[0].length;
+		largeur            = tapis.cartes.length;
+		hauteur            = tapis.cartes[0].length;
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
@@ -79,11 +80,15 @@ public class Tapis_Rectangulaire extends Tapis {
 		if (y < -1 || y > hauteur)
 			return false;
 
+		if (x == -1 || x == largeur)
+			if (y == -1 || y == hauteur)
+				return false;
+
 		return true;
 	}
 
 	// La position est elle valide, mais cette fois sans les bords.
-	public boolean positionJouable(int x, int y) {
+	public boolean positionSurTapis(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
 		if (y < 0 || y > hauteur - 1)
@@ -93,7 +98,7 @@ public class Tapis_Rectangulaire extends Tapis {
 	}
 
 	// L'emplacement donné a-t-il une carte voisine ?.
-	boolean positionAVoisins(int x, int y) {
+	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
 
@@ -101,7 +106,7 @@ public class Tapis_Rectangulaire extends Tapis {
 			int xVoisin = decalage[0] + x;
 			int yVoisin = decalage[1] + y;
 
-			if (positionJouable(xVoisin, yVoisin)) {
+			if (positionSurTapis(xVoisin, yVoisin)) {
 				if (getCarteAt(xVoisin, yVoisin) != null) {
 					return true;
 				}
@@ -114,6 +119,8 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	@Override
 	public Carte getCarteAt(int x, int y) {
+		if (!positionSurTapis(x, y))
+			return null;
 		return cartes[x][y];
 	}
 
@@ -121,7 +128,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		if (!positionLegale(x, y))
 			return false;
 		cartes[x][y] = carte;
-		
+
 		return true;
 	}
 
@@ -137,12 +144,12 @@ public class Tapis_Rectangulaire extends Tapis {
 			return false;
 
 		// Si la position n'est pas sur les bords, est ce qu'il y a une carte ?
-		if (positionJouable(x, y)) {
+		if (positionSurTapis(x, y)) {
 			if (getCarteAt(x, y) != null)
 				return false;
 			setCarteAt(carte, x, y);
 			premiereCartePosee = true;
-			
+
 			this.setChanged();
 			this.notifyObservers();
 			return true;
@@ -155,13 +162,13 @@ public class Tapis_Rectangulaire extends Tapis {
 		} else if (x == largeur) {
 			if (!decalerAGauche())
 				return false;
-			setCarteAt(carte, 0, largeur - 1);
+			setCarteAt(carte, largeur - 1, y);
 
 		} else if (y == -1) {
 			if (!decalerEnBas())
 				return false;
 			setCarteAt(carte, x, 0);
-		} else if (x == largeur) {
+		} else if (y == hauteur) {
 			if (!decalerEnHaut())
 				return false;
 			setCarteAt(carte, x, hauteur - 1);
@@ -170,7 +177,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		premiereCartePosee = true;
 		this.setChanged();
 		this.notifyObservers();
-		
+
 		return true;
 	}
 
@@ -265,7 +272,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public Tapis getClone() {
 		return new Tapis_Rectangulaire(this);

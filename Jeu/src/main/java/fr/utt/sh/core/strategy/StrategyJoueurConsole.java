@@ -1,7 +1,6 @@
 package fr.utt.sh.core.strategy;
 
 import fr.utt.sh.console_ui.Utils;
-import fr.utt.sh.console_ui.VisitorAffichageString;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
@@ -17,7 +16,13 @@ public class StrategyJoueurConsole implements Strategy {
 
 	private ControlleurJeu c = ControlleurJeu.getInstance();
 
-	private Joueur joueurActuel;
+	private Joueur  joueurActuel;
+
+	@Override
+	public void run() {
+		while (!execute()) {
+		}
+	}
 
 	@Override
 	public boolean execute() {
@@ -32,21 +37,19 @@ public class StrategyJoueurConsole implements Strategy {
 			default:
 				break;
 		}
-
 		return false;
-
 	}
 
 	private boolean executeStandard() {
 
 		String message = "Actions possibles: ";
 
-		message += !c.joueurActuelAPiocheCarteCeTour() ? "piocher | " : "p̶i̶o̶c̶h̶e̶r̶ | ";
-		message += !c.joueurActuelAPoseCarteCeTour() && c.joueurActuelAPiocheCarteCeTour() ? "poser {x} {y} | "
+		message += !c.hasJoueurActuelPiocheCarteCeTour() ? "piocher | " : "p̶i̶o̶c̶h̶e̶r̶ | ";
+		message += !c.hasJoueurActuelPoseCarteCeTour() && c.hasJoueurActuelPiocheCarteCeTour() ? "poser {x} {y} | "
 				: "p̶o̶s̶e̶r̶ ̶{̶x̶}̶ ̶{̶y̶}̶ | ";
-		message += !c.joueurActuelADeplaceCarteCeTour() ? "deplacer {x1} {y1} {x2} {y2} | "
+		message += !c.hasJoueurActuelDeplaceCarteCeTour() ? "deplacer {x1} {y1} {x2} {y2} | "
 				: "d̶e̶p̶l̶a̶c̶e̶r̶ ̶{̶x̶1̶}̶ ̶{̶y̶1̶}̶ ̶{̶x̶2̶}̶ ̶{̶y̶2̶}̶ | ";
-		message += c.joueurActuelAPoseCarteCeTour() ? "finir" : "f̶i̶n̶i̶r̶";
+		message += c.hasJoueurActuelPoseCarteCeTour() ? "finir" : "f̶i̶n̶i̶r̶";
 
 //		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x1} {y1} {x2} {y2} | finir");
 		System.out.println(message);
@@ -92,7 +95,7 @@ public class StrategyJoueurConsole implements Strategy {
 				return false;
 
 			case "finir":
-				if (c.joueurActuelPeutFinir()) {
+				if (c.terminerTourJoueurActuel()) {
 					return true;
 				}
 
@@ -157,7 +160,7 @@ public class StrategyJoueurConsole implements Strategy {
 				return false;
 
 			case "finir":
-				if (c.joueurActuelPeutFinir()) {
+				if (c.terminerTourJoueurActuel()) {
 					return true;
 				}
 

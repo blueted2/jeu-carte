@@ -4,11 +4,9 @@ import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.Position;
-import fr.utt.sh.core.Regles;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.tapis.Tapis;
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
 /**
  * Une implementation test d'une strategy. Quand cette strategy est utilisée,
@@ -27,13 +25,26 @@ public class StrategyTest implements Strategy {
 	Tapis tapisTemp;
 	int   lTapis;
 	int   hTapis;
+	
+	private int delay = 200;
 
 	Joueur joueurActuel;
 
 	@Override
-	public boolean execute() {
+	public void run() {
+		try {
+			while (!execute()) {
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
-		tapisTemp = c.getTapis();
+	}
+
+	@Override
+	public boolean execute() throws InterruptedException {
+
+		tapisTemp = c.getCloneTapis();
 		lTapis    = tapisTemp.getLargeur();
 		hTapis    = tapisTemp.getHauteur();
 
@@ -48,32 +59,35 @@ public class StrategyTest implements Strategy {
 		return false;
 	}
 
-	private boolean executeStandard() {
+	private boolean executeStandard() throws InterruptedException {
 		c.joueurActuelPiocheCarte();
+		Thread.sleep(delay);
 		
-		if(c.tapisEstVide()) {
-			c.joueurActuelPoseCartePiochee(2, 1);
-			return true;
+		if (c.tapisEstVide()) {
+			c.joueurActuelPoseCartePiochee(0, 0);
+			Thread.sleep(delay);
+			return c.terminerTourJoueurActuel();
 		}
 
 		joueurActuel = c.getJoueurActuel();
 
 		Carte carteVictoire = joueurActuel.getCarteVictoire();
 		Carte cartePiochee  = joueurActuel.getCartePiochee();
-		
+
 		Position meilleurePosition = getMeilleurePosition(carteVictoire, cartePiochee);
 
 		int x = meilleurePosition.getX();
 		int y = meilleurePosition.getY();
 
 		c.joueurActuelPoseCartePiochee(x, y);
-		return true;
+		Thread.sleep(delay);
+		return c.terminerTourJoueurActuel();
 	}
 
 	private boolean executeAdvanced() {
-		
+
 		joueurActuel = c.getJoueurActuel();
-		
+
 		Carte carteVictoire = joueurActuel.getCarteDansMain(0);
 		Carte carteAPoser   = joueurActuel.getCarteDansMain(1);
 
@@ -84,8 +98,9 @@ public class StrategyTest implements Strategy {
 
 		c.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
 		c.joueurActuelPiocheCarte();
-
-		return true;
+		
+		
+		return c.terminerTourJoueurActuel();
 	}
 
 	private Position getMeilleurePosition(Carte carteVictoire, Carte carteAPoser) {
@@ -98,7 +113,7 @@ public class StrategyTest implements Strategy {
 		for (int y = 0; y < hTapis; y++) {
 			for (int x = 0; x < lTapis; x++) {
 
-				if (tapisTemp.positionJouable(x, y)) {
+				if (tapisTemp.positionSurTapis(x, y)) {
 					if (tapisTemp.poserCarte(carteAPoser, x, y)) {
 
 						VisitorComptageScore v = new VisitorComptageScoreStandard(carteVictoire);

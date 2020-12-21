@@ -5,10 +5,10 @@ package fr.utt.sh.core;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Observable;
 import java.util.Random;
 
 import fr.utt.sh.console_ui.GenerateurString;
-import fr.utt.sh.console_ui.VisitorAffichageString;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
@@ -20,8 +20,6 @@ import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
 import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
 
-import java.util.HashMap;
-
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
  * de la logique des règles.
@@ -29,7 +27,7 @@ import java.util.HashMap;
  * @author grego
  *
  */
-public class ControlleurJeu {
+public class ControlleurJeu extends Observable {
 
 	private static ControlleurJeu instance;
 
@@ -49,6 +47,8 @@ public class ControlleurJeu {
 	private boolean joueurActuelAPiocheCarteCeTour  = false;
 	private boolean joueurActuelADeplaceCarteCeTour = false;
 	private boolean cartesVictoiresDistribues       = false;
+
+	private boolean _jeuTermine = false;
 
 	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
@@ -117,18 +117,13 @@ public class ControlleurJeu {
 		int nombreHumainsAjoutes = 0;
 
 		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
-			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
-				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
-				nombreBotsAjoutes++;
-			}
-
 			if (nombreHumainsAjoutes < nombreDeJoueursHumains) {
-				joueurs.add(new Joueur("Humain_" + nombreHumainsAjoutes, new StrategyJoueurConsole()));
+				joueurs.add(new Joueur("Humain_" + nombreHumainsAjoutes, new StrategyJoueurConsole(), true));
 				nombreHumainsAjoutes++;
 			}
 
 			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
-				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest()));
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest(), false));
 				nombreBotsAjoutes++;
 			}
 		}
@@ -141,6 +136,8 @@ public class ControlleurJeu {
 //		}
 
 	}
+
+	private Thread threadStrategyJoueurActuel;
 
 	/**
 	 * 
@@ -206,7 +203,8 @@ public class ControlleurJeu {
 		// recreers.
 		initialiserCartes();
 
-		InterfaceJeu j = new InterfaceJeu(tapis);
+		// Commener l'interface graphique du jeu.
+		InterfaceJeu.begin();
 
 		// Au debut de la partie, il faut jeter une carte.
 		popCarteAleatoire();
@@ -219,7 +217,7 @@ public class ControlleurJeu {
 				distribuerCartesDansMain();
 				break;
 			default:
-				throw new UnsupportedOperationException("regles par implémenté");
+				throw new UnsupportedOperationException("regles pas implémenté");
 
 		}
 
@@ -243,8 +241,9 @@ public class ControlleurJeu {
 
 			if (!joueurActuelAPoseCarteCeTour)
 				return false;
-		} else
+		} else {
 			debutPartie = false;
+		}
 
 		// Si on est a la fin de l'iterator, en créer un nouveau.
 		if (!iteratorJoueurs.hasNext())
@@ -277,36 +276,23 @@ public class ControlleurJeu {
 				break;
 		}
 
+//		if(threadStrategyJoueurActuel != null)
+//			threadStrategyJoueurActuel.
+
+		threadStrategyJoueurActuel = joueurActuel.beginStrategyThread();
+
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 
 	/**
-	 * Obtenir une copie du {@link Joueur} actuel. Ce joueur est une copie pour la
-	 * meme raison qu'on ne peut seuelement obtenir une copie du tapis: pour
-	 * permettre un access et une modification du tapis de jeu actuel sans le risque
-	 * de perturber le jeu actuel.
+	 * Obtenir le {@link Joueur} actuel, c'est a dire le joueur en train de joueur.
 	 * 
-	 * @return La copie {@link Joueur} actuel.
+	 * @return {@link Joueur}.
 	 */
 	public Joueur getJoueurActuel() {
-		return joueurActuel.getClone();
-	}
-
-	/**
-	 * Donne une {@code ArrayList} de <u> clones </u> des joueurs. Les jouers sont
-	 * clonés afin de permettre une lecture de leurs états, sans que les etats des
-	 * vraies joueurs puisse etre modifié par une source exterieure.
-	 * 
-	 * @return Les joueurs en {@code ArrayList<Joueur>}
-	 */
-	public ArrayList<Joueur> getJoueurs() {
-		ArrayList<Joueur> j = new ArrayList<>();
-
-		for (Joueur joueur : joueurs) {
-			j.add(joueur.getClone());
-		}
-
-		return j;
+		return joueurActuel;
 	}
 
 	/**
@@ -515,26 +501,6 @@ public class ControlleurJeu {
 	}
 
 	/**
-	 * Faire jouer le joueur actuel. Si le joueur a fini son tour, on passe au
-	 * joueur suivant.
-	 * 
-	 * @return {@code true} si le joueur actuel a fini son tour, {@code false}
-	 *         sinon.
-	 */
-	public boolean jouer() {
-		if (joueurActuel.jouer()) {
-			if (jeuTermine()) {
-				calculerScoresDesJoueurs();
-				return false;
-			}
-
-			passerAuJoueurSuivant();
-		}
-
-		return true;
-	}
-
-	/**
 	 * Obtenir une copie profonde du tapis, c'est-a-dire une copie de la liste des
 	 * cartes stockés par les tapis, et non seuelement une copie de la reference a
 	 * la liste. <br>
@@ -542,14 +508,28 @@ public class ControlleurJeu {
 	 * 
 	 * @return Le {@link Tapis} clone du jeu actuel.
 	 */
-	public Tapis getTapis() {
+	public Tapis getCloneTapis() {
 		return tapis.getClone();
 	}
 
-	public ArrayList<Carte> getToutesCartes(){
+	/**
+	 * Obtenir le tapis du jeu en cours.
+	 * 
+	 * @return {@link Tapis}
+	 */
+	public Tapis getTapis() {
+		return tapis;
+	}
+
+	/**
+	 * Obtenir une liste de toutes les cartes possibles du jeu.
+	 * 
+	 * @return Un {@code ArrayList} de cartes.
+	 */
+	public ArrayList<Carte> getToutesCartes() {
 		return toutesCartes;
 	}
-	
+
 	private void afficherTapis() {
 		System.out.print(GenerateurString.getStringTapis(tapis));
 	}
@@ -617,7 +597,7 @@ public class ControlleurJeu {
 	 * @return {@code true} si le joueur actuel a deja posé une carte ce tour,
 	 *         {@code false} sinon.
 	 */
-	public boolean joueurActuelAPoseCarteCeTour() {
+	public boolean hasJoueurActuelPoseCarteCeTour() {
 		return joueurActuelAPoseCarteCeTour;
 	}
 
@@ -625,7 +605,7 @@ public class ControlleurJeu {
 	 * @return {@code true} si le joueur actuel a deja pioché une carte ce tour,
 	 *         {@code false} sinon.
 	 */
-	public boolean joueurActuelAPiocheCarteCeTour() {
+	public boolean hasJoueurActuelPiocheCarteCeTour() {
 		return joueurActuelAPiocheCarteCeTour;
 	}
 
@@ -633,7 +613,7 @@ public class ControlleurJeu {
 	 * @return {@code true} si le joueur a deja déplacé une carte ce tour,
 	 *         {@code false} sinon.
 	 */
-	public boolean joueurActuelADeplaceCarteCeTour() {
+	public boolean hasJoueurActuelDeplaceCarteCeTour() {
 		return joueurActuelADeplaceCarteCeTour;
 	}
 
@@ -654,6 +634,11 @@ public class ControlleurJeu {
 	 * @return {@code true} si le jeu est terminé, {@code false} sinon.
 	 */
 	public boolean jeuTermine() {
+		return _jeuTermine && !threadStrategyJoueurActuel.isAlive(); // Attendre que le thread de la strategy ait
+																		// terminé.
+	}
+
+	private boolean jeuPeutTerminer() {
 		if (tapisEstRempli())
 			return true;
 
@@ -680,7 +665,6 @@ public class ControlleurJeu {
 				break;
 		}
 		return false;
-
 	}
 
 	/**
@@ -690,6 +674,26 @@ public class ControlleurJeu {
 	 */
 	public Regles getRegles() {
 		return regles;
+	}
+
+	/**
+	 * Faire terminer le tour du joueur actuel, tout en verifiant si ce joueur a le
+	 * droit de terminer.
+	 * 
+	 * @return {@code true} si le tour du joueur a pu etre terminé, {@code false}
+	 *         sinon.
+	 */
+	public boolean terminerTourJoueurActuel() {
+		if (!joueurActuelPeutFinir())
+			return false;
+
+		if (jeuPeutTerminer()) {
+			calculerScoresDesJoueurs();
+			_jeuTermine = true;
+			return true;
+		}
+		passerAuJoueurSuivant();
+		return true;
 	}
 
 }

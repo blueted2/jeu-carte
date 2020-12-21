@@ -10,16 +10,17 @@ import fr.utt.sh.gui.InterfaceJeu;
  * @author grego
  *
  */
+@SuppressWarnings("unused")
 public class Main {
 
 	/**
 	 * Methode main, executant le jeu.
 	 * 
-	 * @param args
+	 * @param args Les arguments de ligne commande.
+	 * @throws InterruptedException JSP
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 
-		
 		ControlleurJeu c = ControlleurJeu.getInstance();
 
 		// Sélection du nombre de joueurs (humains et bots)
@@ -78,13 +79,12 @@ public class Main {
 //		}
 //
 //		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
-		
-		c.commencerNouvellePartie(0, 2, Regles.Standard, TypeTapis.Rectangulaire, 5, 3);
+
+		c.commencerNouvellePartie(1, 2, Regles.Standard, TypeTapis.Triangulaire, 5, 3);
 
 		while (!c.jeuTermine()) {
-			c.jouer();
+			Thread.sleep(10); // Sans le delais, le program devient instable.
 		}
-
 		c.afficherScoresDesJoueurs();
 	}
 }

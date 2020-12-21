@@ -115,8 +115,5 @@ public class Carte {
 		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}
 
-	public static Carte carteTest() {
-		return new Carte(Couleur.Bleu, Remplissage.Rempli, Forme.Carre);
-	}
 }
 

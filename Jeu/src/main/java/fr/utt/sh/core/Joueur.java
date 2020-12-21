@@ -4,21 +4,16 @@
 package fr.utt.sh.core;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.Observable;
 
-import fr.utt.sh.console_ui.GenerateurString;
-import fr.utt.sh.console_ui.VisitableAffichage;
-import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 
 /**
  * <pre>
- * Cette classe représente un joueur. Elle implémente le patron de conception
- * {@code Strategy}. Chaque tour, ControlleurJeu appelle la méthode
- * {@link Joueur#jouer()}, ce qui en tour appelle la méthode exécute d'une
+ * Cette classe représente un joueur. Elle implémente une version du patron de conception
+ * {@code Strategy}, modifié pour fonctioné ne multi thread. Au debut de chaque tour, ControlleurJeu appelle la méthode
+ * {@link Joueur#beginStrategyThread()}, ce qui a son commence un thread executant une 
  * {@link Strategy}.
  * 
  * Les attributs du joueur comme cartePiochee, carteVictoire ... sont tous
@@ -36,12 +31,25 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  * @author grego
  *
  */
-public class Joueur {
+public class Joueur extends Observable {
 
 	private ArrayList<Carte> cartesMain = new ArrayList<>();
 
 	private Carte cartePiochee;
 	private Carte carteVictoire;
+
+	private boolean humain;
+
+	/**
+	 * Le joueur est-il controllé par un humain ? Utilisé pour l'interface graphique
+	 * afin de determiner si l'interface doit etre activée ou non.
+	 * 
+	 * @return {@code true} si le joueur est contorllé par un humain, {@code false}
+	 *         sinon.
+	 */
+	public boolean isHumain() {
+		return humain;
+	}
 
 	private String id;
 
@@ -54,10 +62,12 @@ public class Joueur {
 	 * 
 	 * @param id       Un {@code String} pour donner un nom / identifiant au joueur.
 	 * @param strategy La {@link Strategy} que ce joueur va implémenter.
+	 * @param humain   Le joueur est-il humain ?
 	 */
-	public Joueur(String id, Strategy strategy) {
+	public Joueur(String id, Strategy strategy, boolean humain) {
 		this.id       = id;
 		this.strategy = strategy;
+		this.humain   = humain;
 	}
 
 	/**
@@ -90,6 +100,9 @@ public class Joueur {
 	 */
 	public void setCartePiochee(Carte carte) {
 		cartePiochee = carte;
+
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -108,6 +121,8 @@ public class Joueur {
 	 */
 	public void setCarteVictoire(Carte carte) {
 		carteVictoire = carte;
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -141,6 +156,8 @@ public class Joueur {
 	 */
 	public void ajouterCarteDansMain(Carte carte) {
 		cartesMain.add(carte);
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -155,6 +172,8 @@ public class Joueur {
 			return false;
 
 		cartesMain.remove(carte);
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 
@@ -174,14 +193,14 @@ public class Joueur {
 	}
 
 	/**
-	 * Exécute la strategy donné lors de la construction du joueur.
+	 * Commencer le thread de la strategy du joueur.
 	 * 
-	 * @return {@code true} si le joueur a fini son tour, {@code false} sinon.
+	 * @return Le {@code Thread} de la strategy.
 	 */
-	public boolean jouer() {
-		if (strategy.execute())
-			return true;
-		return false;
+	public Thread beginStrategyThread() {
+		Thread threadStrategy = new Thread(strategy);
+		threadStrategy.start();
+		return threadStrategy;
 	}
 
 	public String toString() {
@@ -190,6 +209,7 @@ public class Joueur {
 
 	/**
 	 * Donne un clone du joueur.
+	 * 
 	 * @return {@link Joueur}
 	 */
 	public Joueur getClone() {
@@ -197,8 +217,9 @@ public class Joueur {
 	}
 
 	/**
-	 * TODO : Retirer
-	 * @return int
+	 * Obtenir le score du joueur.
+	 * 
+	 * @return Le score du joueur.
 	 * 
 	 */
 	public int getScore() {
@@ -206,8 +227,10 @@ public class Joueur {
 	}
 
 	/**
-	 * TODO : Retirer
-	 * @param score int
+	 * Affecter le score du joueur.
+	 * 
+	 * 
+	 * @param score Le nouveau score du joueur.
 	 */
 	public void setScore(int score) {
 		this.score = score;
