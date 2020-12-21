@@ -151,7 +151,7 @@ public class InterfaceJeu {
 		frame.getContentPane().add(boutonPioche);
 		frame.getContentPane().add(boutonFinTour);
 
-		new ControlleurInterfaceJeu(this);
+//		new ControlleurInterfaceJeu(this);
 
 		updatePositionsComposents();
 	}

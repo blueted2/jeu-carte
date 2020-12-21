@@ -80,7 +80,7 @@ public class Main {
 //
 //		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
 
-		c.commencerNouvellePartie(1, 2, Regles.Standard, TypeTapis.Triangulaire, 5, 3);
+		c.commencerNouvellePartie(1, 2, Regles.Advanced, TypeTapis.Triangulaire, 5, 3);
 
 		while (!c.jeuTermine()) {
 			Thread.sleep(10); // Sans le delais, le program devient instable.

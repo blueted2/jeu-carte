@@ -1,13 +1,16 @@
 package fr.utt.sh.gui.vue;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JPanel;
 
+import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 import fr.utt.sh.gui.InterfaceJeu;
@@ -23,10 +26,12 @@ import fr.utt.sh.gui.InterfaceJeu;
  */
 @SuppressWarnings("serial")
 public class VueJoueurActuel extends JPanel implements Observer {
-	private ControlleurJeu   cj;
-	private Joueur           joueurActuel;
-	private EmplacementCarte emCarteVictoire;
-	private EmplacementCarte emCartePiochee;
+	private ControlleurJeu              cj;
+	private Joueur                      joueurActuel;
+	private EmplacementCarte            emCarteVictoire;
+	private EmplacementCarte            emCartePiochee;
+	private JPanel                      panelCarteDansMain;
+	private ArrayList<EmplacementCarte> emCartesDansMain;
 
 	/**
 	 * @return {@link EmplacementCarte} de la carte victoire du joueur actuel.
@@ -67,7 +72,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 			// actuel.
 			joueurActuel.addObserver(this);
 
-			updateValeursCartes(); 
+			updateValeursCartes();
 		} else if (arg0 instanceof Joueur) {
 			updateValeursCartes();
 		}
@@ -77,10 +82,24 @@ public class VueJoueurActuel extends JPanel implements Observer {
 		cj.addObserver(this);
 		joueurActuel = cj.getJoueurActuel();
 
-		emCarteVictoire = new EmplacementCarte(null);
-		emCartePiochee  = new EmplacementCarte(null);
-		add(emCarteVictoire);
-		add(emCartePiochee);
+		switch (cj.getRegles()) {
+			case Standard:
+				emCarteVictoire = new EmplacementCarte(null);
+				emCartePiochee = new EmplacementCarte(null);
+
+				add(emCarteVictoire);
+				add(emCartePiochee);
+				break;
+			case Advanced:
+				panelCarteDansMain = new JPanel();
+				emCartesDansMain = new ArrayList<EmplacementCarte>();
+
+				add(panelCarteDansMain);
+				break;
+			default:
+				break;
+		}
+
 		setLayout(null);
 
 		addComponentListener(new ComponentAdapter() {
@@ -99,12 +118,50 @@ public class VueJoueurActuel extends JPanel implements Observer {
 		int hCarte = hPanel;
 		int lCarte = (int) (hCarte / InterfaceJeu.RATIO_CARTE);
 
-		emCarteVictoire.setBounds(lPanel - 2 * lCarte, 0, lCarte, hCarte);
-		emCartePiochee.setBounds((lPanel - lCarte) / 2, 0, lCarte, hCarte);
+		switch (cj.getRegles()) {
+			case Standard:
+				emCarteVictoire.setBounds(lPanel - 2 * lCarte, 0, lCarte, hCarte);
+				emCartePiochee.setBounds((lPanel - lCarte) / 2, 0, lCarte, hCarte);
+				break;
+			case Advanced:
+				int nbCartesDansMain = joueurActuel.getNombreCartesDansMain();
+				int lCarteDansMains = nbCartesDansMain * lCarte;
+				panelCarteDansMain.setBounds((lPanel - lCarteDansMains) / 2, 0, lCarteDansMains, hCarte);
+				panelCarteDansMain.setLayout(new GridLayout(1, nbCartesDansMain));
+				panelCarteDansMain.revalidate();
+
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+		}
+
 	}
 
 	private void updateValeursCartes() {
-		emCarteVictoire.setCarte(joueurActuel.getCarteVictoire());
-		emCartePiochee.setCarte(joueurActuel.getCartePiochee());
+		switch (cj.getRegles()) {
+			case Standard:
+				emCarteVictoire.setCarte(joueurActuel.getCarteVictoire());
+				emCartePiochee.setCarte(joueurActuel.getCartePiochee());
+				break;
+			case Advanced:
+				// Supprimer tout les emplacements (plus facile que de trouver quel sont ceux
+				// qui n'ont pas changé...)
+				for (EmplacementCarte emCarteDansMain : emCartesDansMain) {
+					panelCarteDansMain.remove(emCarteDansMain);
+				}
+				emCartesDansMain = new ArrayList<EmplacementCarte>();
+
+				for (Carte carte : joueurActuel.getCartesDansMain()) {
+					EmplacementCarte emCarte = new EmplacementCarte(null);
+					emCarte.setCarte(carte);
+					emCartesDansMain.add(emCarte);
+					panelCarteDansMain.add(emCarte);
+				}
+
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+		}
+
 	}
 }
