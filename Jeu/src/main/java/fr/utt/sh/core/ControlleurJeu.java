@@ -6,6 +6,7 @@ package fr.utt.sh.core;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
 import fr.utt.sh.console_ui.GenerateurString;
@@ -27,7 +28,7 @@ import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
  * @author grego
  *
  */
-public class ControlleurJeu extends Observable {
+public class ControlleurJeu extends Observable{
 
 	private static ControlleurJeu instance;
 
@@ -165,7 +166,7 @@ public class ControlleurJeu extends Observable {
 	 * @param hauteur   TODO
 	 */
 	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur,
-			int hauteur) {
+			int hauteur){
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -279,10 +280,11 @@ public class ControlleurJeu extends Observable {
 //		if(threadStrategyJoueurActuel != null)
 //			threadStrategyJoueurActuel.
 
-		threadStrategyJoueurActuel = joueurActuel.beginStrategyThread();
-
 		setChanged();
 		notifyObservers();
+
+		threadStrategyJoueurActuel = joueurActuel.beginStrategyThread();
+
 		return true;
 	}
 
@@ -497,7 +499,11 @@ public class ControlleurJeu extends Observable {
 	 *         sinon.
 	 */
 	public boolean joueurActuelPeutFinir() {
-		return (joueurActuelAPiocheCarteCeTour && joueurActuelAPoseCarteCeTour);
+		if (!joueurActuelAPoseCarteCeTour)
+			return false;
+		if (ilResteDesCartes() && !joueurActuelAPiocheCarteCeTour)
+			return false;
+		return true;
 	}
 
 	/**
@@ -686,6 +692,9 @@ public class ControlleurJeu extends Observable {
 	public boolean terminerTourJoueurActuel() {
 		if (!joueurActuelPeutFinir())
 			return false;
+		
+		joueurActuel.arreterStrategy();
+		
 
 		if (jeuPeutTerminer()) {
 			calculerScoresDesJoueurs();

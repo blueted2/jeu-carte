@@ -5,6 +5,7 @@ package fr.utt.sh.core;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
@@ -33,7 +34,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  */
 public class Joueur extends Observable {
 
-	private ArrayList<Carte> cartesMain = new ArrayList<>();
+	private CopyOnWriteArrayList<Carte> cartesMain = new CopyOnWriteArrayList<>();
 
 	private Carte cartePiochee;
 	private Carte carteVictoire;
@@ -80,7 +81,7 @@ public class Joueur extends Observable {
 		this.strategy      = joueur.strategy;
 		this.cartePiochee  = joueur.cartePiochee;
 		this.carteVictoire = joueur.carteVictoire;
-		this.cartesMain    = new ArrayList<Carte>(joueur.cartesMain);
+		this.cartesMain    = new CopyOnWriteArrayList<Carte>(joueur.cartesMain);
 		this.score         = joueur.score;
 	}
 
@@ -172,6 +173,7 @@ public class Joueur extends Observable {
 			return false;
 
 		cartesMain.remove(carte);
+		
 		setChanged();
 		notifyObservers();
 		return true;
@@ -188,7 +190,7 @@ public class Joueur extends Observable {
 	 * 
 	 * @return Une {@link ArrayList} des cartes dans le main du joueur.
 	 */
-	public ArrayList<Carte> getCartesDansMain() {
+	public CopyOnWriteArrayList<Carte> getCartesDansMain() {
 		return cartesMain;
 	}
 
@@ -198,7 +200,7 @@ public class Joueur extends Observable {
 	 * @return Le {@code Thread} de la strategy.
 	 */
 	public Thread beginStrategyThread() {
-		Thread threadStrategy = new Thread(strategy);
+		Thread threadStrategy = new Thread(strategy, this.toString());
 		threadStrategy.start();
 		return threadStrategy;
 	}
@@ -234,6 +236,11 @@ public class Joueur extends Observable {
 	 */
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	
+	public void arreterStrategy() {
+		strategy.arreter();
 	}
 
 }

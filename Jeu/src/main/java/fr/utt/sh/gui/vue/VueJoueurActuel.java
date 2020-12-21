@@ -7,6 +7,7 @@ import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.swing.JPanel;
 
@@ -31,7 +32,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 	private EmplacementCarte            emCarteVictoire;
 	private EmplacementCarte            emCartePiochee;
 	private JPanel                      panelCarteDansMain;
-	private ArrayList<EmplacementCarte> emCartesDansMain;
+	private CopyOnWriteArrayList <EmplacementCarte> emCartesDansMain;
 
 	/**
 	 * @return {@link EmplacementCarte} de la carte victoire du joueur actuel.
@@ -64,6 +65,9 @@ public class VueJoueurActuel extends JPanel implements Observer {
 			if (joueurActuel != null)
 				joueurActuel.deleteObserver(this);
 
+			
+			
+			
 			joueurActuel = cj.getJoueurActuel();
 
 			// Au debut, le joueur actuel est nul, donc on ne peut pas ajouter l'observer
@@ -80,7 +84,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 
 	private void initialize() {
 		cj.addObserver(this);
-		joueurActuel = cj.getJoueurActuel();
+		
 
 		switch (cj.getRegles()) {
 			case Standard:
@@ -92,7 +96,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 				break;
 			case Advanced:
 				panelCarteDansMain = new JPanel();
-				emCartesDansMain = new ArrayList<EmplacementCarte>();
+				emCartesDansMain = new CopyOnWriteArrayList <EmplacementCarte>();
 
 				add(panelCarteDansMain);
 				break;
@@ -124,6 +128,8 @@ public class VueJoueurActuel extends JPanel implements Observer {
 				emCartePiochee.setBounds((lPanel - lCarte) / 2, 0, lCarte, hCarte);
 				break;
 			case Advanced:
+				if(joueurActuel == null)
+					return;
 				int nbCartesDansMain = joueurActuel.getNombreCartesDansMain();
 				int lCarteDansMains = nbCartesDansMain * lCarte;
 				panelCarteDansMain.setBounds((lPanel - lCarteDansMains) / 2, 0, lCarteDansMains, hCarte);
@@ -135,6 +141,14 @@ public class VueJoueurActuel extends JPanel implements Observer {
 				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
 		}
 
+	}
+
+	public JPanel getPanelCarteDansMain() {
+		return panelCarteDansMain;
+	}
+
+	public CopyOnWriteArrayList <EmplacementCarte> getEmCartesDansMain() {
+		return emCartesDansMain;
 	}
 
 	private void updateValeursCartes() {
@@ -149,7 +163,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 				for (EmplacementCarte emCarteDansMain : emCartesDansMain) {
 					panelCarteDansMain.remove(emCarteDansMain);
 				}
-				emCartesDansMain = new ArrayList<EmplacementCarte>();
+				emCartesDansMain = new CopyOnWriteArrayList <EmplacementCarte>();
 
 				for (Carte carte : joueurActuel.getCartesDansMain()) {
 					EmplacementCarte emCarte = new EmplacementCarte(null);
@@ -157,6 +171,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 					emCartesDansMain.add(emCarte);
 					panelCarteDansMain.add(emCarte);
 				}
+				updateBoundsCartes();
 
 				break;
 			default:

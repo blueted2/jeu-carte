@@ -17,9 +17,8 @@ public class Main {
 	 * Methode main, executant le jeu.
 	 * 
 	 * @param args Les arguments de ligne commande.
-	 * @throws InterruptedException JSP
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 
 		ControlleurJeu c = ControlleurJeu.getInstance();
 
@@ -83,7 +82,12 @@ public class Main {
 		c.commencerNouvellePartie(1, 2, Regles.Advanced, TypeTapis.Triangulaire, 5, 3);
 
 		while (!c.jeuTermine()) {
-			Thread.sleep(10); // Sans le delais, le program devient instable.
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} // Sans le delais, le program devient instable.
 		}
 		c.afficherScoresDesJoueurs();
 	}

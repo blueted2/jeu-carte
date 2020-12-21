@@ -11,8 +11,9 @@ public interface Strategy extends Runnable {
 	/**
 	 * Appelé quand le joueur doit jouer.
 	 * 
-	 * @return {@code true} si la strategy a pu être effectuée, {@code false} sinon.
 	 * @throws InterruptedException JSP
 	 */
-	public boolean execute() throws InterruptedException;
+	public void execute() throws InterruptedException;
+	
+	public void arreter();
 }

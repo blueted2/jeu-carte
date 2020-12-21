@@ -25,16 +25,15 @@ public class StrategyTest implements Strategy {
 	Tapis tapisTemp;
 	int   lTapis;
 	int   hTapis;
-	
-	private int delay = 200;
+
+	private int delay = 2000;
 
 	Joueur joueurActuel;
 
 	@Override
 	public void run() {
 		try {
-			while (!execute()) {
-			}
+			execute();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +41,7 @@ public class StrategyTest implements Strategy {
 	}
 
 	@Override
-	public boolean execute() throws InterruptedException {
+	public void execute() throws InterruptedException {
 
 		tapisTemp = c.getCloneTapis();
 		lTapis    = tapisTemp.getLargeur();
@@ -50,19 +49,21 @@ public class StrategyTest implements Strategy {
 
 		switch (c.getRegles()) {
 			case Standard:
-				return executeStandard();
+				executeStandard();
+				break;
 			case Advanced:
-				return executeAdvanced();
+				executeAdvanced();
+				break;
 			default:
 				break;
 		}
-		return false;
+		return;
 	}
 
 	private boolean executeStandard() throws InterruptedException {
 		c.joueurActuelPiocheCarte();
 		Thread.sleep(delay);
-		
+
 		if (c.tapisEstVide()) {
 			c.joueurActuelPoseCartePiochee(0, 0);
 			Thread.sleep(delay);
@@ -84,7 +85,7 @@ public class StrategyTest implements Strategy {
 		return c.terminerTourJoueurActuel();
 	}
 
-	private boolean executeAdvanced() {
+	private boolean executeAdvanced() throws InterruptedException {
 
 		joueurActuel = c.getJoueurActuel();
 
@@ -96,16 +97,19 @@ public class StrategyTest implements Strategy {
 		int x = meilleurePosition.getX();
 		int y = meilleurePosition.getY();
 
+//		Thread.sleep(delay);
 		c.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
+//		Thread.sleep(delay);
 		c.joueurActuelPiocheCarte();
-		
-		
+		Thread.sleep(delay);
+
+		System.out.println("strategy test");
 		return c.terminerTourJoueurActuel();
 	}
 
 	private Position getMeilleurePosition(Carte carteVictoire, Carte carteAPoser) {
-		int posXMax  = -2; // Position invalide, pour tester si la valeur a été changée.
-		int posYMax  = -2;
+		int posXMax  = -1; // Position invalide, pour tester si la valeur a été changée.
+		int posYMax  = -1;
 		int scoreMax = -1;
 
 		// Essayer tous les coordonnées possibles pour trouver une position jouable, et
@@ -132,5 +136,8 @@ public class StrategyTest implements Strategy {
 		}
 		return new Position(posXMax, posYMax);
 	}
+
+	public void arreter() {
+	};
 
 }
