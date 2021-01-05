@@ -5,10 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.gui.vue.EmplacementCarte;
@@ -26,6 +24,8 @@ public class ControlleurInterfaceJeu {
 
 	private ControlleurJeu cj;
 
+	private InterfaceJeu interfaceJeu;
+
 	private EmplacementCarte emCarteSelectionee;
 	private boolean          carteSelectioneeEstSurTapis;
 
@@ -33,15 +33,20 @@ public class ControlleurInterfaceJeu {
 	 * Constructeur pour le controlleu. Prend en argument l'{@link InterfaceJeu}
 	 * pour laquel ce controlleur est responsable.
 	 * 
-	 * @param i L'{@link InterfaceJeu} du controlleur.
+	 * @param interfaceJeu L'{@link InterfaceJeu} du controlleur.
 	 */
-	public ControlleurInterfaceJeu(InterfaceJeu i) {
-		cj = ControlleurJeu.getInstance();
+	public ControlleurInterfaceJeu(InterfaceJeu interfaceJeu) {
+		this.interfaceJeu = interfaceJeu;
+		cj                = ControlleurJeu.getInstance();
 
-		EmplacementCarte emCartePiochee = i.getVueJoueurActuel().getEmCartePiochee();
+		addButtonListeners();
+	}
+
+	private void addButtonListeners() {
+		EmplacementCarte emCartePiochee = interfaceJeu.getVueJoueurActuel().getEmCartePiochee();
 
 		// Listener pour le bouton piocher une carte.
-		i.getBoutonPioche().addActionListener(new ActionListener() {
+		interfaceJeu.getBoutonPioche().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -52,7 +57,7 @@ public class ControlleurInterfaceJeu {
 		});
 
 		// Listeners pour les cartes dans du tapis.
-		i.getVueTapis().getEmplacementsCartes().forEach((emCarteTapis) -> {
+		interfaceJeu.getVueTapis().getEmplacementsCartes().forEach((emCarteTapis) -> {
 			emCarteTapis.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -89,7 +94,8 @@ public class ControlleurInterfaceJeu {
 
 							break;
 						case Advanced:
-							CopyOnWriteArrayList<EmplacementCarte> emCartesDansMain = i.getVueJoueurActuel()
+						case Variante:
+							CopyOnWriteArrayList<EmplacementCarte> emCartesDansMain = interfaceJeu.getVueJoueurActuel()
 									.getEmCartesDansMain();
 							if (emCartesDansMain.contains(emCarteSelectionee)) {
 								int x = emCarteTapis.getPosition().getX();
@@ -119,7 +125,7 @@ public class ControlleurInterfaceJeu {
 		});
 
 		// Listener pour le bouton fin de tour.
-		i.getBoutonFinTour().addActionListener(new ActionListener() {
+		interfaceJeu.getBoutonFinTour().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (!cj.getJoueurActuel().isHumain())
@@ -155,8 +161,9 @@ public class ControlleurInterfaceJeu {
 
 				break;
 			case Advanced:
-
-				i.getVueJoueurActuel().getPanelCarteDansMain().addContainerListener(new ContainerAdapter() {
+			case Variante:
+				// Listeners pour les cartes dans la main ud joueur. Les listeners sont ajouté quand les composants de la vueJoueurActuel sont ajoutés. 
+				interfaceJeu.getVueJoueurActuel().getPanelCarteDansMain().addContainerListener(new ContainerAdapter() {
 					@Override
 					public void componentAdded(ContainerEvent e) {
 						Component c = e.getChild();
@@ -178,7 +185,6 @@ public class ControlleurInterfaceJeu {
 									selectionerEmCarte(null);
 								else {
 									selectionerEmCarte(emCarte);
-									System.out.println(emCarte.getCarte());
 								}
 							}
 						});
@@ -190,30 +196,7 @@ public class ControlleurInterfaceJeu {
 				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
 
 		}
-
 	}
-
-//	private void addListenersCartesDansMain(ArrayList<EmplacementCarte> emCartesDansMain) {
-//		emCartesDansMain.forEach((emCarte) -> {
-//			emCarte.addActionListener(new ActionListener() {
-//				@Override
-//				public void actionPerformed(ActionEvent arg0) {
-//					System.out.println(emCarte.getCarte());
-//					if (!cj.getJoueurActuel().isHumain())
-//						return;
-//					if (carteSelectionee == emCarte) {
-//						selectionerEmCarte(null);
-//						return;
-//					}
-//
-//					if (emCarte.getCarte() == null)
-//						selectionerEmCarte(null);
-//					else
-//						selectionerEmCarte(emCarte);
-//				}
-//			});
-//		});
-//	}
 
 	// Selectionner une nouvelle carte.
 	private void selectionerEmCarte(EmplacementCarte emCarte) {

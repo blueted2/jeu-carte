@@ -14,5 +14,7 @@ public enum Regles {
 	/**
 	 * Regles advanved.
 	 */
-	Advanced
+	Advanced,
+	
+	Variante
 }

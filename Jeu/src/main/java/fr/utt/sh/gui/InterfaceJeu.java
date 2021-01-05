@@ -13,6 +13,7 @@ import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.gui.controlleur.ControlleurInterfaceJeu;
 import fr.utt.sh.gui.utils.ComponentResizeEndListener;
 import fr.utt.sh.gui.vue.VueJoueurActuel;
+import fr.utt.sh.gui.vue.VueScoresJoueurs;
 import fr.utt.sh.gui.vue.VueTapis;
 
 /**
@@ -23,10 +24,11 @@ import fr.utt.sh.gui.vue.VueTapis;
  */
 public class InterfaceJeu {
 
-	private VueTapis        vueTapis;
-	private VueJoueurActuel vueJoueurActuel;
-	private JButton         boutonPioche;
-	private JButton         boutonFinTour;
+	private VueTapis         vueTapis;
+	private VueJoueurActuel  vueJoueurActuel;
+	private VueScoresJoueurs vueScoresJoueurs;
+	private JButton          boutonPioche;
+	private JButton          boutonFinTour;
 
 	private JFrame              frame;
 	private static InterfaceJeu instance;
@@ -124,10 +126,11 @@ public class InterfaceJeu {
 	private void initialize() {
 		loadIcons();
 
-		vueTapis        = GenerateurVueTapis.generate(tapis);
-		vueJoueurActuel = new VueJoueurActuel();
-		boutonPioche    = new JButton("Piocher");
-		boutonFinTour   = new JButton("Finir Tour");
+		vueTapis         = GenerateurVueTapis.generate(tapis);
+		vueJoueurActuel  = new VueJoueurActuel();
+		vueScoresJoueurs = new VueScoresJoueurs();
+		boutonPioche     = new JButton("Piocher");
+		boutonFinTour    = new JButton("Finir Tour");
 
 		frame = new JFrame();
 		frame.getContentPane().setLayout(null);
@@ -148,6 +151,7 @@ public class InterfaceJeu {
 
 		frame.getContentPane().add(vueTapis);
 		frame.getContentPane().add(vueJoueurActuel);
+		frame.getContentPane().add(vueScoresJoueurs);
 		frame.getContentPane().add(boutonPioche);
 		frame.getContentPane().add(boutonFinTour);
 
@@ -187,6 +191,8 @@ public class InterfaceJeu {
 		int hVueJoueur = (int) (hFrame * proportionJoueur);
 
 		vueJoueurActuel.setBounds(0, hFrame - hVueJoueur, lFrame, hVueJoueur);
+		
+		vueScoresJoueurs.setBounds(0, 100, 100, 100);
 
 		int hPioche = (int) (hFrame * proportionPioche);
 		int lPioche = (int) (hFrame * proportionPioche / RATIO_CARTE);
@@ -216,7 +222,6 @@ public class InterfaceJeu {
 			ImageIcon icon  = new ImageIcon(getClass().getResource(nomFichier));
 			Image     image = icon.getImage();
 			imagesCartes.put(carte, image);
-
 		}
 	}
 

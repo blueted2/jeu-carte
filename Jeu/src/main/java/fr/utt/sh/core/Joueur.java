@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 
@@ -32,7 +33,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  * @author grego
  *
  */
-public class Joueur extends Observable {
+public class Joueur{
 
 	private CopyOnWriteArrayList<Carte> cartesMain = new CopyOnWriteArrayList<>();
 
@@ -101,9 +102,6 @@ public class Joueur extends Observable {
 	 */
 	public void setCartePiochee(Carte carte) {
 		cartePiochee = carte;
-
-		setChanged();
-		notifyObservers();
 	}
 
 	/**
@@ -122,8 +120,6 @@ public class Joueur extends Observable {
 	 */
 	public void setCarteVictoire(Carte carte) {
 		carteVictoire = carte;
-		setChanged();
-		notifyObservers();
 	}
 
 	/**
@@ -157,8 +153,6 @@ public class Joueur extends Observable {
 	 */
 	public void ajouterCarteDansMain(Carte carte) {
 		cartesMain.add(carte);
-		setChanged();
-		notifyObservers();
 	}
 
 	/**
@@ -173,9 +167,7 @@ public class Joueur extends Observable {
 			return false;
 
 		cartesMain.remove(carte);
-		
-		setChanged();
-		notifyObservers();
+	
 		return true;
 	}
 
@@ -238,9 +230,16 @@ public class Joueur extends Observable {
 		this.score = score;
 	}
 
-	
+	/**
+	 * Demander a la strategy du joueur d'arreter.
+	 */
 	public void arreterStrategy() {
 		strategy.arreter();
+	}
+
+	public void resetCartes() {
+		cartePiochee = null;
+		carteVictoire = null;
 	}
 
 }

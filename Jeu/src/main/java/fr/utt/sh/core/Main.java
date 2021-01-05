@@ -1,7 +1,8 @@
 package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.Utils;
-import fr.utt.sh.core.tapis.Tapis.TypeTapis;
+import fr.utt.sh.core.tapis.TypeTapis;
+import fr.utt.sh.gui.InterfaceConfiguration;
 import fr.utt.sh.gui.InterfaceJeu;
 
 /**
@@ -79,16 +80,20 @@ public class Main {
 //
 //		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
 
-		c.commencerNouvellePartie(1, 2, Regles.Advanced, TypeTapis.Triangulaire, 5, 3);
+		InterfaceConfiguration.begin();
+		
+//		c.commencerNouveauJeu(0, 2, Regles.Advanced, TypeTapis.Rectangulaire_5x3, 2);
 
-		while (!c.jeuTermine()) {
+		while (!c.isJeuTermine()) {
 			try {
-				Thread.sleep(10);
+				Thread.sleep(10);// Sans le delais, le program devient instable.
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} // Sans le delais, le program devient instable.
+			} 
 		}
 		c.afficherScoresDesJoueurs();
+		
+//		c.commencerNouveauJeu(0, 2, Regles.Advanced, TypeTapis.Rectangulaire_5x3);
 	}
 }

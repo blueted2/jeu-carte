@@ -15,5 +15,8 @@ public interface Strategy extends Runnable {
 	 */
 	public void execute() throws InterruptedException;
 	
+	/**
+	 * Demander la strategy d'arreter. 
+	 */
 	public void arreter();
 }

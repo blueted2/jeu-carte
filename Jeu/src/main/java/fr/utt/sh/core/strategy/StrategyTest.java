@@ -20,13 +20,13 @@ import fr.utt.sh.core.tapis.Tapis;
  */
 public class StrategyTest implements Strategy {
 
-	ControlleurJeu c = ControlleurJeu.getInstance();
+	ControlleurJeu cj = ControlleurJeu.getInstance();
 
 	Tapis tapisTemp;
 	int   lTapis;
 	int   hTapis;
 
-	private int delay = 2000;
+	private int delay = 100;
 
 	Joueur joueurActuel;
 
@@ -43,34 +43,37 @@ public class StrategyTest implements Strategy {
 	@Override
 	public void execute() throws InterruptedException {
 
-		tapisTemp = c.getCloneTapis();
+		tapisTemp = cj.getCloneTapis();
 		lTapis    = tapisTemp.getLargeur();
 		hTapis    = tapisTemp.getHauteur();
 
-		switch (c.getRegles()) {
+		switch (cj.getRegles()) {
 			case Standard:
 				executeStandard();
 				break;
 			case Advanced:
+			case Variante:
 				executeAdvanced();
 				break;
 			default:
-				break;
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
 		}
 		return;
 	}
 
 	private boolean executeStandard() throws InterruptedException {
-		c.joueurActuelPiocheCarte();
+
+		Thread.sleep(delay);
+		cj.joueurActuelPiocheCarte();
 		Thread.sleep(delay);
 
-		if (c.tapisEstVide()) {
-			c.joueurActuelPoseCartePiochee(0, 0);
+		if (cj.tapisEstVide()) {
+			cj.joueurActuelPoseCartePiochee(0, 0);
 			Thread.sleep(delay);
-			return c.terminerTourJoueurActuel();
+			return cj.terminerTourJoueurActuel();
 		}
 
-		joueurActuel = c.getJoueurActuel();
+		joueurActuel = cj.getJoueurActuel();
 
 		Carte carteVictoire = joueurActuel.getCarteVictoire();
 		Carte cartePiochee  = joueurActuel.getCartePiochee();
@@ -80,14 +83,14 @@ public class StrategyTest implements Strategy {
 		int x = meilleurePosition.getX();
 		int y = meilleurePosition.getY();
 
-		c.joueurActuelPoseCartePiochee(x, y);
+		cj.joueurActuelPoseCartePiochee(x, y);
 		Thread.sleep(delay);
-		return c.terminerTourJoueurActuel();
+		return cj.terminerTourJoueurActuel();
 	}
 
 	private boolean executeAdvanced() throws InterruptedException {
 
-		joueurActuel = c.getJoueurActuel();
+		joueurActuel = cj.getJoueurActuel();
 
 		Carte carteVictoire = joueurActuel.getCarteDansMain(0);
 		Carte carteAPoser   = joueurActuel.getCarteDansMain(1);
@@ -97,14 +100,13 @@ public class StrategyTest implements Strategy {
 		int x = meilleurePosition.getX();
 		int y = meilleurePosition.getY();
 
-//		Thread.sleep(delay);
-		c.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
-//		Thread.sleep(delay);
-		c.joueurActuelPiocheCarte();
+		Thread.sleep(delay);
+		cj.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
+		Thread.sleep(delay);
+		cj.joueurActuelPiocheCarte();
 		Thread.sleep(delay);
 
-		System.out.println("strategy test");
-		return c.terminerTourJoueurActuel();
+		return cj.terminerTourJoueurActuel();
 	}
 
 	private Position getMeilleurePosition(Carte carteVictoire, Carte carteAPoser) {
