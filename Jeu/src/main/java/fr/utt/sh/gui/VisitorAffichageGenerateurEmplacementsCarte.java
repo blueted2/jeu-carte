@@ -27,7 +27,7 @@ public class VisitorAffichageGenerateurEmplacementsCarte implements VisitorAffic
 	@Override
 	public void visit(Tapis_Rectangulaire tapis) {
 
-		vueTapis = new VueTapis();
+		vueTapis = new VueTapis(tapis);
 		vueTapis.setLayout(new GridLayout(tapis.getHauteur() + 2, tapis.getLargeur() + 2));
 
 		for (int y = -1; y < tapis.getHauteur() + 1; y++) {
@@ -57,7 +57,7 @@ public class VisitorAffichageGenerateurEmplacementsCarte implements VisitorAffic
 
 	@Override
 	public void visit(Tapis_Triangulaire tapis) {
-		vueTapis = new VueTapis();
+		vueTapis = new VueTapis(tapis);
 		vueTapis.setLayout(new GridLayout(tapis.getHauteur() + 2, tapis.getLargeur() + 2));
 
 		for (int y = -1; y < tapis.getHauteur() + 1; y++) {

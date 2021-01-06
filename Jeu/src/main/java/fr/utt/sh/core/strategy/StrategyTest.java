@@ -26,7 +26,7 @@ public class StrategyTest implements Strategy {
 	int   lTapis;
 	int   hTapis;
 
-	private int delay = 100;
+	private int delay = 00;
 
 	Joueur joueurActuel;
 

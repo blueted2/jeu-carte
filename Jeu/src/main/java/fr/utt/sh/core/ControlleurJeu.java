@@ -17,6 +17,7 @@ import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.actions.PoserCarte;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
+import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
@@ -194,7 +195,7 @@ public class ControlleurJeu extends Observable {
 
 		// Commener l'interface graphique du jeu.
 		InterfaceJeu.begin();
-		
+
 		VueConsole.begin();
 
 		commencerNouvellePartie();
@@ -277,12 +278,12 @@ public class ControlleurJeu extends Observable {
 		joueurActuelAPiocheCarteCeTour  = false;
 		joueurActuelAPoseCarteCeTour    = false;
 		joueurActuelADeplaceCarteCeTour = false;
-		
+
 		setChanged();
 		notifyObservers(new NouveauJoueur(joueurActuel));
 
-//		if(threadStrategyJoueurActuel != null)
-//			threadStrategyJoueurActuel.
+		joueurActuel.arreterStrategy();
+
 
 		threadStrategyJoueurActuel = joueurActuel.beginStrategyThread();
 
@@ -320,11 +321,9 @@ public class ControlleurJeu extends Observable {
 			return false;
 
 		joueurActuelAPiocheCarteCeTour = true;
-		
+
 		Carte nouvelleCarte = popCarteAleatoire();
 
-		
-		
 		switch (regles) {
 			case Advanced:
 				joueurActuel.ajouterCarteDansMain(nouvelleCarte);
@@ -334,11 +333,11 @@ public class ControlleurJeu extends Observable {
 				break;
 			case Variante:
 				return false;
-				// Le joueur ne peut pas piocher de cartes, tout a ete distribué
+			// Le joueur ne peut pas piocher de cartes, tout a ete distribué
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
-		
+
 		setChanged();
 		notifyObservers(new PiocherCarte(joueurActuel, nouvelleCarte));
 		return true;
@@ -367,7 +366,7 @@ public class ControlleurJeu extends Observable {
 			return false;
 
 		joueurActuel.retirerCarteDansMain(carte);
-		
+
 		setChanged();
 		notifyObservers(new PoserCarte(carte, new Position(x, y)));
 
@@ -384,12 +383,12 @@ public class ControlleurJeu extends Observable {
 	 */
 	public boolean joueurActuelPoseCartePiochee(int x, int y) {
 		Carte cartePiochee = joueurActuel.getCartePiochee();
-		
+
 		if (!joueurActuelPoseCarte(cartePiochee, x, y))
 			return false;
 
 		joueurActuel.setCartePiochee(null);
-		
+
 		setChanged();
 		notifyObservers(new PoserCarte(cartePiochee, new Position(x, y)));
 		return true;
@@ -409,7 +408,6 @@ public class ControlleurJeu extends Observable {
 
 		if (!tapis.poserCarte(carte, x, y))
 			return false;
-
 
 		joueurActuelAPoseCarteCeTour = true;
 		return true;
@@ -445,15 +443,15 @@ public class ControlleurJeu extends Observable {
 
 	private void distribuerToutesCartesDansMain() {
 		int i = 0;
-		while(ilResteDesCartes()) {
-			if(i >= joueurs.size())
-				i=0;
-			
+		while (ilResteDesCartes()) {
+			if (i >= joueurs.size())
+				i = 0;
+
 			joueurs.get(i).ajouterCarteDansMain(popCarteAleatoire());
 			i++;
 		}
 	}
-	
+
 	/**
 	 * Deplacer une carte sur le tapis, prennant en compte si le joueur actuel a
 	 * deja deplacé une carte, si la nouvelle position a des voisins...
@@ -473,9 +471,9 @@ public class ControlleurJeu extends Observable {
 			return false;
 
 		joueurActuelADeplaceCarteCeTour = true;
-		
+
 		setChanged();
-		notifyObservers(new DeplacerCarte(new Position(x1, y1), new Position(x2,  y2)));
+		notifyObservers(new DeplacerCarte(new Position(x1, y1), new Position(x2, y2)));
 		return true;
 
 	}
@@ -543,9 +541,6 @@ public class ControlleurJeu extends Observable {
 	public ArrayList<Carte> getToutesCartes() {
 		return toutesCartes;
 	}
-
-	
-
 
 	/**
 	 * Afficher le score de tout les jouers a la console.
@@ -684,8 +679,6 @@ public class ControlleurJeu extends Observable {
 	public boolean terminerTourJoueurActuel() {
 		if (!joueurActuelPeutFinir())
 			return false;
-
-		joueurActuel.arreterStrategy();
 
 		if (partiePeutTerminer()) {
 			calculerScoresDesJoueurs();

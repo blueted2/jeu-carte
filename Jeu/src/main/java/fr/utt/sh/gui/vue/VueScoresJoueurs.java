@@ -32,7 +32,6 @@ public class VueScoresJoueurs extends JPanel implements Observer {
 		updateComponentValues();
 	}
 	
-	
 	private void updateComponentValues() {
 		ArrayList<Joueur> joueurs = c.getJoueurs();
 		for(int i = 0; i<joueurs.size(); i++) {
