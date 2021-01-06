@@ -1,7 +1,8 @@
 package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.Utils;
-import fr.utt.sh.core.tapis.Tapis.TypeTapis;
+import fr.utt.sh.core.tapis.TypeTapis;
+import fr.utt.sh.gui.InterfaceConfiguration;
 import fr.utt.sh.gui.InterfaceJeu;
 
 /**
@@ -17,9 +18,8 @@ public class Main {
 	 * Methode main, executant le jeu.
 	 * 
 	 * @param args Les arguments de ligne commande.
-	 * @throws InterruptedException JSP
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 
 		ControlleurJeu c = ControlleurJeu.getInstance();
 
@@ -80,11 +80,20 @@ public class Main {
 //
 //		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
 
-		c.commencerNouvellePartie(1, 2, Regles.Standard, TypeTapis.Triangulaire, 5, 3);
+		InterfaceConfiguration.begin();
+		
+//		c.commencerNouveauJeu(0, 2, Regles.Advanced, TypeTapis.Rectangulaire_5x3, 2);
 
-		while (!c.jeuTermine()) {
-			Thread.sleep(10); // Sans le delais, le program devient instable.
+		while (!c.isJeuTermine()) {
+			try {
+				Thread.sleep(10);// Sans le delais, le program devient instable.
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
 		}
 		c.afficherScoresDesJoueurs();
+		
+//		c.commencerNouveauJeu(0, 2, Regles.Advanced, TypeTapis.Rectangulaire_5x3);
 	}
 }

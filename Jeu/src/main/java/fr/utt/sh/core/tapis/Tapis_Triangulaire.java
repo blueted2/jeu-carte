@@ -61,10 +61,9 @@ public class Tapis_Triangulaire extends Tapis {
 			return false;
 
 		if (!positionAVoisins(x, y))
-			if (premiereCartePosee)
+			if (!estVide())
 				return false;
-			else
-				premiereCartePosee = true;
+
 
 		if (positionSurTapis(x, y)) {
 			if (getCarteAt(x, y) != null)
@@ -316,6 +315,17 @@ public class Tapis_Triangulaire extends Tapis {
 	public void accept(VisitorComptageScore v) {
 		v.visit(this);
 
+	}
+
+	@Override
+	public void clear() {
+		cartes = new Carte[taille][];
+		// Créer une matrice / liste 2d triangulaire.
+		for (int i = 0; i < taille; i++) {
+			cartes[i] = new Carte[i + 1];
+		}
+		this.setChanged();
+		this.notifyObservers();
 	}
 
 }

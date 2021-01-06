@@ -176,24 +176,6 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	public abstract boolean estVide();
 
 	/**
-	 * Une enumeration de types de tapis valides.
-	 * 
-	 * @author grego
-	 *
-	 */
-	public enum TypeTapis {
-		/**
-		 * Une tapis triangulaire de taille 5.
-		 */
-		Triangulaire,
-		/**
-		 * Un tapis rectangulaire de taille 5x3.
-		 */
-		Rectangulaire
-	}
-
-	
-	/**
 	 * Raccoursis pour {@link #getCarteAt(int, int)}.
 	 * @param posCarte La position de la carte a obtenir.
 	 * @return La carte a la position donnée. 
@@ -201,4 +183,6 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	public Carte getCarteAt(Position posCarte) {
 		return getCarteAt(posCarte.getX(), posCarte.getY());
 	}
+
+	public abstract void clear();
 }

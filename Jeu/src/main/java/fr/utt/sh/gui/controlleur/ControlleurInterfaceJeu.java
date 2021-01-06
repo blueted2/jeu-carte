@@ -1,11 +1,16 @@
 package fr.utt.sh.gui.controlleur;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.gui.vue.EmplacementCarte;
+import fr.utt.sh.gui.vue.VueJeu;
 
 /**
  * Cette classe est le controlleur pour une {@link InterfaceJeu}. Elle ajoute
@@ -20,20 +25,29 @@ public class ControlleurInterfaceJeu {
 
 	private ControlleurJeu cj;
 
-	private EmplacementCarte carteSelectionee;
+	private VueJeu vueJeu;
+
+	private EmplacementCarte emCarteSelectionee;
 	private boolean          carteSelectioneeEstSurTapis;
 
 	/**
 	 * Constructeur pour le controlleu. Prend en argument l'{@link InterfaceJeu}
 	 * pour laquel ce controlleur est responsable.
 	 * 
-	 * @param i L'{@link InterfaceJeu} du controlleur.
+	 * @param vueJeu
 	 */
-	public ControlleurInterfaceJeu(InterfaceJeu i) {
-		cj = ControlleurJeu.getInstance();
+	public ControlleurInterfaceJeu(VueJeu vueJeu) {
+		this.vueJeu = vueJeu;
+		cj          = ControlleurJeu.getInstance();
+
+		addButtonListeners();
+	}
+
+	private void addButtonListeners() {
+		EmplacementCarte emCartePiochee = vueJeu.getVueJoueurActuel().getEmCartePiochee();
 
 		// Listener pour le bouton piocher une carte.
-		i.getBoutonPioche().addActionListener(new ActionListener() {
+		vueJeu.getBoutonPioche().addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -43,91 +57,157 @@ public class ControlleurInterfaceJeu {
 			}
 		});
 
-		// Listener pour la carte piochee.
-		EmplacementCarte emCartePiochee = i.getVueJoueurActuel().getEmCartePiochee();
-		emCartePiochee.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				if (!cj.getJoueurActuel().isHumain())
-					return;
-				if (carteSelectionee == emCartePiochee) {
-					selectionerEmCarte(null);
-					return;
-				}
-
-				if (emCartePiochee.getCarte() == null)
-					selectionerEmCarte(null);
-				else
-					selectionerEmCarte(emCartePiochee);
-			}
-
-		});
-
 		// Listeners pour les cartes dans du tapis.
-		i.getVueTapis().getEmplacementsCartes().forEach((emCarte) -> {
-			emCarte.addActionListener(new ActionListener() {
+		vueJeu.getVueTapis().getEmplacementsCartes().forEach((emCarteTapis) -> {
+			emCarteTapis.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if (!cj.getJoueurActuel().isHumain())
 						return;
-					if (carteSelectionee == emCarte) {
+					if (emCarteSelectionee == emCarteTapis) {
 						selectionerEmCarte(null);
 						return;
 					}
 
-					if (carteSelectionee != null) {
+					if (emCarteSelectionee != null) {
 						if (carteSelectioneeEstSurTapis) {
-							int x1 = carteSelectionee.getPosition().getX();
-							int y1 = carteSelectionee.getPosition().getY();
-							int x2 = emCarte.getPosition().getX();
-							int y2 = emCarte.getPosition().getY();
+							int x1 = emCarteSelectionee.getPosition().getX();
+							int y1 = emCarteSelectionee.getPosition().getY();
+							int x2 = emCarteTapis.getPosition().getX();
+							int y2 = emCarteTapis.getPosition().getY();
 
 							cj.joueurActuelDeplaceCarte(x1, y1, x2, y2);
 							selectionerEmCarte(null);
+							return;
+						}
+					}
 
-						} else {
-							if (carteSelectionee == emCartePiochee) {
-								int x = emCarte.getPosition().getX();
-								int y = emCarte.getPosition().getY();
+					switch (cj.getRegles()) {
+						case Standard:
+							if (emCarteSelectionee == emCartePiochee) {
+								int x = emCarteTapis.getPosition().getX();
+								int y = emCarteTapis.getPosition().getY();
 
 								cj.joueurActuelPoseCartePiochee(x, y);
 								selectionerEmCarte(null);
+								return;
 							}
 
-						}
-						return;
+							break;
+						case Advanced:
+						case Variante:
+							CopyOnWriteArrayList<EmplacementCarte> emCartesDansMain = vueJeu.getVueJoueurActuel()
+									.getEmCartesDansMain();
+							if (emCartesDansMain.contains(emCarteSelectionee)) {
+								int x = emCarteTapis.getPosition().getX();
+								int y = emCarteTapis.getPosition().getY();
+
+								cj.joueurActuelPoseCarteDansMain(emCarteSelectionee.getCarte(), x, y);
+								selectionerEmCarte(null);
+								return;
+							}
+
+							break;
+						default:
+							throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+
 					}
 
-					if (emCarte.getCarte() != null) {
-						selectionerEmCarte(emCarte);
+					if (emCarteTapis.getCarte() != null) {
+						selectionerEmCarte(emCarteTapis);
 						carteSelectioneeEstSurTapis = true;
 					} else
 						selectionerEmCarte(null);
+
+					return;
 
 				}
 			});
 		});
 
 		// Listener pour le bouton fin de tour.
-		i.getBoutonFinTour().addActionListener(new ActionListener() {
+		vueJeu.getBoutonFinTour().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (!cj.getJoueurActuel().isHumain())
 					return;
+
 				cj.terminerTourJoueurActuel();
+
 			}
 		});
 
+		switch (cj.getRegles()) {
+			case Standard:
+
+				// Listener pour la carte piochee.
+				emCartePiochee.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						if (!cj.getJoueurActuel().isHumain())
+							return;
+						if (emCarteSelectionee == emCartePiochee) {
+							selectionerEmCarte(null);
+							return;
+						}
+
+						if (emCartePiochee.getCarte() == null)
+							selectionerEmCarte(null);
+						else
+							selectionerEmCarte(emCartePiochee);
+					}
+
+				});
+
+				break;
+			case Advanced:
+			case Variante:
+				// Listeners pour les cartes dans la main ud joueur. Les listeners sont ajouté
+				// quand les composants de la vueJoueurActuel sont ajoutés.
+				vueJeu.getVueJoueurActuel().getPanelCarteDansMain().addContainerListener(new ContainerAdapter() {
+					@Override
+					public void componentAdded(ContainerEvent e) {
+						Component c = e.getChild();
+						if (!(c instanceof EmplacementCarte))
+							return;
+
+						EmplacementCarte emCarte = (EmplacementCarte) c;
+						emCarte.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								if (!cj.getJoueurActuel().isHumain())
+									return;
+								if (emCarteSelectionee == emCarte) {
+									selectionerEmCarte(null);
+									return;
+								}
+
+								if (emCarte.getCarte() == null)
+									selectionerEmCarte(null);
+								else {
+									selectionerEmCarte(emCarte);
+								}
+							}
+						});
+
+					}
+				});
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+
+		}
 	}
 
 	// Selectionner une nouvelle carte.
 	private void selectionerEmCarte(EmplacementCarte emCarte) {
 		carteSelectioneeEstSurTapis = false;
-		if (carteSelectionee != null)
-			carteSelectionee.setSelectionee(false); // Enlever l'effet de selection de la carte selectionée précédente.
+		if (emCarteSelectionee != null)
+			emCarteSelectionee.setSelectionee(false); // Enlever l'effet de selection de la carte selectionée
+														// précédente.
 
-		carteSelectionee = emCarte;
+		emCarteSelectionee = emCarte;
 		if (emCarte != null)
 			emCarte.setSelectionee(true); // Ajouter l'effet de selection a la nouvelle carte.
 	}

@@ -12,7 +12,9 @@ import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.gui.controlleur.ControlleurInterfaceJeu;
 import fr.utt.sh.gui.utils.ComponentResizeEndListener;
+import fr.utt.sh.gui.vue.VueJeu;
 import fr.utt.sh.gui.vue.VueJoueurActuel;
+import fr.utt.sh.gui.vue.VueScoresJoueurs;
 import fr.utt.sh.gui.vue.VueTapis;
 
 /**
@@ -23,15 +25,18 @@ import fr.utt.sh.gui.vue.VueTapis;
  */
 public class InterfaceJeu {
 
-	private VueTapis        vueTapis;
-	private VueJoueurActuel vueJoueurActuel;
-	private JButton         boutonPioche;
-	private JButton         boutonFinTour;
+	private VueTapis         vueTapis;
+	private VueJoueurActuel  vueJoueurActuel;
+	private VueScoresJoueurs vueScoresJoueurs;
+	private JButton          boutonPioche;
+	private JButton          boutonFinTour;
 
 	private JFrame              frame;
 	private static InterfaceJeu instance;
 	private ControlleurJeu      cj;
 	private Tapis               tapis;
+	
+	private VueJeu vueJeu;
 
 	/**
 	 * Obtenir la partie visualisation du tapis.
@@ -61,74 +66,14 @@ public class InterfaceJeu {
 	}
 
 	private InterfaceJeu() {
-
 		cj    = ControlleurJeu.getInstance();
 		tapis = cj.getTapis();
 		initialize();
 	}
 
-	/**
-	 * Obtenir l'instance de l'interface jeu.
-	 * 
-	 * @return {@link InterfaceJeu}
-	 */
-	public InterfaceJeu getInstance() {
-		return instance;
-	}
-
-	/**
-	 * Obtenir la partie visualisation du tapis.
-	 * 
-	 * @return {@link VueTapis}
-	 */
-	public VueTapis getVueTapis() {
-		return vueTapis;
-	}
-
-	/**
-	 * Obtenir la partie visualisation du joueur actuel.
-	 * 
-	 * @return {@link VueJoueurActuel}
-	 */
-	public VueJoueurActuel getVueJoueurActuel() {
-		return vueJoueurActuel;
-	}
-
-	/**
-	 * Obtenir le bouton pour piocher une carte.
-	 * 
-	 * @return Un {@link JButton}
-	 */
-	public JButton getBoutonPioche() {
-		return boutonPioche;
-	}
-
-	/**
-	 * Obtenir le frame principal de l'interface.
-	 * 
-	 * @return {@link JFrame}
-	 */
-	public JFrame getFrame() {
-		return frame;
-	}
-
-	/**
-	 * Obtenir le bouton de fin de tour.
-	 * 
-	 * @return {@link JButton}
-	 */
-	public JButton getBoutonFinTour() {
-		return boutonFinTour;
-	}
-
 	private void initialize() {
 		loadIcons();
-
-		vueTapis        = GenerateurVueTapis.generate(tapis);
-		vueJoueurActuel = new VueJoueurActuel();
-		boutonPioche    = new JButton("Piocher");
-		boutonFinTour   = new JButton("Finir Tour");
-
+		
 		frame = new JFrame();
 		frame.getContentPane().setLayout(null);
 
@@ -136,70 +81,26 @@ public class InterfaceJeu {
 
 		frame.setVisible(true);
 		frame.setSize(1024, 720);
-
-		tapis.addObserver(vueTapis);
+		
+		vueJeu = new VueJeu();
+		
+		frame.getContentPane().add(vueJeu);
 
 		frame.addComponentListener(new ComponentResizeEndListener(100) {
 			@Override
 			public void resizeTimedOut() {
-				updatePositionsComposents();
+				vueJeu.setBounds(frame.getContentPane().getBounds());
 			}
 		});
-
-		frame.getContentPane().add(vueTapis);
-		frame.getContentPane().add(vueJoueurActuel);
-		frame.getContentPane().add(boutonPioche);
-		frame.getContentPane().add(boutonFinTour);
-
-		new ControlleurInterfaceJeu(this);
-
-		updatePositionsComposents();
 	}
-
-	private void updatePositionsComposents() {
-		double proportionTapis   = .8;
-		double proportionJoueur  = .2;
-		double proportionPioche  = .2;
-		double proportionFinTour = .2;
-
-		Dimension dim    = frame.getContentPane().getSize();
-		int       lFrame = dim.width;
-		int       hFrame = dim.height;
-
-		int nbCartesLargeur = tapis.getLargeur() + 2; // +2 pour les bords
-		int nbCartesHauteur = tapis.getHauteur() + 2;
-
-		double ratioVueTapis = (double) nbCartesHauteur / (double) nbCartesLargeur * RATIO_CARTE;
-
-		int hVueTapis;
-		int lVueTapis;
-
-		if (hFrame * proportionTapis / ratioVueTapis < lFrame * proportionTapis) {
-			hVueTapis = (int) (hFrame * proportionTapis);
-			lVueTapis = (int) (hFrame * proportionTapis / ratioVueTapis);
-		} else {
-			hVueTapis = (int) (lFrame * proportionTapis * ratioVueTapis);
-			lVueTapis = (int) (lFrame * proportionTapis);
-		}
-
-		vueTapis.setBounds((lFrame - lVueTapis) / 2, 0, lVueTapis, hVueTapis);
-
-		int hVueJoueur = (int) (hFrame * proportionJoueur);
-
-		vueJoueurActuel.setBounds(0, hFrame - hVueJoueur, lFrame, hVueJoueur);
-
-		int hPioche = (int) (hFrame * proportionPioche);
-		int lPioche = (int) (hFrame * proportionPioche / RATIO_CARTE);
-
-		boutonPioche.setBounds(lFrame - lPioche, (hFrame - hPioche) / 2, lPioche, hPioche);
-
-		int hFinTour = (int) (hFrame * proportionFinTour);
-		int lFinTour = (int) (hFrame * proportionFinTour);
-
-		boutonFinTour.setBounds(lFrame - lFinTour, 0, lFinTour, hFinTour);
-
-		frame.revalidate();
-
+	
+	/**
+	 * Obtenir l'instance de l'interface jeu.
+	 * 
+	 * @return {@link InterfaceJeu}
+	 */
+	public InterfaceJeu getInstance() {
+		return instance;
 	}
 
 	private void loadIcons() {
@@ -216,7 +117,6 @@ public class InterfaceJeu {
 			ImageIcon icon  = new ImageIcon(getClass().getResource(nomFichier));
 			Image     image = icon.getImage();
 			imagesCartes.put(carte, image);
-
 		}
 	}
 

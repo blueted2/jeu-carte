@@ -140,7 +140,7 @@ public class Tapis_Rectangulaire extends Tapis {
 
 		// Cas particulier pour la première carte, car elle ne peut jamais avoir de
 		// voisins
-		if (premiereCartePosee && !positionAVoisins(x, y))
+		if (!estVide() && !positionAVoisins(x, y))
 			return false;
 
 		// Si la position n'est pas sur les bords, est ce qu'il y a une carte ?
@@ -148,8 +148,7 @@ public class Tapis_Rectangulaire extends Tapis {
 			if (getCarteAt(x, y) != null)
 				return false;
 			setCarteAt(carte, x, y);
-			premiereCartePosee = true;
-
+			
 			this.setChanged();
 			this.notifyObservers();
 			return true;
@@ -286,6 +285,14 @@ public class Tapis_Rectangulaire extends Tapis {
 	@Override
 	public void accept(VisitorComptageScore v) {
 		v.visit(this);
+	}
+
+	@Override
+	public void clear() {
+		cartes = new Carte[largeur][hauteur];
+		this.setChanged();
+		this.notifyObservers();
+		
 	}
 
 }

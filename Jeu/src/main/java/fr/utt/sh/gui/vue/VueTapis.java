@@ -1,5 +1,7 @@
 package fr.utt.sh.gui.vue;
 
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -33,13 +35,16 @@ public class VueTapis extends JPanel implements Observer {
 
 	/**
 	 * Constructeur pour la visualisation du tapis. <br>
-	 * Remarque: Ce constructeur n'est pas appelé directement dans
-	 * {@link InterfaceJeu}, a la place un visitor puis un generateur sont utilisé
-	 * afin de "generer" l'instance de la visualisation.
+	 * Remarque: Ce constructeur n'est pas appelé directement dans {@link VueJeu}, a
+	 * la place un visitor puis un generateur sont utilisé afin de "generer"
+	 * l'instance de la visualisation.
+	 * 
+	 * @param tapis
 	 */
-	public VueTapis() {
+	public VueTapis(Tapis tapis) {
 		super();
 		emCartes = new ArrayList<EmplacementCarte>();
+		tapis.addObserver(this);
 	}
 
 	/**
@@ -89,6 +94,43 @@ public class VueTapis extends JPanel implements Observer {
 			emCarte.setVisible(carteEstVisible);
 
 		}
+	}
+
+	@Override
+	public void setBounds(int x, int y, int width, int height) {
+		double ratioCarte = InterfaceJeu.RATIO_CARTE;
+
+		if(width==0) {
+			super.setBounds(x, y, width, height);
+			return;
+		}
+		
+		double ratioTapis = height / width;
+
+		int nbColonnes = ((GridLayout) getLayout()).getColumns();
+		int nbLignes   = ((GridLayout) getLayout()).getRows();
+
+		double ratioTapisVoulu =  (ratioCarte * nbLignes) / nbColonnes;
+
+		// Si le tapis serait top long dans la verticale.
+		if (ratioTapis > ratioTapisVoulu) {
+			int newHeight = (int) (width * ratioTapisVoulu);
+			y += (height - newHeight) / 2;
+			height = newHeight;
+
+		} else {
+			int newWidth = (int) (height / ratioTapisVoulu);
+
+			x += (width - newWidth) / 2;
+			width = newWidth;
+		}
+
+		super.setBounds(x, y, width, height);
+	}
+	
+	@Override
+	public void setBounds(Rectangle r) {
+		setBounds(r.x, r.y, r.width, r.height);
 	}
 
 }

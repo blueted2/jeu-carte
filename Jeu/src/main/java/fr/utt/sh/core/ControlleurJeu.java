@@ -9,16 +9,22 @@ import java.util.Observable;
 import java.util.Random;
 
 import fr.utt.sh.console_ui.GenerateurString;
+import fr.utt.sh.console_ui.VueConsole;
+import fr.utt.sh.core.actions.DeplacerCarte;
+import fr.utt.sh.core.actions.FinPartie;
+import fr.utt.sh.core.actions.NouveauJoueur;
+import fr.utt.sh.core.actions.PiocherCarte;
+import fr.utt.sh.core.actions.PoserCarte;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
+import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
 import fr.utt.sh.core.tapis.Tapis;
-import fr.utt.sh.core.tapis.Tapis.TypeTapis;
 import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis_Triangulaire;
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
+import fr.utt.sh.core.tapis.TypeTapis;
 
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
@@ -46,9 +52,11 @@ public class ControlleurJeu extends Observable {
 	private boolean joueurActuelAPoseCarteCeTour    = false;
 	private boolean joueurActuelAPiocheCarteCeTour  = false;
 	private boolean joueurActuelADeplaceCarteCeTour = false;
-	private boolean cartesVictoiresDistribues       = false;
 
 	private boolean _jeuTermine = false;
+
+	private int nombreTotalDeParties;
+	private int nombreDePartiesJoues = 0;
 
 	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
@@ -91,18 +99,6 @@ public class ControlleurJeu extends Observable {
 	}
 
 	private void initialiserCartes() {
-		if (toutesCartes == null) {
-
-			toutesCartes = new ArrayList<Carte>();
-			for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
-				for (Carte.Couleur couleur : Carte.Couleur.values()) {
-					for (Carte.Forme forme : Carte.Forme.values()) {
-						Carte nouvelleCarte = new Carte(couleur, remplissage, forme);
-						toutesCartes.add(nouvelleCarte);
-					}
-				}
-			}
-		}
 
 		cartesRestantes = new ArrayList<Carte>();
 		for (Carte carte : toutesCartes) {
@@ -141,9 +137,9 @@ public class ControlleurJeu extends Observable {
 
 	/**
 	 * 
-	 * Commencer une nouvelle partie, et supprime celle deja en cours. Le nombre
-	 * total de joueurs doit etre soit 2 ou 3, donc les combinaisons possibles de
-	 * joueurs humains et bots sonts:
+	 * Commencer un nouveau jeu, et supprime celle deja en cours. Le nombre total de
+	 * joueurs doit etre soit 2 ou 3, donc les combinaisons possibles de joueurs
+	 * humains et bots sonts:
 	 * 
 	 * <pre>
 	 * 0, 2
@@ -157,15 +153,14 @@ public class ControlleurJeu extends Observable {
 	 * Si incorrect, les nombres de joueurs seront corrigés.
 	 * 
 	 * 
-	 * @param nbHumains Le nombre de joueurs humains.
-	 * @param nbBots    Le nombre de joueurs bots.
-	 * @param regles    Les regles de jeu a utiliser
-	 * @param typeTapis Le type de tapis a utiliser
-	 * @param largeur   TODO
-	 * @param hauteur   TODO
+	 * @param nbHumains       Le nombre de joueurs humains.
+	 * @param nbBots          Le nombre de joueurs bots.
+	 * @param regles          Les regles de jeu a utiliser
+	 * @param typeTapis       Le type de tapis a utiliser
+	 * @param nombreDeParties
 	 */
-	public void commencerNouvellePartie(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int largeur,
-			int hauteur) {
+	public void commencerNouveauJeu(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis,
+			int nombreDeParties) {
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -173,6 +168,8 @@ public class ControlleurJeu extends Observable {
 
 		nbBots = Math.max(0, nbBots);
 		nbBots = Math.min(3, nbBots);
+
+		nombreTotalDeParties = Math.max(1, nombreDeParties);
 
 		if (nbBots + nbHumains > 3)
 			nbBots = 0;
@@ -183,28 +180,52 @@ public class ControlleurJeu extends Observable {
 		this.regles = regles;
 
 		switch (typeTapis) {
-			case Triangulaire:
-				tapis = new Tapis_Triangulaire(largeur);
+			case Rectangulaire_5x3:
+				tapis = new Tapis_5x3();
 				break;
-			case Rectangulaire:
-				tapis = new Tapis_Rectangulaire(largeur, hauteur);
+			case Triangulaire_5:
+				tapis = new Tapis_Triangulaire(5);
 				break;
 			default:
 				tapis = new Tapis_5x3();
 				break;
 		}
-
 		genererJoueurs(nbHumains, nbBots);
-		iteratorJoueurs = joueurs.iterator();
-
-		debutPartie = true;
-
-		// Au lieur d'aller chercher toutes les cartes chez les joueurs, simplement les
-		// recreers.
-		initialiserCartes();
+		genererToutesCartes();
 
 		// Commener l'interface graphique du jeu.
 		InterfaceJeu.begin();
+
+		VueConsole.begin();
+
+		commencerNouvellePartie();
+	}
+
+	private void genererToutesCartes() {
+		toutesCartes = new ArrayList<Carte>();
+		for (Carte.Remplissage remplissage : Carte.Remplissage.values()) {
+			for (Carte.Couleur couleur : Carte.Couleur.values()) {
+				for (Carte.Forme forme : Carte.Forme.values()) {
+					Carte nouvelleCarte = new Carte(couleur, remplissage, forme);
+					toutesCartes.add(nouvelleCarte);
+				}
+			}
+		}
+	}
+
+	private void commencerNouvellePartie() {
+		for (Joueur joueur : joueurs) {
+			joueur.resetCartes();
+		}
+
+		iteratorJoueurs = joueurs.iterator();
+		tapis.clear();
+
+		debutPartie = true;
+
+		// Au lieu d'aller chercher toutes les cartes chez les joueurs, simplement les
+		// recreers.
+		initialiserCartes();
 
 		// Au debut de la partie, il faut jeter une carte.
 		popCarteAleatoire();
@@ -215,6 +236,9 @@ public class ControlleurJeu extends Observable {
 				break;
 			case Advanced:
 				distribuerCartesDansMain();
+				break;
+			case Variante:
+				distribuerToutesCartesDansMain();
 				break;
 			default:
 				throw new UnsupportedOperationException("regles pas implémenté");
@@ -255,34 +279,14 @@ public class ControlleurJeu extends Observable {
 		joueurActuelAPoseCarteCeTour    = false;
 		joueurActuelADeplaceCarteCeTour = false;
 
-		System.out.println("-------------------------------------");
-		System.out.println(String.format("A %s de jouer.", joueurActuel));
+		setChanged();
+		notifyObservers(new NouveauJoueur(joueurActuel));
 
-		afficherTapis();
+		joueurActuel.arreterStrategy();
 
-		switch (regles) {
-			case Standard:
-				Carte carteVictoire = joueurActuel.getCarteVictoire();
-				String stringCarte = GenerateurString.getStringCarte(carteVictoire);
-
-				System.out.println(String.format("Carte victoire: |%s|", stringCarte));
-				break;
-
-			case Advanced:
-				afficherMainJoueurActuel();
-				break;
-
-			default:
-				break;
-		}
-
-//		if(threadStrategyJoueurActuel != null)
-//			threadStrategyJoueurActuel.
 
 		threadStrategyJoueurActuel = joueurActuel.beginStrategyThread();
 
-		setChanged();
-		notifyObservers();
 		return true;
 	}
 
@@ -316,29 +320,28 @@ public class ControlleurJeu extends Observable {
 		if (!ilResteDesCartes())
 			return false;
 
-		Carte nouvelleCarte = popCarteAleatoire();
-
-		String carteString = GenerateurString.getStringCarte(nouvelleCarte);
-
-		System.out.println();
-		System.out
-				.println(String.format("%s a pioché un %s |%s|", joueurActuel, nouvelleCarte.toString(), carteString));
-
 		joueurActuelAPiocheCarteCeTour = true;
+
+		Carte nouvelleCarte = popCarteAleatoire();
 
 		switch (regles) {
 			case Advanced:
 				joueurActuel.ajouterCarteDansMain(nouvelleCarte);
-				afficherMainJoueurActuel();
-				return true;
+				break;
 			case Standard:
 				joueurActuel.setCartePiochee(nouvelleCarte);
-				return true;
-			default:
 				break;
+			case Variante:
+				return false;
+			// Le joueur ne peut pas piocher de cartes, tout a ete distribué
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
 
-		throw new UnsupportedOperationException("Regles non implémentéés");
+		setChanged();
+		notifyObservers(new PiocherCarte(joueurActuel, nouvelleCarte));
+		return true;
+
 	}
 
 	/**
@@ -363,6 +366,10 @@ public class ControlleurJeu extends Observable {
 			return false;
 
 		joueurActuel.retirerCarteDansMain(carte);
+
+		setChanged();
+		notifyObservers(new PoserCarte(carte, new Position(x, y)));
+
 		return true;
 	}
 
@@ -375,12 +382,16 @@ public class ControlleurJeu extends Observable {
 	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
 	 */
 	public boolean joueurActuelPoseCartePiochee(int x, int y) {
-		if (!joueurActuelPoseCarte(joueurActuel.getCartePiochee(), x, y))
+		Carte cartePiochee = joueurActuel.getCartePiochee();
+
+		if (!joueurActuelPoseCarte(cartePiochee, x, y))
 			return false;
 
 		joueurActuel.setCartePiochee(null);
-		return true;
 
+		setChanged();
+		notifyObservers(new PoserCarte(cartePiochee, new Position(x, y)));
+		return true;
 	}
 
 	/*
@@ -397,14 +408,6 @@ public class ControlleurJeu extends Observable {
 
 		if (!tapis.poserCarte(carte, x, y))
 			return false;
-
-		System.out.println();
-		System.out.println(String.format("%s a posé une carte a (%d, %d)", joueurActuel, x, y));
-
-		if (regles == Regles.Standard)
-			afficherPointsJoueurActuel();
-
-		afficherTapis();
 
 		joueurActuelAPoseCarteCeTour = true;
 		return true;
@@ -423,13 +426,10 @@ public class ControlleurJeu extends Observable {
 	// Donner une carte victoire a chaque joueur. Seulement appelé en debut de
 	// partie, et pour les regles standard.
 	private boolean distribuerCartesVictoires() {
-		if (cartesVictoiresDistribues)
-			return false;
-
 		for (Joueur joueur : joueurs) {
 			joueur.setCarteVictoire(popCarteAleatoire());
 		}
-		cartesVictoiresDistribues = true;
+
 		return true;
 	}
 
@@ -438,6 +438,17 @@ public class ControlleurJeu extends Observable {
 			for (int i = 0; i < 3; i++) {
 				joueur.ajouterCarteDansMain(popCarteAleatoire());
 			}
+		}
+	}
+
+	private void distribuerToutesCartesDansMain() {
+		int i = 0;
+		while (ilResteDesCartes()) {
+			if (i >= joueurs.size())
+				i = 0;
+
+			joueurs.get(i).ajouterCarteDansMain(popCarteAleatoire());
+			i++;
 		}
 	}
 
@@ -459,13 +470,10 @@ public class ControlleurJeu extends Observable {
 		if (!tapis.deplacerCarte(x1, y1, x2, y2))
 			return false;
 
-		System.out.println();
-		System.out
-				.println(String.format("%s a deplacé une carte de (%d, %d) a (%d, %d)", joueurActuel, x1, y1, x2, y2));
-
-		afficherTapis();
-
 		joueurActuelADeplaceCarteCeTour = true;
+
+		setChanged();
+		notifyObservers(new DeplacerCarte(new Position(x1, y1), new Position(x2, y2)));
 		return true;
 
 	}
@@ -497,7 +505,11 @@ public class ControlleurJeu extends Observable {
 	 *         sinon.
 	 */
 	public boolean joueurActuelPeutFinir() {
-		return (joueurActuelAPiocheCarteCeTour && joueurActuelAPoseCarteCeTour);
+		if (!joueurActuelAPoseCarteCeTour)
+			return false;
+		if (ilResteDesCartes() && !joueurActuelAPiocheCarteCeTour)
+			return false;
+		return true;
 	}
 
 	/**
@@ -528,26 +540,6 @@ public class ControlleurJeu extends Observable {
 	 */
 	public ArrayList<Carte> getToutesCartes() {
 		return toutesCartes;
-	}
-
-	private void afficherTapis() {
-		System.out.print(GenerateurString.getStringTapis(tapis));
-	}
-
-	private void afficherPointsJoueurActuel() {
-
-		if (regles == Regles.Standard) {
-			String stringCarteVictoire = GenerateurString.getStringCarte(joueurActuel.getCarteVictoire());
-			System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
-					getScorePourCarte(joueurActuel.getCarteVictoire())));
-		}
-
-	}
-
-	private void afficherMainJoueurActuel() {
-		System.out.println("Main:");
-		System.out.println(GenerateurString.getStringCartesDansMainJoueur(joueurActuel));
-		System.out.println();
 	}
 
 	/**
@@ -582,10 +574,11 @@ public class ControlleurJeu extends Observable {
 					carteVictoire = joueur.getCarteVictoire();
 					break;
 				case Advanced:
+				case Variante:
 					carteVictoire = joueur.getCarteDansMain(0);
 					break;
 				default:
-					break;
+					throw new IllegalArgumentException("Unexpected value: " + getRegles());
 			}
 
 			int score = getScorePourCarte(carteVictoire);
@@ -633,12 +626,12 @@ public class ControlleurJeu extends Observable {
 	 * 
 	 * @return {@code true} si le jeu est terminé, {@code false} sinon.
 	 */
-	public boolean jeuTermine() {
+	public boolean isJeuTermine() {
 		return _jeuTermine && !threadStrategyJoueurActuel.isAlive(); // Attendre que le thread de la strategy ait
 																		// terminé.
 	}
 
-	private boolean jeuPeutTerminer() {
+	private boolean partiePeutTerminer() {
 		if (tapisEstRempli())
 			return true;
 
@@ -652,6 +645,7 @@ public class ControlleurJeu extends Observable {
 
 				return true;
 			case Advanced:
+			case Variante:
 				if (ilResteDesCartes())
 					return false;
 
@@ -662,9 +656,8 @@ public class ControlleurJeu extends Observable {
 
 				return true;
 			default:
-				break;
+				throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
-		return false;
 	}
 
 	/**
@@ -687,13 +680,23 @@ public class ControlleurJeu extends Observable {
 		if (!joueurActuelPeutFinir())
 			return false;
 
-		if (jeuPeutTerminer()) {
+		if (partiePeutTerminer()) {
 			calculerScoresDesJoueurs();
-			_jeuTermine = true;
+			setChanged();
+			notifyObservers(new FinPartie());
+
+			nombreDePartiesJoues++;
+			if (nombreDePartiesJoues >= nombreTotalDeParties)
+				_jeuTermine = true;
+			else
+				commencerNouvellePartie();
 			return true;
 		}
 		passerAuJoueurSuivant();
 		return true;
 	}
 
+	public ArrayList<Joueur> getJoueurs() {
+		return joueurs;
+	}
 }

@@ -20,21 +20,20 @@ import fr.utt.sh.core.tapis.Tapis;
  */
 public class StrategyTest implements Strategy {
 
-	ControlleurJeu c = ControlleurJeu.getInstance();
+	ControlleurJeu cj = ControlleurJeu.getInstance();
 
 	Tapis tapisTemp;
 	int   lTapis;
 	int   hTapis;
-	
-	private int delay = 200;
+
+	private int delay = 00;
 
 	Joueur joueurActuel;
 
 	@Override
 	public void run() {
 		try {
-			while (!execute()) {
-			}
+			execute();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -42,34 +41,39 @@ public class StrategyTest implements Strategy {
 	}
 
 	@Override
-	public boolean execute() throws InterruptedException {
+	public void execute() throws InterruptedException {
 
-		tapisTemp = c.getCloneTapis();
+		tapisTemp = cj.getCloneTapis();
 		lTapis    = tapisTemp.getLargeur();
 		hTapis    = tapisTemp.getHauteur();
 
-		switch (c.getRegles()) {
+		switch (cj.getRegles()) {
 			case Standard:
-				return executeStandard();
-			case Advanced:
-				return executeAdvanced();
-			default:
+				executeStandard();
 				break;
+			case Advanced:
+			case Variante:
+				executeAdvanced();
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
 		}
-		return false;
+		return;
 	}
 
 	private boolean executeStandard() throws InterruptedException {
-		c.joueurActuelPiocheCarte();
+
 		Thread.sleep(delay);
-		
-		if (c.tapisEstVide()) {
-			c.joueurActuelPoseCartePiochee(0, 0);
+		cj.joueurActuelPiocheCarte();
+		Thread.sleep(delay);
+
+		if (cj.tapisEstVide()) {
+			cj.joueurActuelPoseCartePiochee(0, 0);
 			Thread.sleep(delay);
-			return c.terminerTourJoueurActuel();
+			return cj.terminerTourJoueurActuel();
 		}
 
-		joueurActuel = c.getJoueurActuel();
+		joueurActuel = cj.getJoueurActuel();
 
 		Carte carteVictoire = joueurActuel.getCarteVictoire();
 		Carte cartePiochee  = joueurActuel.getCartePiochee();
@@ -79,14 +83,14 @@ public class StrategyTest implements Strategy {
 		int x = meilleurePosition.getX();
 		int y = meilleurePosition.getY();
 
-		c.joueurActuelPoseCartePiochee(x, y);
+		cj.joueurActuelPoseCartePiochee(x, y);
 		Thread.sleep(delay);
-		return c.terminerTourJoueurActuel();
+		return cj.terminerTourJoueurActuel();
 	}
 
-	private boolean executeAdvanced() {
+	private boolean executeAdvanced() throws InterruptedException {
 
-		joueurActuel = c.getJoueurActuel();
+		joueurActuel = cj.getJoueurActuel();
 
 		Carte carteVictoire = joueurActuel.getCarteDansMain(0);
 		Carte carteAPoser   = joueurActuel.getCarteDansMain(1);
@@ -96,16 +100,18 @@ public class StrategyTest implements Strategy {
 		int x = meilleurePosition.getX();
 		int y = meilleurePosition.getY();
 
-		c.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
-		c.joueurActuelPiocheCarte();
-		
-		
-		return c.terminerTourJoueurActuel();
+		Thread.sleep(delay);
+		cj.joueurActuelPoseCarteDansMain(carteAPoser, x, y);
+		Thread.sleep(delay);
+		cj.joueurActuelPiocheCarte();
+		Thread.sleep(delay);
+
+		return cj.terminerTourJoueurActuel();
 	}
 
 	private Position getMeilleurePosition(Carte carteVictoire, Carte carteAPoser) {
-		int posXMax  = -2; // Position invalide, pour tester si la valeur a été changée.
-		int posYMax  = -2;
+		int posXMax  = -1; // Position invalide, pour tester si la valeur a été changée.
+		int posYMax  = -1;
 		int scoreMax = -1;
 
 		// Essayer tous les coordonnées possibles pour trouver une position jouable, et
@@ -132,5 +138,8 @@ public class StrategyTest implements Strategy {
 		}
 		return new Position(posXMax, posYMax);
 	}
+
+	public void arreter() {
+	};
 
 }
