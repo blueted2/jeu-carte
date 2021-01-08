@@ -4,6 +4,7 @@ import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.score.VisitorComptageScore;
 
+
 /**
  * Classe de base pour créer des tapis triangulaires. La hauteur et la largeur
  * seront egaux.
@@ -11,7 +12,7 @@ import fr.utt.sh.core.score.VisitorComptageScore;
  * @author grego
  *
  */
-public class Tapis_Triangulaire extends Tapis {
+public class TapisTri extends Tapis {
 
 	int taille;
 
@@ -24,7 +25,7 @@ public class Tapis_Triangulaire extends Tapis {
 	 * 
 	 * @param taille La taille du tapis triangulaire a créer.
 	 */
-	public Tapis_Triangulaire(int taille) {
+	public TapisTri(int taille) {
 		this.taille = taille;
 
 		cartes = new Carte[taille][];
@@ -40,7 +41,7 @@ public class Tapis_Triangulaire extends Tapis {
 	 * @param tapis Le tapis a etre cloné.
 	 * 
 	 */
-	public Tapis_Triangulaire(Tapis_Triangulaire tapis) {
+	public TapisTri(TapisTri tapis) {
 
 		this.cartes = new Carte[tapis.cartes.length][];
 		for (int i = 0; i < tapis.cartes.length; i++) {
@@ -256,7 +257,7 @@ public class Tapis_Triangulaire extends Tapis {
 
 	@Override
 	public Tapis getClone() {
-		return new Tapis_Triangulaire(this);
+		return new TapisTri(this);
 	}
 
 	@Override

@@ -16,5 +16,6 @@ public enum TypeTapis {
 	 */
 //	Rectangulaire,
 	Rectangulaire_5x3,
-	Triangulaire_5
+	Triangulaire_5,
+	RectangulaireTrouee_6x3
 }

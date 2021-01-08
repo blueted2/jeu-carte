@@ -25,17 +25,10 @@ import fr.utt.sh.gui.vue.VueTapis;
  */
 public class InterfaceJeu {
 
-	private VueTapis         vueTapis;
-	private VueJoueurActuel  vueJoueurActuel;
-	private VueScoresJoueurs vueScoresJoueurs;
-	private JButton          boutonPioche;
-	private JButton          boutonFinTour;
-
-	private JFrame              frame;
+	private JFrame frame;
 	private static InterfaceJeu instance;
-	private ControlleurJeu      cj;
-	private Tapis               tapis;
-	
+	private ControlleurJeu cj;
+
 	private VueJeu vueJeu;
 
 	/**
@@ -65,25 +58,29 @@ public class InterfaceJeu {
 		instance = new InterfaceJeu();
 	}
 
+	public static InterfaceJeu getInstance() {
+		if (instance == null)
+			begin();
+		return instance;
+	}
+
 	private InterfaceJeu() {
-		cj    = ControlleurJeu.getInstance();
-		tapis = cj.getTapis();
 		initialize();
 	}
 
 	private void initialize() {
 		loadIcons();
-		
+
 		frame = new JFrame();
 		frame.getContentPane().setLayout(null);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setVisible(true);
-		frame.setSize(1024, 720);
 		
+
 		vueJeu = new VueJeu();
-		
+
 		frame.getContentPane().add(vueJeu);
 
 		frame.addComponentListener(new ComponentResizeEndListener(100) {
@@ -92,15 +89,7 @@ public class InterfaceJeu {
 				vueJeu.setBounds(frame.getContentPane().getBounds());
 			}
 		});
-	}
-	
-	/**
-	 * Obtenir l'instance de l'interface jeu.
-	 * 
-	 * @return {@link InterfaceJeu}
-	 */
-	public InterfaceJeu getInstance() {
-		return instance;
+		frame.setSize(1024, 720);
 	}
 
 	private void loadIcons() {
@@ -114,10 +103,14 @@ public class InterfaceJeu {
 			nomFichier += carte.getCouleur().name().toLowerCase() + "_";
 			nomFichier += carte.getRemplissage().name().toLowerCase() + ".jpg";
 
-			ImageIcon icon  = new ImageIcon(getClass().getResource(nomFichier));
-			Image     image = icon.getImage();
+			ImageIcon icon = new ImageIcon(getClass().getResource(nomFichier));
+			Image image = icon.getImage();
 			imagesCartes.put(carte, image);
 		}
+	}
+
+	public JFrame getFrame() {
+		return frame;
 	}
 
 }

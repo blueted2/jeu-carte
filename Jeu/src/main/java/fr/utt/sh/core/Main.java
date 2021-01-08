@@ -2,8 +2,7 @@ package fr.utt.sh.core;
 
 import fr.utt.sh.console_ui.Utils;
 import fr.utt.sh.core.tapis.TypeTapis;
-import fr.utt.sh.gui.InterfaceConfiguration;
-import fr.utt.sh.gui.InterfaceJeu;
+import fr.utt.sh.gui.InterfaceConfiguration;;
 
 /**
  * 
@@ -22,6 +21,32 @@ public class Main {
 	public static void main(String[] args) {
 
 		ControlleurJeu c = ControlleurJeu.getInstance();
+
+		switch (args.length) {
+		case 1:
+			if (args[0].equals("console")) {
+				c.commencerNouveauJeu(1, 1, Regles.Standard, TypeTapis.Rectangulaire_5x3, 2, false);
+			} else {
+				InterfaceConfiguration.begin();
+			}
+			break;
+
+		case 5:
+			boolean console = args[0].equals("console");
+			int nbHumains = Integer.parseInt(args[1]);
+			int nbBots = Integer.parseInt(args[2]);
+			int indexRegles = Integer.parseInt(args[3]);
+			int indexTapis = Integer.parseInt(args[4]);
+			Regles regles = Regles.values()[indexRegles];
+			TypeTapis tapis = TypeTapis.values()[indexTapis];
+
+			c.commencerNouveauJeu(nbHumains, nbBots, regles, tapis, 2, !console);
+			break;
+
+		default:
+			InterfaceConfiguration.begin();
+			break;
+		}
 
 		// Sélection du nombre de joueurs (humains et bots)
 //
@@ -80,20 +105,15 @@ public class Main {
 //
 //		c.commencerNouvellePartie(nbHumains, nbBots, regles, tapis, largeur, hauteur);
 
-		InterfaceConfiguration.begin();
-		
-//		c.commencerNouveauJeu(0, 2, Regles.Advanced, TypeTapis.Rectangulaire_5x3, 2);
-
 		while (!c.isJeuTermine()) {
 			try {
 				Thread.sleep(10);// Sans le delais, le program devient instable.
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
+			}
 		}
-		c.afficherScoresDesJoueurs();
-		
+
 //		c.commencerNouveauJeu(0, 2, Regles.Advanced, TypeTapis.Rectangulaire_5x3);
 	}
 }

@@ -1,7 +1,8 @@
 package fr.utt.sh.console_ui;
 
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
-import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+import fr.utt.sh.core.tapis.TapisTri;
+import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
+import fr.utt.sh.core.tapis.TapisRect;
 
 /**
  * @author grego
@@ -9,14 +10,16 @@ import fr.utt.sh.core.tapis.Tapis_Triangulaire;
  */
 public interface VisitorAffichage {
 	/**
-	 * Visiter un {@link Tapis_Rectangulaire}, pour pouvoir créer une version affichable.
-	 * @param tapis {@link Tapis_Rectangulaire}
+	 * Visiter un {@link TapisRect}, pour pouvoir créer une version affichable.
+	 * @param tapis {@link TapisRect}
 	 */
-	public void visit(Tapis_Rectangulaire tapis);
+	public void visit(TapisRect tapis);
 	
-	/**Visiter un {@link Tapis_Triangulaire}, pour pouvoir créer une version affichable.
-	 * @param tapis {@link Tapis_Triangulaire}
+	/**Visiter un {@link TapisTri}, pour pouvoir créer une version affichable.
+	 * @param tapis {@link TapisTri}
 	 */
-	public void visit(Tapis_Triangulaire tapis);
+	public void visit(TapisTri tapis);
+
+	public void visit(TapisRectDecalable tapis);
 
 }

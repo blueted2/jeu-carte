@@ -7,8 +7,9 @@ import javax.swing.JPanel;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Position;
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
-import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+import fr.utt.sh.core.tapis.TapisTri;
+import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
+import fr.utt.sh.core.tapis.TapisRect;
 import fr.utt.sh.gui.vue.EmplacementCarte;
 import fr.utt.sh.gui.vue.EmplacementCarteBord;
 import fr.utt.sh.gui.vue.VueTapis;
@@ -25,7 +26,37 @@ public class VisitorAffichageGenerateurEmplacementsCarte implements VisitorAffic
 	private VueTapis vueTapis;
 
 	@Override
-	public void visit(Tapis_Rectangulaire tapis) {
+	public void visit(TapisRect tapis) {
+
+		vueTapis = new VueTapis(tapis);
+		vueTapis.setLayout(new GridLayout(tapis.getHauteur(), tapis.getLargeur()));
+
+		for (int y = 0; y < tapis.getHauteur(); y++) {
+			for (int x = 0; x < tapis.getLargeur(); x++) {
+				JComponent emplacement;
+
+				if (!tapis.positionLegale(x, y))
+					emplacement = new JPanel();
+
+				else if (tapis.positionSurTapis(x, y)) {
+					EmplacementCarte emCarte = new EmplacementCarte(new Position(x, y));
+					emCarte.setCarte(tapis.getCarteAt(x, y));
+					emplacement = emCarte;
+					vueTapis.addEmCarte(emCarte);
+				} else {
+					EmplacementCarte emCarte = new EmplacementCarteBord(new Position(x, y));
+					emplacement = emCarte;
+					vueTapis.addEmCarte(emCarte);
+				}
+
+				vueTapis.add(emplacement);
+
+			}
+		}
+	}
+	
+	@Override
+	public void visit(TapisRectDecalable tapis) {
 
 		vueTapis = new VueTapis(tapis);
 		vueTapis.setLayout(new GridLayout(tapis.getHauteur() + 2, tapis.getLargeur() + 2));
@@ -52,11 +83,10 @@ public class VisitorAffichageGenerateurEmplacementsCarte implements VisitorAffic
 
 			}
 		}
-
 	}
 
 	@Override
-	public void visit(Tapis_Triangulaire tapis) {
+	public void visit(TapisTri tapis) {
 		vueTapis = new VueTapis(tapis);
 		vueTapis.setLayout(new GridLayout(tapis.getHauteur() + 2, tapis.getLargeur() + 2));
 

@@ -3,8 +3,8 @@ package fr.utt.sh.core.score;
 import java.util.LinkedList;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.tapis.Tapis_Rectangulaire;
-import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+import fr.utt.sh.core.tapis.TapisTri;
+import fr.utt.sh.core.tapis.TapisRect;
 
 /**
  * <pre>
@@ -48,7 +48,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	}
 
 	@Override
-	public void visit(Tapis_Rectangulaire tapis) {
+	public void visit(TapisRect tapis) {
 		int largeurTapis = tapis.getLargeur();
 		int hauteurTapis = tapis.getHauteur();
 
@@ -74,7 +74,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	}
 
 	@Override
-	public void visit(Tapis_Triangulaire tapis) {
+	public void visit(TapisTri tapis) {
 		int tailleTapis = tapis.getHauteur(); // Hauteur et largeur sont les meme pour un tapis triangulaire.
 
 		// Calcule des lingnes

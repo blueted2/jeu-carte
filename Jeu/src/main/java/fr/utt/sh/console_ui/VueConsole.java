@@ -11,6 +11,7 @@ import fr.utt.sh.core.Regles;
 import fr.utt.sh.core.actions.ActionMainJoueur;
 import fr.utt.sh.core.actions.ActionTapis;
 import fr.utt.sh.core.actions.DeplacerCarte;
+import fr.utt.sh.core.actions.FinPartie;
 import fr.utt.sh.core.actions.NouveauJoueur;
 import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.actions.PoserCarte;
@@ -64,13 +65,31 @@ public class VueConsole implements Observer {
 		
 		if(arg1 instanceof NouveauJoueur)
 			afficherNouveauJoueur((NouveauJoueur) arg1);
+		
+		if(arg1 instanceof FinPartie)
+			afficherScoresDesJoueurs();
 
 	}
 
 	private void afficherNouveauJoueur(NouveauJoueur nouveauJoueur) {
+		Joueur joueur = nouveauJoueur.getJoueur();
+		
 		System.out.println();
 		System.out.println("--------------------------------------------");
-		System.out.println(String.format("A %s de jouer", nouveauJoueur.getJoueur()));
+		
+		System.out.println(String.format("A %s de jouer", joueur));
+		switch (cj.getRegles()) {
+		case Standard:
+			Carte carteVictoire = joueur.getCarteVictoire();
+			System.out.println(String.format("Carte victoire: %s (%s)", GenerateurString.getStringCarte(carteVictoire), carteVictoire));
+			break;
+		case Variante:
+		case Advanced:
+			break;	
+
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+		}
 		
 	}
 
@@ -114,15 +133,10 @@ public class VueConsole implements Observer {
 		System.out.println();
 	}
 
-	private void afficherPointsJoueurActuel() {
-
-		if (cj.getRegles() == Regles.Standard) {
-			Joueur joueurActuel        = cj.getJoueurActuel();
-			String stringCarteVictoire = GenerateurString.getStringCarte(joueurActuel.getCarteVictoire());
-			System.out.println(String.format("Score pour %s avec |%s|: %d", joueurActuel, stringCarteVictoire,
-					cj.getScorePourCarte(joueurActuel.getCarteVictoire())));
-		}
-
+	private void afficherScoresDesJoueurs() {
+		cj.getJoueurs().forEach(j -> {
+			System.out.println(String.format("Score de %s: %d", j, j.getScore()));
+		});
 	}
 
 }

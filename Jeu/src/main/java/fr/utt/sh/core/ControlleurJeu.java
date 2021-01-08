@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Random;
 
-import fr.utt.sh.console_ui.GenerateurString;
 import fr.utt.sh.console_ui.VueConsole;
 import fr.utt.sh.core.actions.DeplacerCarte;
 import fr.utt.sh.core.actions.FinPartie;
@@ -17,14 +16,14 @@ import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.actions.PoserCarte;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
-import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyTest;
-import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.core.tapis.Tapis_5x3;
-import fr.utt.sh.core.tapis.Tapis_Triangulaire;
+import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.TypeTapis;
+import fr.utt.sh.core.tapis.decalable.TapisRectTrouee_6x3;
+import fr.utt.sh.core.tapis.Tapis;
 
 /**
  * Cette classe singleton se charge de controller le flux general du jeu, ainsi
@@ -37,10 +36,10 @@ public class ControlleurJeu extends Observable {
 
 	private static ControlleurJeu instance;
 
-	private ArrayList<Carte>  toutesCartes;
-	private ArrayList<Carte>  cartesRestantes;
+	private ArrayList<Carte> toutesCartes;
+	private ArrayList<Carte> cartesRestantes;
 	private ArrayList<Joueur> joueurs;
-	private Iterator<Joueur>  iteratorJoueurs;
+	private Iterator<Joueur> iteratorJoueurs;
 
 	private Tapis tapis;
 
@@ -48,9 +47,10 @@ public class ControlleurJeu extends Observable {
 
 	private Regles regles;
 
-	private boolean debutPartie                     = false;
-	private boolean joueurActuelAPoseCarteCeTour    = false;
-	private boolean joueurActuelAPiocheCarteCeTour  = false;
+	private boolean debutPartie = false;
+	private boolean debutJeu = true;
+	private boolean joueurActuelAPoseCarteCeTour = false;
+	private boolean joueurActuelAPiocheCarteCeTour = false;
 	private boolean joueurActuelADeplaceCarteCeTour = false;
 
 	private boolean _jeuTermine = false;
@@ -60,7 +60,7 @@ public class ControlleurJeu extends Observable {
 
 	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
-		joueurs         = new ArrayList<Joueur>();
+		joueurs = new ArrayList<Joueur>();
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class ControlleurJeu extends Observable {
 	private void genererJoueurs(int nombreDeJoueursHumains, int nombreDeJoueuersBots) {
 		joueurs = new ArrayList<Joueur>();
 
-		int nombreBotsAjoutes    = 0;
+		int nombreBotsAjoutes = 0;
 		int nombreHumainsAjoutes = 0;
 
 		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
@@ -157,10 +157,11 @@ public class ControlleurJeu extends Observable {
 	 * @param nbBots          Le nombre de joueurs bots.
 	 * @param regles          Les regles de jeu a utiliser
 	 * @param typeTapis       Le type de tapis a utiliser
-	 * @param nombreDeParties
+	 * @param nombreDeParties Le nombre de parties dans un jeu
+	 * @param interfaceJeu    Si l'interface graphique doit etre activée
 	 */
-	public void commencerNouveauJeu(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis,
-			int nombreDeParties) {
+	public void commencerNouveauJeu(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int nombreDeParties,
+			boolean interfaceJeu) {
 
 		// Assurer que le nombre de joueurs soit correct.
 		nbHumains = Math.max(0, nbHumains);
@@ -180,21 +181,26 @@ public class ControlleurJeu extends Observable {
 		this.regles = regles;
 
 		switch (typeTapis) {
-			case Rectangulaire_5x3:
-				tapis = new Tapis_5x3();
-				break;
-			case Triangulaire_5:
-				tapis = new Tapis_Triangulaire(5);
-				break;
-			default:
-				tapis = new Tapis_5x3();
-				break;
+		case Rectangulaire_5x3:
+			tapis = new Tapis_5x3();
+			break;
+		case Triangulaire_5:
+			tapis = new TapisTri(5);
+			break;
+		case RectangulaireTrouee_6x3:
+			tapis = new TapisRectTrouee_6x3();
+			break;
+		default:
+			tapis = new Tapis_5x3();
+			break;
 		}
 		genererJoueurs(nbHumains, nbBots);
 		genererToutesCartes();
 
 		// Commener l'interface graphique du jeu.
-		InterfaceJeu.begin();
+		if (interfaceJeu) {
+			InterfaceJeu.begin();
+		}
 
 		VueConsole.begin();
 
@@ -213,7 +219,16 @@ public class ControlleurJeu extends Observable {
 		}
 	}
 
-	private void commencerNouvellePartie() {
+	public boolean commencerNouvellePartie() {
+
+		if (!debutJeu) {
+			if (!partiePeutTerminer()) {
+				return false;
+			}
+		} else {
+			debutJeu = false;
+		}
+
 		for (Joueur joueur : joueurs) {
 			joueur.resetCartes();
 		}
@@ -231,21 +246,22 @@ public class ControlleurJeu extends Observable {
 		popCarteAleatoire();
 
 		switch (regles) {
-			case Standard:
-				distribuerCartesVictoires();
-				break;
-			case Advanced:
-				distribuerCartesDansMain();
-				break;
-			case Variante:
-				distribuerToutesCartesDansMain();
-				break;
-			default:
-				throw new UnsupportedOperationException("regles pas implémenté");
+		case Standard:
+			distribuerCartesVictoires();
+			break;
+		case Advanced:
+			distribuerCartesDansMain();
+			break;
+		case Variante:
+			distribuerToutesCartesDansMain();
+			break;
+		default:
+			throw new UnsupportedOperationException("regles pas implémenté");
 
 		}
 
 		passerAuJoueurSuivant();
+		return true;
 	}
 
 	/**
@@ -275,15 +291,14 @@ public class ControlleurJeu extends Observable {
 
 		joueurActuel = iteratorJoueurs.next();
 
-		joueurActuelAPiocheCarteCeTour  = false;
-		joueurActuelAPoseCarteCeTour    = false;
+		joueurActuelAPiocheCarteCeTour = false;
+		joueurActuelAPoseCarteCeTour = false;
 		joueurActuelADeplaceCarteCeTour = false;
 
 		setChanged();
 		notifyObservers(new NouveauJoueur(joueurActuel));
 
 		joueurActuel.arreterStrategy();
-
 
 		threadStrategyJoueurActuel = joueurActuel.beginStrategyThread();
 
@@ -325,17 +340,17 @@ public class ControlleurJeu extends Observable {
 		Carte nouvelleCarte = popCarteAleatoire();
 
 		switch (regles) {
-			case Advanced:
-				joueurActuel.ajouterCarteDansMain(nouvelleCarte);
-				break;
-			case Standard:
-				joueurActuel.setCartePiochee(nouvelleCarte);
-				break;
-			case Variante:
-				return false;
-			// Le joueur ne peut pas piocher de cartes, tout a ete distribué
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + getRegles());
+		case Advanced:
+			joueurActuel.ajouterCarteDansMain(nouvelleCarte);
+			break;
+		case Standard:
+			joueurActuel.setCartePiochee(nouvelleCarte);
+			break;
+		case Variante:
+			return false;
+		// Le joueur ne peut pas piocher de cartes, tout a ete distribué
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
 
 		setChanged();
@@ -417,7 +432,7 @@ public class ControlleurJeu extends Observable {
 	private Carte popCarteAleatoire() {
 		if (!ilResteDesCartes())
 			return null;
-		int   i = new Random().nextInt(cartesRestantes.size());
+		int i = new Random().nextInt(cartesRestantes.size());
 		Carte c = cartesRestantes.get(i);
 		cartesRestantes.remove(i);
 		return c;
@@ -543,16 +558,6 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Afficher le score de tout les jouers a la console.
-	 */
-	public void afficherScoresDesJoueurs() {
-		joueurs.forEach(j -> {
-
-			System.out.println(String.format("Score de %s: %d", j, j.getScore()));
-		});
-	}
-
-	/**
 	 * Obtenir le score d'une carte pour l'etat actuel du tapis.
 	 * 
 	 * @param carte La {@link Carte} pour laquelle on veut calculer le score.
@@ -570,15 +575,15 @@ public class ControlleurJeu extends Observable {
 			Carte carteVictoire = null;
 
 			switch (regles) {
-				case Standard:
-					carteVictoire = joueur.getCarteVictoire();
-					break;
-				case Advanced:
-				case Variante:
-					carteVictoire = joueur.getCarteDansMain(0);
-					break;
-				default:
-					throw new IllegalArgumentException("Unexpected value: " + getRegles());
+			case Standard:
+				carteVictoire = joueur.getCarteVictoire();
+				break;
+			case Advanced:
+			case Variante:
+				carteVictoire = joueur.getCarteDansMain(0);
+				break;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + getRegles());
 			}
 
 			int score = getScorePourCarte(carteVictoire);
@@ -636,27 +641,27 @@ public class ControlleurJeu extends Observable {
 			return true;
 
 		switch (regles) {
-			case Standard:
-				if (ilResteDesCartes())
+		case Standard:
+			if (ilResteDesCartes())
+				return false;
+
+			if (!joueurActuelAPoseCarteCeTour)
+				return false;
+
+			return true;
+		case Advanced:
+		case Variante:
+			if (ilResteDesCartes())
+				return false;
+
+			for (Joueur joueur : joueurs) {
+				if (joueur.getNombreCartesDansMain() > 1)
 					return false;
+			}
 
-				if (!joueurActuelAPoseCarteCeTour)
-					return false;
-
-				return true;
-			case Advanced:
-			case Variante:
-				if (ilResteDesCartes())
-					return false;
-
-				for (Joueur joueur : joueurs) {
-					if (joueur.getNombreCartesDansMain() > 1)
-						return false;
-				}
-
-				return true;
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + getRegles());
+			return true;
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
 	}
 
@@ -682,14 +687,17 @@ public class ControlleurJeu extends Observable {
 
 		if (partiePeutTerminer()) {
 			calculerScoresDesJoueurs();
-			setChanged();
-			notifyObservers(new FinPartie());
 
 			nombreDePartiesJoues++;
-			if (nombreDePartiesJoues >= nombreTotalDeParties)
+			if (nombreDePartiesJoues >= nombreTotalDeParties) {
 				_jeuTermine = true;
-			else
-				commencerNouvellePartie();
+				setChanged();
+				notifyObservers(new FinPartie(true));
+			} else {
+				setChanged();
+				notifyObservers(new FinPartie(false));
+			}
+
 			return true;
 		}
 		passerAuJoueurSuivant();
@@ -698,5 +706,15 @@ public class ControlleurJeu extends Observable {
 
 	public ArrayList<Joueur> getJoueurs() {
 		return joueurs;
+	}
+
+	public Joueur getGagnant() {
+		Joueur gagnant = joueurs.get(0);
+		for (Joueur joueur : joueurs) {
+			if (joueur.getScore() > gagnant.getScore())
+				gagnant = joueur;
+		}
+
+		return gagnant;
 	}
 }

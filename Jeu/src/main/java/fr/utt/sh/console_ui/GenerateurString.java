@@ -2,8 +2,8 @@ package fr.utt.sh.console_ui;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Carte.Remplissage;
-import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.tapis.Tapis;
+import fr.utt.sh.core.Joueur;
 
 /**
  * Cette classe contient des methodes pour créer des representaion string to
@@ -36,7 +36,7 @@ public class GenerateurString {
 	 */
 	public static String getStringCarte(Carte carte) {
 		if (carte == null)
-			return "";
+			return "><";
 
 		char   charCouleur = carte.getCouleur().name().charAt(0);
 		String charForme   = getCharForme(carte);

@@ -1,11 +1,13 @@
 package fr.utt.sh.core.tapis;
 
+import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
+
 /**
- * Une implementation de taille fixe 5x3 de {@link Tapis_Rectangulaire}.
+ * Une implementation de taille fixe 5x3 de {@link TapisRectDecalable}.
  * @author grego
  *
  */
-public class Tapis_5x3 extends Tapis_Rectangulaire{
+public class Tapis_5x3 extends TapisRectDecalable{
 
 	/**
 	 * Constructeur pour un tapis rectangulaire 5x3.

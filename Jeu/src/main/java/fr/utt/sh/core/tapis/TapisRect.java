@@ -12,13 +12,13 @@ import fr.utt.sh.core.score.VisitorComptageScore;
  * @author grego
  *
  */
-public class Tapis_Rectangulaire extends Tapis {
+public class TapisRect extends Tapis {
 
 	private Carte[][] cartes;
-	boolean           premiereCartePosee = false;
+	protected boolean premiereCartePosee = false;
 
-	private int largeur;
-	private int hauteur;
+	protected int largeur;
+	protected int hauteur;
 
 	/**
 	 * Constructeur pour un tapis rectangulaire general.
@@ -26,7 +26,7 @@ public class Tapis_Rectangulaire extends Tapis {
 	 * @param largeur Largeur du jeu.
 	 * @param hauteur Hauteur du jeu.
 	 */
-	public Tapis_Rectangulaire(int largeur, int hauteur) {
+	public TapisRect(int largeur, int hauteur) {
 		this.largeur = largeur;
 		this.hauteur = hauteur;
 
@@ -38,7 +38,7 @@ public class Tapis_Rectangulaire extends Tapis {
 	 * 
 	 * @param tapis Le {@code Tapis} a cloner.
 	 */
-	public Tapis_Rectangulaire(Tapis_Rectangulaire tapis) {
+	public TapisRect(TapisRect tapis) {
 		this.cartes = new Carte[tapis.cartes.length][];
 
 		for (int i = 0; i < tapis.cartes.length; i++) {
@@ -49,8 +49,8 @@ public class Tapis_Rectangulaire extends Tapis {
 			}
 		}
 
-		largeur            = tapis.cartes.length;
-		hauteur            = tapis.cartes[0].length;
+		largeur = tapis.cartes.length;
+		hauteur = tapis.cartes[0].length;
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
@@ -124,7 +124,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		return cartes[x][y];
 	}
 
-	boolean setCarteAt(Carte carte, int x, int y) {
+	protected boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
 		cartes[x][y] = carte;
@@ -148,7 +148,7 @@ public class Tapis_Rectangulaire extends Tapis {
 			if (getCarteAt(x, y) != null)
 				return false;
 			setCarteAt(carte, x, y);
-			
+
 			this.setChanged();
 			this.notifyObservers();
 			return true;
@@ -274,7 +274,7 @@ public class Tapis_Rectangulaire extends Tapis {
 
 	@Override
 	public Tapis getClone() {
-		return new Tapis_Rectangulaire(this);
+		return new TapisRect(this);
 	}
 
 	@Override
@@ -292,7 +292,7 @@ public class Tapis_Rectangulaire extends Tapis {
 		cartes = new Carte[largeur][hauteur];
 		this.setChanged();
 		this.notifyObservers();
-		
+
 	}
 
 }
