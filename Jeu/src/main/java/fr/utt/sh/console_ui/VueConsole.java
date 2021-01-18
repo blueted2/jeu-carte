@@ -7,7 +7,6 @@ import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.Position;
-import fr.utt.sh.core.Regles;
 import fr.utt.sh.core.actions.ActionMainJoueur;
 import fr.utt.sh.core.actions.ActionTapis;
 import fr.utt.sh.core.actions.DeplacerCarte;
@@ -16,17 +15,27 @@ import fr.utt.sh.core.actions.NouveauJoueur;
 import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.actions.PoserCarte;
 
+/**
+ * Une classe singleton permettant d'afficher la vue du jeu actuel a la console.
+ * @author grego
+ *
+ */
 public class VueConsole implements Observer {
 
 	private static VueConsole instance;
 	private ControlleurJeu    cj;
 
+	/**
+	 * Demarer la vue.
+	 * <br>
+	 * Nécessite que controlleurJeu soit deja intialisé.
+	 */
 	public static void begin() {
 		if (instance == null)
 			instance = new VueConsole();
 	}
 
-	public VueConsole() {
+	private VueConsole() {
 		cj = ControlleurJeu.getInstance();
 		cj.addObserver(this);
 

@@ -10,6 +10,7 @@ import java.util.Random;
 
 import fr.utt.sh.console_ui.VueConsole;
 import fr.utt.sh.core.actions.DeplacerCarte;
+import fr.utt.sh.core.actions.FinJeu;
 import fr.utt.sh.core.actions.FinPartie;
 import fr.utt.sh.core.actions.NouveauJoueur;
 import fr.utt.sh.core.actions.PiocherCarte;
@@ -36,10 +37,10 @@ public class ControlleurJeu extends Observable {
 
 	private static ControlleurJeu instance;
 
-	private ArrayList<Carte> toutesCartes;
-	private ArrayList<Carte> cartesRestantes;
+	private ArrayList<Carte>  toutesCartes;
+	private ArrayList<Carte>  cartesRestantes;
 	private ArrayList<Joueur> joueurs;
-	private Iterator<Joueur> iteratorJoueurs;
+	private Iterator<Joueur>  iteratorJoueurs;
 
 	private Tapis tapis;
 
@@ -47,10 +48,10 @@ public class ControlleurJeu extends Observable {
 
 	private Regles regles;
 
-	private boolean debutPartie = false;
-	private boolean debutJeu = true;
-	private boolean joueurActuelAPoseCarteCeTour = false;
-	private boolean joueurActuelAPiocheCarteCeTour = false;
+	private boolean debutPartie                     = false;
+	private boolean debutJeu                        = true;
+	private boolean joueurActuelAPoseCarteCeTour    = false;
+	private boolean joueurActuelAPiocheCarteCeTour  = false;
 	private boolean joueurActuelADeplaceCarteCeTour = false;
 
 	private boolean _jeuTermine = false;
@@ -60,7 +61,7 @@ public class ControlleurJeu extends Observable {
 
 	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
-		joueurs = new ArrayList<Joueur>();
+		joueurs         = new ArrayList<Joueur>();
 	}
 
 	/**
@@ -109,7 +110,7 @@ public class ControlleurJeu extends Observable {
 	private void genererJoueurs(int nombreDeJoueursHumains, int nombreDeJoueuersBots) {
 		joueurs = new ArrayList<Joueur>();
 
-		int nombreBotsAjoutes = 0;
+		int nombreBotsAjoutes    = 0;
 		int nombreHumainsAjoutes = 0;
 
 		while (nombreBotsAjoutes + nombreHumainsAjoutes < nombreDeJoueuersBots + nombreDeJoueursHumains) {
@@ -181,18 +182,18 @@ public class ControlleurJeu extends Observable {
 		this.regles = regles;
 
 		switch (typeTapis) {
-		case Rectangulaire_5x3:
-			tapis = new Tapis_5x3();
-			break;
-		case Triangulaire_5:
-			tapis = new TapisTri(5);
-			break;
-		case RectangulaireTrouee_6x3:
-			tapis = new TapisRectTrouee_6x3();
-			break;
-		default:
-			tapis = new Tapis_5x3();
-			break;
+			case Rectangulaire_5x3:
+				tapis = new Tapis_5x3();
+				break;
+			case Triangulaire_5:
+				tapis = new TapisTri(5);
+				break;
+			case RectangulaireTrouee_6x3:
+				tapis = new TapisRectTrouee_6x3();
+				break;
+			default:
+				tapis = new Tapis_5x3();
+				break;
 		}
 		genererJoueurs(nbHumains, nbBots);
 		genererToutesCartes();
@@ -219,6 +220,13 @@ public class ControlleurJeu extends Observable {
 		}
 	}
 
+	/**
+	 * Essayer de commencer une nouvelle partie, tout en verifiant si la partie
+	 * actuelle peut se terminer.
+	 * 
+	 * @return {@code true} si une nouvelle partie a pu etre commencée,
+	 *         {@code false} sinon.
+	 */
 	public boolean commencerNouvellePartie() {
 
 		if (!debutJeu) {
@@ -246,17 +254,17 @@ public class ControlleurJeu extends Observable {
 		popCarteAleatoire();
 
 		switch (regles) {
-		case Standard:
-			distribuerCartesVictoires();
-			break;
-		case Advanced:
-			distribuerCartesDansMain();
-			break;
-		case Variante:
-			distribuerToutesCartesDansMain();
-			break;
-		default:
-			throw new UnsupportedOperationException("regles pas implémenté");
+			case Standard:
+				distribuerCartesVictoires();
+				break;
+			case Advanced:
+				distribuerCartesDansMain();
+				break;
+			case Variante:
+				distribuerToutesCartesDansMain();
+				break;
+			default:
+				throw new UnsupportedOperationException("regles pas implémenté");
 
 		}
 
@@ -291,8 +299,8 @@ public class ControlleurJeu extends Observable {
 
 		joueurActuel = iteratorJoueurs.next();
 
-		joueurActuelAPiocheCarteCeTour = false;
-		joueurActuelAPoseCarteCeTour = false;
+		joueurActuelAPiocheCarteCeTour  = false;
+		joueurActuelAPoseCarteCeTour    = false;
 		joueurActuelADeplaceCarteCeTour = false;
 
 		setChanged();
@@ -340,17 +348,17 @@ public class ControlleurJeu extends Observable {
 		Carte nouvelleCarte = popCarteAleatoire();
 
 		switch (regles) {
-		case Advanced:
-			joueurActuel.ajouterCarteDansMain(nouvelleCarte);
-			break;
-		case Standard:
-			joueurActuel.setCartePiochee(nouvelleCarte);
-			break;
-		case Variante:
-			return false;
-		// Le joueur ne peut pas piocher de cartes, tout a ete distribué
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + getRegles());
+			case Advanced:
+				joueurActuel.ajouterCarteDansMain(nouvelleCarte);
+				break;
+			case Standard:
+				joueurActuel.setCartePiochee(nouvelleCarte);
+				break;
+			case Variante:
+				return false;
+			// Le joueur ne peut pas piocher de cartes, tout a ete distribué
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
 
 		setChanged();
@@ -432,7 +440,7 @@ public class ControlleurJeu extends Observable {
 	private Carte popCarteAleatoire() {
 		if (!ilResteDesCartes())
 			return null;
-		int i = new Random().nextInt(cartesRestantes.size());
+		int   i = new Random().nextInt(cartesRestantes.size());
 		Carte c = cartesRestantes.get(i);
 		cartesRestantes.remove(i);
 		return c;
@@ -575,15 +583,15 @@ public class ControlleurJeu extends Observable {
 			Carte carteVictoire = null;
 
 			switch (regles) {
-			case Standard:
-				carteVictoire = joueur.getCarteVictoire();
-				break;
-			case Advanced:
-			case Variante:
-				carteVictoire = joueur.getCarteDansMain(0);
-				break;
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + getRegles());
+				case Standard:
+					carteVictoire = joueur.getCarteVictoire();
+					break;
+				case Advanced:
+				case Variante:
+					carteVictoire = joueur.getCarteDansMain(0);
+					break;
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + getRegles());
 			}
 
 			int score = getScorePourCarte(carteVictoire);
@@ -641,27 +649,27 @@ public class ControlleurJeu extends Observable {
 			return true;
 
 		switch (regles) {
-		case Standard:
-			if (ilResteDesCartes())
-				return false;
-
-			if (!joueurActuelAPoseCarteCeTour)
-				return false;
-
-			return true;
-		case Advanced:
-		case Variante:
-			if (ilResteDesCartes())
-				return false;
-
-			for (Joueur joueur : joueurs) {
-				if (joueur.getNombreCartesDansMain() > 1)
+			case Standard:
+				if (ilResteDesCartes())
 					return false;
-			}
 
-			return true;
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + getRegles());
+				if (!joueurActuelAPoseCarteCeTour)
+					return false;
+
+				return true;
+			case Advanced:
+			case Variante:
+				if (ilResteDesCartes())
+					return false;
+
+				for (Joueur joueur : joueurs) {
+					if (joueur.getNombreCartesDansMain() > 1)
+						return false;
+				}
+
+				return true;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + getRegles());
 		}
 	}
 
@@ -692,10 +700,10 @@ public class ControlleurJeu extends Observable {
 			if (nombreDePartiesJoues >= nombreTotalDeParties) {
 				_jeuTermine = true;
 				setChanged();
-				notifyObservers(new FinPartie(true));
+				notifyObservers(new FinJeu());
 			} else {
 				setChanged();
-				notifyObservers(new FinPartie(false));
+				notifyObservers(new FinPartie());
 			}
 
 			return true;
@@ -704,10 +712,16 @@ public class ControlleurJeu extends Observable {
 		return true;
 	}
 
+	/**
+	 * @return Un {@link ArrayList} des joueurs du jeu.
+	 */
 	public ArrayList<Joueur> getJoueurs() {
 		return joueurs;
 	}
 
+	/**
+	 * @return Le {@link Joueur} avec le score le plus élevé.
+	 */
 	public Joueur getGagnant() {
 		Joueur gagnant = joueurs.get(0);
 		for (Joueur joueur : joueurs) {

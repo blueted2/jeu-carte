@@ -1,35 +1,27 @@
 package fr.utt.sh.gui;
 
-import java.awt.Dimension;
 import java.awt.Image;
 import java.util.HashMap;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
-import fr.utt.sh.core.tapis.Tapis;
-import fr.utt.sh.gui.controlleur.ControlleurInterfaceJeu;
 import fr.utt.sh.gui.utils.ComponentResizeEndListener;
 import fr.utt.sh.gui.vue.VueJeu;
-import fr.utt.sh.gui.vue.VueJoueurActuel;
-import fr.utt.sh.gui.vue.VueScoresJoueurs;
-import fr.utt.sh.gui.vue.VueTapis;
 
 /**
- * Visualisation graphique de l'etat du jeu en cours.
+ * Classe singleton créeant une visualisation graphique de l'etat du jeu en
+ * cours.
  * 
  * @author grego
  *
  */
 public class InterfaceJeu {
 
-	private JFrame frame;
+	private JFrame              frame;
 	private static InterfaceJeu instance;
-	private ControlleurJeu cj;
-
-	private VueJeu vueJeu;
+	private VueJeu              vueJeu;
 
 	/**
 	 * Obtenir la partie visualisation du tapis.
@@ -58,6 +50,11 @@ public class InterfaceJeu {
 		instance = new InterfaceJeu();
 	}
 
+	/**
+	 * Obtenir l'instance de l'interface graphique du jeu.
+	 * 
+	 * @return {@link InterfaceJeu}
+	 */
 	public static InterfaceJeu getInstance() {
 		if (instance == null)
 			begin();
@@ -77,7 +74,6 @@ public class InterfaceJeu {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		frame.setVisible(true);
-		
 
 		vueJeu = new VueJeu();
 
@@ -103,12 +99,15 @@ public class InterfaceJeu {
 			nomFichier += carte.getCouleur().name().toLowerCase() + "_";
 			nomFichier += carte.getRemplissage().name().toLowerCase() + ".jpg";
 
-			ImageIcon icon = new ImageIcon(getClass().getResource(nomFichier));
-			Image image = icon.getImage();
+			ImageIcon icon  = new ImageIcon(getClass().getResource(nomFichier));
+			Image     image = icon.getImage();
 			imagesCartes.put(carte, image);
 		}
 	}
 
+	/**
+	 * @return Le {@link JFrame} de l'interface graphique.
+	 */
 	public JFrame getFrame() {
 		return frame;
 	}

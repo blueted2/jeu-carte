@@ -15,6 +15,11 @@ public enum Regles {
 	 * Regles advanved.
 	 */
 	Advanced,
-	
+
+	/**
+	 * Une variante des regles Advanced, ou toutes les cartes sont distribués au
+	 * debut du jeu, et le score du joueur déterminé avec la derniere carte du
+	 * joueur.
+	 */
 	Variante
 }
