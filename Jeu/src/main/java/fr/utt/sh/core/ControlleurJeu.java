@@ -18,7 +18,7 @@ import fr.utt.sh.core.actions.PoserCarte;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
-import fr.utt.sh.core.strategy.StrategyTest;
+import fr.utt.sh.core.strategy.StrategyBot;
 import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.TapisTri;
@@ -120,7 +120,7 @@ public class ControlleurJeu extends Observable {
 			}
 
 			if (nombreBotsAjoutes < nombreDeJoueuersBots) {
-				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyTest(), false));
+				joueurs.add(new Joueur("Bot_" + nombreBotsAjoutes, new StrategyBot(), false));
 				nombreBotsAjoutes++;
 			}
 		}
