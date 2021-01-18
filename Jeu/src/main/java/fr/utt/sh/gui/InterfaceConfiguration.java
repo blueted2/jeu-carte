@@ -4,11 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,13 +20,20 @@ import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Regles;
 import fr.utt.sh.core.tapis.TypeTapis;
 
+/**
+ * Classe singleton créant une interface graphique pour configuer et commencer
+ * un nouveau jeu.
+ * 
+ * @author grego
+ *
+ */
 public class InterfaceConfiguration {
 
 	JComboBox<TypeTapis> selectionTapis;
-	JComboBox<String> selectionNombreHumains;
-	JComboBox<String> selectionNombreBots;
-	JComboBox<Regles> selectionRegles;
-	JCheckBox selectionGraphique;
+	JComboBox<String>    selectionNombreHumains;
+	JComboBox<String>    selectionNombreBots;
+	JComboBox<Regles>    selectionRegles;
+	JCheckBox            selectionGraphique;
 
 	JButton boutonCommencer;
 
@@ -38,6 +43,9 @@ public class InterfaceConfiguration {
 
 	private ControlleurJeu cj;
 
+	/**
+	 * Commencer/créer l'instance de l'interface de configuration.
+	 */
 	public static void begin() {
 		if (instance != null)
 			return;
@@ -72,18 +80,18 @@ public class InterfaceConfiguration {
 		panel.setLayout(layout);
 
 		JLabel labelConfiguration = new JLabel("Configuration Jeu");
-		JLabel labelTypeTapis = new JLabel("Type du Tapis");
-		JLabel labelRegles = new JLabel("Regles du Jeu");
-		JLabel labelHumains = new JLabel("Humains");
-		JLabel labelBots = new JLabel("Bots");
-		JLabel labelGraphique = new JLabel("GUI Activé");
+		JLabel labelTypeTapis     = new JLabel("Type du Tapis");
+		JLabel labelRegles        = new JLabel("Regles du Jeu");
+		JLabel labelHumains       = new JLabel("Humains");
+		JLabel labelBots          = new JLabel("Bots");
+		JLabel labelGraphique     = new JLabel("GUI Activé");
 
 		String[] nombres = { "0", "1", "2", "3" };
 
-		selectionTapis = new JComboBox<TypeTapis>(TypeTapis.values());
+		selectionTapis         = new JComboBox<TypeTapis>(TypeTapis.values());
 		selectionNombreHumains = new JComboBox<String>(nombres);
-		selectionNombreBots = new JComboBox<String>(nombres);
-		selectionRegles = new JComboBox<Regles>(Regles.values());
+		selectionNombreBots    = new JComboBox<String>(nombres);
+		selectionRegles        = new JComboBox<Regles>(Regles.values());
 
 		selectionGraphique = new JCheckBox();
 
@@ -111,42 +119,24 @@ public class InterfaceConfiguration {
 		selectionNombreBots.setSelectedIndex(1);
 		selectionGraphique.setSelected(true);
 
-		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(labelConfiguration)
-				.addComponent(labelTypeTapis)
-				.addComponent(selectionTapis)
-				.addComponent(labelRegles)
-				.addComponent(selectionRegles)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup()
-								.addComponent(labelHumains)
-								.addComponent(labelBots)
-								.addComponent(labelGraphique))
-						.addGroup(layout.createParallelGroup()
-								.addComponent(selectionNombreHumains)
-								.addComponent(selectionNombreBots)
-								.addComponent(selectionGraphique)))
-				.addComponent(boutonCommencer));
+		layout.setHorizontalGroup(
+				layout.createParallelGroup().addComponent(labelConfiguration).addComponent(labelTypeTapis)
+						.addComponent(selectionTapis).addComponent(labelRegles).addComponent(selectionRegles)
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup().addComponent(labelHumains)
+										.addComponent(labelBots).addComponent(labelGraphique))
+								.addGroup(layout.createParallelGroup().addComponent(selectionNombreHumains)
+										.addComponent(selectionNombreBots).addComponent(selectionGraphique)))
+						.addComponent(boutonCommencer));
 
-		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(labelConfiguration)
+		layout.setVerticalGroup(layout.createSequentialGroup().addComponent(labelConfiguration)
+				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(labelTypeTapis).addComponent(selectionTapis)
+				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(labelRegles).addComponent(selectionRegles)
 				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(labelTypeTapis)
-				.addComponent(selectionTapis)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(labelRegles).addComponent(selectionRegles)
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addGroup(layout.createParallelGroup()
-						.addComponent(selectionNombreHumains)
-						.addComponent(labelHumains))
-				.addGroup(layout.createParallelGroup()
-						.addComponent(selectionNombreBots)
-						.addComponent(labelBots))
-				.addGroup(layout.createParallelGroup()
-						.addComponent(selectionGraphique)
-						.addComponent(labelGraphique))
-				.addPreferredGap(ComponentPlacement.UNRELATED)
-				.addComponent(boutonCommencer));
+				.addGroup(layout.createParallelGroup().addComponent(selectionNombreHumains).addComponent(labelHumains))
+				.addGroup(layout.createParallelGroup().addComponent(selectionNombreBots).addComponent(labelBots))
+				.addGroup(layout.createParallelGroup().addComponent(selectionGraphique).addComponent(labelGraphique))
+				.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(boutonCommencer));
 
 		frame.pack();
 
@@ -159,11 +149,11 @@ public class InterfaceConfiguration {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Regles regles = (Regles) selectionRegles.getSelectedItem();
+				Regles    regles    = (Regles) selectionRegles.getSelectedItem();
 				TypeTapis typeTapis = (TypeTapis) selectionTapis.getSelectedItem();
-				int nbHumains = selectionNombreHumains.getSelectedIndex();
-				int nbBots = selectionNombreBots.getSelectedIndex();
-				boolean graphique = selectionGraphique.isSelected();
+				int       nbHumains = selectionNombreHumains.getSelectedIndex();
+				int       nbBots    = selectionNombreBots.getSelectedIndex();
+				boolean   graphique = selectionGraphique.isSelected();
 
 				cj.commencerNouveauJeu(nbHumains, nbBots, regles, typeTapis, 2, graphique);
 				frame.dispose();
@@ -175,7 +165,7 @@ public class InterfaceConfiguration {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int nbHumains = selectionNombreHumains.getSelectedIndex();
-				int nbBots = selectionNombreBots.getSelectedIndex();
+				int nbBots    = selectionNombreBots.getSelectedIndex();
 
 				if (nbHumains > 3 - nbBots) {
 					selectionNombreHumains.setSelectedIndex(3 - nbBots);
@@ -192,7 +182,7 @@ public class InterfaceConfiguration {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int nbHumains = selectionNombreHumains.getSelectedIndex();
-				int nbBots = selectionNombreBots.getSelectedIndex();
+				int nbBots    = selectionNombreBots.getSelectedIndex();
 
 				if (nbBots > 3 - nbHumains) {
 					selectionNombreBots.setSelectedIndex(3 - nbHumains);

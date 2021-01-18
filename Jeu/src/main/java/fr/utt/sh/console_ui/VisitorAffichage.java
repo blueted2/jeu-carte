@@ -20,6 +20,10 @@ public interface VisitorAffichage {
 	 */
 	public void visit(TapisTri tapis);
 
+	/**
+	 * Visiter un {@link TapisRectDecalable}, pour pouvoir créer une version affichable.
+	 * @param tapis {@link TapisRectDecalable}
+	 */
 	public void visit(TapisRectDecalable tapis);
 
 }

@@ -1,7 +1,10 @@
 package fr.utt.sh.core.actions;
 
 /**
- * Si une classe implemente cette interface, cela indique que la classe est une ActionJeu qui modifie la main du joueur.
+ * 
+ * Si une {@link ActionJeu} implement cette interface, cela indique que l'action
+ * aura une influence sur la main du joueur actuel.
+ * 
  * @author grego
  *
  */

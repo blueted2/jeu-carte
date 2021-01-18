@@ -5,17 +5,27 @@ import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.tapis.Decalable;
 import fr.utt.sh.core.tapis.TapisRect;
 
-public class TapisRectDecalable extends TapisRect implements Decalable{
+/**
+ * Une variante de {@link TapisRect} décalable.
+ * 
+ * @author grego
+ *
+ */
+public class TapisRectDecalable extends TapisRect implements Decalable {
 
+	/**
+	 * @param largeur La largeur du tapis.
+	 * @param hauteur La hauteur du tapis.
+	 */
 	public TapisRectDecalable(int largeur, int hauteur) {
 		super(largeur, hauteur);
 	}
 
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
-		if(super.poserCarte(carte, x, y))
+		if (super.poserCarte(carte, x, y))
 			return true;
-		
+
 		if (x == -1) {
 			if (!decalerADroite())
 				return false;
@@ -40,9 +50,9 @@ public class TapisRectDecalable extends TapisRect implements Decalable{
 		this.notifyObservers();
 
 		return true;
-		
+
 	}
-	
+
 	boolean decalerAGauche() {
 		for (int y = 0; y < hauteur; y++) {
 			// Si il y a une carte sur la colonne de gauche, les cartes ne peuvent pas être
@@ -114,7 +124,7 @@ public class TapisRectDecalable extends TapisRect implements Decalable{
 		return true;
 
 	}
-	
+
 	@Override
 	public void accept(VisitorAffichage v) {
 		v.visit(this);

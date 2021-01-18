@@ -8,14 +8,15 @@ package fr.utt.sh.core.tapis;
  */
 public enum TypeTapis {
 	/**
-	 * Une tapis triangulaire de taille 5.
-	 */
-//	Triangulaire,
-	/**
 	 * Un tapis rectangulaire de taille 5x3.
 	 */
-//	Rectangulaire,
 	Rectangulaire_5x3,
+	/**
+	 * Un tapis triangulaire de taille 5.
+	 */
 	Triangulaire_5,
+	/**
+	 * Un tapis rectangulaire de taille 6x3 avec des trous.
+	 */
 	RectangulaireTrouee_6x3
 }

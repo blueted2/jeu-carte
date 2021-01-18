@@ -23,7 +23,7 @@ import java.util.Observable;
  * @author grego
  *
  */
-@SuppressWarnings("deprecation")
+
 public abstract class Tapis extends Observable implements VisitableAffichage, VisitableComptageScore {
 
 	/**
@@ -143,17 +143,18 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	 * @param y Ordonnée de la carte.
 	 */
 	public void retirerCarte(int x, int y) {
-		setCarteAt(null, x, y);		
+		setCarteAt(null, x, y);
 	}
 
 	/**
 	 * La position donnée a-t-elle un (des) voisin(s) ?
+	 * 
 	 * @param x Abscisse position.
 	 * @param y Ordonnée position.
 	 * @return {@code true} si la positon a au moins un voisin, {@code false} sinon.
 	 */
 	public abstract boolean positionAVoisins(int x, int y);
-	
+
 	/**
 	 * Obtenir la largeur du tapis.
 	 * 
@@ -177,12 +178,16 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 
 	/**
 	 * Raccoursis pour {@link #getCarteAt(int, int)}.
+	 * 
 	 * @param posCarte La position de la carte a obtenir.
-	 * @return La carte a la position donnée. 
+	 * @return La carte a la position donnée.
 	 */
 	public Carte getCarteAt(Position posCarte) {
 		return getCarteAt(posCarte.getX(), posCarte.getY());
 	}
 
+	/**
+	 * Vider le tapis.
+	 */
 	public abstract void clear();
 }

@@ -1,19 +1,15 @@
 package fr.utt.sh.gui.vue;
 
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.actions.FinJeu;
@@ -21,9 +17,16 @@ import fr.utt.sh.core.actions.FinPartie;
 import fr.utt.sh.core.actions.NouveauJoueur;
 import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.gui.GenerateurVueTapis;
-import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.gui.controlleur.ControlleurInterfaceJeu;
 
+/**
+ * Une représentation du jeu actuel. <br>
+ * Nécessite que ControlleurJue soit intialisé.
+ * 
+ * @author grego
+ *
+ */
+@SuppressWarnings("serial")
 public class VueJeu extends JPanel implements Observer {
 	private VueTapis         vueTapis;
 	private VueJoueurActuel  vueJoueurActuel;
@@ -46,6 +49,9 @@ public class VueJeu extends JPanel implements Observer {
 	 */
 	public static final double RATIO_CARTE = 1.5;
 
+	/**
+	 * Constructeur pour {@link VueJeu}.
+	 */
 	public VueJeu() {
 		cj    = ControlleurJeu.getInstance();
 		tapis = cj.getTapis();

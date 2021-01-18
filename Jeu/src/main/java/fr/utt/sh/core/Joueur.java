@@ -4,10 +4,8 @@
 package fr.utt.sh.core;
 
 import java.util.ArrayList;
-import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.strategy.Strategy;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 
@@ -33,7 +31,7 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
  * @author grego
  *
  */
-public class Joueur{
+public class Joueur {
 
 	private CopyOnWriteArrayList<Carte> cartesMain = new CopyOnWriteArrayList<>();
 
@@ -167,7 +165,7 @@ public class Joueur{
 			return false;
 
 		cartesMain.remove(carte);
-	
+
 		return true;
 	}
 
@@ -237,8 +235,11 @@ public class Joueur{
 		strategy.arreter();
 	}
 
+	/**
+	 * Supprimer toutes les cartes du joueur.
+	 */
 	public void resetCartes() {
-		cartePiochee = null;
+		cartePiochee  = null;
 		carteVictoire = null;
 	}
 
