@@ -10,6 +10,7 @@ import java.util.Random;
 
 import fr.utt.sh.console_ui.VueConsole;
 import fr.utt.sh.core.actions.DeplacerCarte;
+import fr.utt.sh.core.actions.FinJeu;
 import fr.utt.sh.core.actions.FinPartie;
 import fr.utt.sh.core.actions.NouveauJoueur;
 import fr.utt.sh.core.actions.PiocherCarte;
@@ -692,10 +693,10 @@ public class ControlleurJeu extends Observable {
 			if (nombreDePartiesJoues >= nombreTotalDeParties) {
 				_jeuTermine = true;
 				setChanged();
-				notifyObservers(new FinPartie(true));
+				notifyObservers(new FinJeu());
 			} else {
 				setChanged();
-				notifyObservers(new FinPartie(false));
+				notifyObservers(new FinPartie());
 			}
 
 			return true;

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
+import fr.utt.sh.core.actions.FinJeu;
 import fr.utt.sh.core.actions.FinPartie;
 import fr.utt.sh.core.actions.NouveauJoueur;
 import fr.utt.sh.core.tapis.Tapis;
@@ -24,14 +25,14 @@ import fr.utt.sh.gui.InterfaceJeu;
 import fr.utt.sh.gui.controlleur.ControlleurInterfaceJeu;
 
 public class VueJeu extends JPanel implements Observer {
-	private VueTapis vueTapis;
-	private VueJoueurActuel vueJoueurActuel;
+	private VueTapis         vueTapis;
+	private VueJoueurActuel  vueJoueurActuel;
 	private VueScoresJoueurs vueScoresJoueurs;
-	private JButton boutonPioche;
-	private JButton boutonFinTour;
+	private JButton          boutonPioche;
+	private JButton          boutonFinTour;
 
 	private ControlleurJeu cj;
-	private Tapis tapis;
+	private Tapis          tapis;
 
 	/**
 	 * Obtenir la partie visualisation du tapis.
@@ -46,7 +47,7 @@ public class VueJeu extends JPanel implements Observer {
 	public static final double RATIO_CARTE = 1.5;
 
 	public VueJeu() {
-		cj = ControlleurJeu.getInstance();
+		cj    = ControlleurJeu.getInstance();
 		tapis = cj.getTapis();
 		initialize();
 	}
@@ -90,11 +91,11 @@ public class VueJeu extends JPanel implements Observer {
 	private void initialize() {
 		cj.addObserver(this);
 
-		vueTapis = GenerateurVueTapis.generate(tapis);
-		vueJoueurActuel = new VueJoueurActuel();
+		vueTapis         = GenerateurVueTapis.generate(tapis);
+		vueJoueurActuel  = new VueJoueurActuel();
 		vueScoresJoueurs = new VueScoresJoueurs();
-		boutonPioche = new JButton("Piocher");
-		boutonFinTour = new JButton("Finir Tour");
+		boutonPioche     = new JButton("Piocher");
+		boutonFinTour    = new JButton("Finir Tour");
 
 		setLayout(null);
 
@@ -113,29 +114,29 @@ public class VueJeu extends JPanel implements Observer {
 		new ControlleurInterfaceJeu(this);
 
 		switch (cj.getRegles()) {
-		case Standard:
-		case Advanced:
-			break;
-		case Variante:
-			boutonPioche.setVisible(false);
-			break;
+			case Standard:
+			case Advanced:
+				break;
+			case Variante:
+				boutonPioche.setVisible(false);
+				break;
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
 		}
 
 		updatePositionsComposents();
 	}
 
 	private void updatePositionsComposents() {
-		double proportionTapis = .7;
-		double proportionJoueur = .2;
-		double proportionPioche = .2;
+		double proportionTapis   = .7;
+		double proportionJoueur  = .2;
+		double proportionPioche  = .2;
 		double proportionFinTour = .2;
 
-		Dimension dim = getSize();
-		int lFrame = dim.width;
-		int hFrame = dim.height;
+		Dimension dim    = getSize();
+		int       lFrame = dim.width;
+		int       hFrame = dim.height;
 
 		int xVueTapis = (int) (lFrame * (1 - proportionTapis) / 2);
 		int yVueTapis = 0;
@@ -175,30 +176,28 @@ public class VueJeu extends JPanel implements Observer {
 		}
 
 		else if (arg1 instanceof FinPartie) {
-			if (((FinPartie) arg1).isFinJeu()) {
-				new Thread() {
-					public void run() {
+			new Thread() {
+				public void run() {
 //					JFrame frame = InterfaceJeu.getInstance().getFrame();
-						Joueur gagnant = cj.getGagnant();
+					Joueur gagnant = cj.getGagnant();
 
-						JOptionPane.showMessageDialog(null, "<html>Fin du jeu <br>" + gagnant.toString()
-								+ " a gangné avec " + gagnant.getScore() + " points" + "</html>");
-					};
-				}.start();
-			} else {
-				new Thread() {
-					public void run() {
+					JOptionPane.showMessageDialog(null, "<html>Fin du jeu <br>" + gagnant.toString() + " a gangné avec "
+							+ gagnant.getScore() + " points" + "</html>");
+				};
+			}.start();
+		} else if (arg1 instanceof FinJeu) {
+			new Thread() {
+				public void run() {
 //					JFrame frame = InterfaceJeu.getInstance().getFrame();
 
-						JOptionPane.showMessageDialog(null,
-								"<html>Fin de la partie !<br> Cliquez sur OK pour passer a la suivante. </html>");
+					JOptionPane.showMessageDialog(null,
+							"<html>Fin de la partie !<br> Cliquez sur OK pour passer a la suivante. </html>");
 
-						cj.commencerNouvellePartie();
+					cj.commencerNouvellePartie();
 
-					};
-				}.start();
-			}
-
+				};
+			}.start();
 		}
+
 	}
 }
