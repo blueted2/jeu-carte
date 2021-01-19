@@ -23,9 +23,9 @@ import fr.utt.sh.core.tapis.TapisRect;
 public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 	Carte             carte;
-	Carte.Couleur     couleur;
-	Carte.Forme       forme;
-	Carte.Remplissage remplissage;
+	Carte.Couleur     couleurCarte;
+	Carte.Forme       formeCarte;
+	Carte.Remplissage remplissageCarte;
 
 	int points = 0;
 
@@ -42,9 +42,9 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	@Override
 	public void setCarte(Carte carte) {
 		this.carte  = carte;
-		couleur     = carte.getCouleur();
-		forme       = carte.getForme();
-		remplissage = carte.getRemplissage();
+		couleurCarte     = carte.getCouleur();
+		formeCarte       = carte.getForme();
+		remplissageCarte = carte.getRemplissage();
 	}
 
 	@Override
@@ -128,21 +128,21 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 			} else {
 
-				if (carte.getCouleur() == couleur)
+				if (carte.getCouleur() == couleurCarte)
 					couleurALaSuite++;
 				else {
 					maxCouleurALaSuite = Math.max(couleurALaSuite, maxCouleurALaSuite);
 					couleurALaSuite    = 0;
 				}
 
-				if (carte.getForme() == forme)
+				if (carte.getForme() == formeCarte)
 					formeALaSuite++;
 				else {
 					maxFormeALaSuite = Math.max(formeALaSuite, maxFormeALaSuite);
 					formeALaSuite    = 0;
 				}
 
-				if (carte.getRemplissage() == remplissage)
+				if (carte.getRemplissage() == remplissageCarte)
 					remplissageALaSuite++;
 				else {
 					maxRemplissageALaSuite = Math.max(remplissageALaSuite, maxRemplissageALaSuite);
