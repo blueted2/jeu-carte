@@ -20,10 +20,10 @@ import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyBot;
 import fr.utt.sh.gui.InterfaceJeu;
-import fr.utt.sh.core.tapis.Tapis_5x3;
 import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.TypeTapis;
 import fr.utt.sh.core.tapis.decalable.TapisRectTrouee_6x3;
+import fr.utt.sh.core.tapis.decalable.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis;
 
 /**
@@ -58,6 +58,8 @@ public class ControlleurJeu extends Observable {
 
 	private int nombreTotalDeParties;
 	private int nombreDePartiesJoues = 0;
+	
+	private Thread threadStrategyJoueurActuel;
 
 	private ControlleurJeu() {
 		cartesRestantes = new ArrayList<Carte>();
@@ -134,7 +136,7 @@ public class ControlleurJeu extends Observable {
 
 	}
 
-	private Thread threadStrategyJoueurActuel;
+	
 
 	/**
 	 * 
