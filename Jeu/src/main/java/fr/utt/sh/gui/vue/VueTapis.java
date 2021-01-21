@@ -38,8 +38,10 @@ public class VueTapis extends JPanel implements Observer {
 	 * Remarque: Ce constructeur n'est pas appelé directement dans {@link VueJeu}, a
 	 * la place un visitor puis un generateur sont utilisé afin de "generer"
 	 * l'instance de la visualisation.
+	 * <br>
 	 * 
-	 * @param tapis
+	 * 
+	 * @param tapis Le {@link Tapis} que va réprésenter cette vue.
 	 */
 	public VueTapis(Tapis tapis) {
 		super();
@@ -100,34 +102,34 @@ public class VueTapis extends JPanel implements Observer {
 	public void setBounds(int x, int y, int width, int height) {
 		double ratioCarte = InterfaceJeu.RATIO_CARTE;
 
-		if(width==0) {
+		if (width == 0) {
 			super.setBounds(x, y, width, height);
 			return;
 		}
-		
+
 		double ratioTapis = height / width;
 
 		int nbColonnes = ((GridLayout) getLayout()).getColumns();
 		int nbLignes   = ((GridLayout) getLayout()).getRows();
 
-		double ratioTapisVoulu =  (ratioCarte * nbLignes) / nbColonnes;
+		double ratioTapisVoulu = (ratioCarte * nbLignes) / nbColonnes;
 
 		// Si le tapis serait top long dans la verticale.
 		if (ratioTapis > ratioTapisVoulu) {
 			int newHeight = (int) (width * ratioTapisVoulu);
-			y += (height - newHeight) / 2;
-			height = newHeight;
+			y      += (height - newHeight) / 2;
+			height  = newHeight;
 
 		} else {
 			int newWidth = (int) (height / ratioTapisVoulu);
 
-			x += (width - newWidth) / 2;
-			width = newWidth;
+			x     += (width - newWidth) / 2;
+			width  = newWidth;
 		}
 
 		super.setBounds(x, y, width, height);
 	}
-	
+
 	@Override
 	public void setBounds(Rectangle r) {
 		setBounds(r.x, r.y, r.width, r.height);

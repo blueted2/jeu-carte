@@ -11,8 +11,9 @@ import java.util.Observable;
  * tapis possibles. <br>
  * 
  * La position d'une carte est donnée par deux parametres integers, pouvant
- * representer soit des coordonnées cartésiens comme dans , soit polaire pour
- * une implémentation de tapis circulaire. <br>
+ * representer soit des coordonnées cartésiens comme pour {@link TapisRect},
+ * soit polaire pour une implémentation de tapis circulaire (actuelement il n'y
+ * a pas d'implémentations polaires de tapis). <br>
  * {@link Tapis} doit permet un deplacement dynamique du jeu. Cela se fait en
  * ayant les emplacements du bord toujours vides. Si une carte est posé sur ces
  * emplacements, le {@link Tapis} tente de decaler toutes les cartes, en
@@ -23,7 +24,6 @@ import java.util.Observable;
  * @author grego
  *
  */
-
 public abstract class Tapis extends Observable implements VisitableAffichage, VisitableComptageScore {
 
 	/**
