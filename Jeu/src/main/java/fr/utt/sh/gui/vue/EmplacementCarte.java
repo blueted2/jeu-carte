@@ -76,14 +76,12 @@ public class EmplacementCarte extends JButton {
 		int       w   = Math.max(1, dim.width);
 		int       h   = Math.max(1, dim.height);
 
-		Image     image     = originalImage;                                              // transform
-																							// it
-		Image     newimg    = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH); // scale it
-																							// the
-																							// smooth
-																							// way
-		ImageIcon imageIcon = new ImageIcon(newimg);                                      // transform
-																							// it back
+		Image image = originalImage;
+
+		Image newimg = image.getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH);
+
+		ImageIcon imageIcon = new ImageIcon(newimg);
+
 		setIcon(imageIcon);
 		revalidate();
 	}

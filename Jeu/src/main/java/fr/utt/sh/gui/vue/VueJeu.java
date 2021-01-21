@@ -184,7 +184,6 @@ public class VueJeu extends JPanel implements Observer {
 		else if (arg1 instanceof FinPartie) {
 			new Thread() {
 				public void run() {
-//					JFrame frame = InterfaceJeu.getInstance().getFrame();
 					Joueur gagnant = cj.getGagnant();
 
 					JOptionPane.showMessageDialog(null, "<html>Fin du jeu <br>" + gagnant.toString() + " a gangné avec "
@@ -194,7 +193,6 @@ public class VueJeu extends JPanel implements Observer {
 		} else if (arg1 instanceof FinJeu) {
 			new Thread() {
 				public void run() {
-//					JFrame frame = InterfaceJeu.getInstance().getFrame();
 
 					JOptionPane.showMessageDialog(null,
 							"<html>Fin de la partie !<br> Cliquez sur OK pour passer a la suivante. </html>");

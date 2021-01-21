@@ -2,11 +2,9 @@ package fr.utt.sh.gui.utils;
 
 import java.awt.event.*;
 import javax.swing.*;
-
-// 
-
+ 
 /**
- * Composent trouvé sur <a href=
+ * Composant trouvé sur <a href=
  * "https://stackoverflow.com/questions/17338322/getting-the-last-resize-event-of-a-component">
  * Stackoverflow</a>. Cette classe agit comme un {@link ComponentAdapter}, mais
  * avec une fontionalité supplémentaire: detecter la fin du changement de la
