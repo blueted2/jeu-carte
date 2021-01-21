@@ -26,7 +26,7 @@ public class StrategyBot implements Strategy {
 	int   lTapis;
 	int   hTapis;
 
-	private int delay = 00;
+	private int delay = 500;
 
 	Joueur joueurActuel;
 

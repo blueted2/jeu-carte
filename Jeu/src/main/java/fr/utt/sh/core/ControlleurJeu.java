@@ -58,7 +58,7 @@ public class ControlleurJeu extends Observable {
 
 	private int nombreTotalDeParties;
 	private int nombreDePartiesJoues = 0;
-	
+
 	private Thread threadStrategyJoueurActuel;
 
 	private ControlleurJeu() {
@@ -128,15 +128,7 @@ public class ControlleurJeu extends Observable {
 		}
 
 		return;
-//		joueurs = new ArrayList<Joueur>();
-//		for (int i = 0; i < nombreDeJoueurs; i++) {
-//			joueurs.add(new Joueur(Integer.toString(i)));
-////			joueurs.add(new Joueur());
-//		}
-
 	}
-
-	
 
 	/**
 	 * 

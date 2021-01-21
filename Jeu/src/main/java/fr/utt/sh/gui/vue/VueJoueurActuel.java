@@ -62,24 +62,6 @@ public class VueJoueurActuel extends JPanel implements Observer {
 			updateComponentValues();
 			return;
 		}
-		
-		
-//		if (arg0 instanceof ControlleurJeu) {
-//			if (joueurActuel != null)
-//				joueurActuel.deleteObserver(this);
-//
-//			joueurActuel = cj.getJoueurActuel();
-//
-//			// Au debut, le joueur actuel est nul, donc on ne peut pas ajouter l'observer
-//			// directement. Il faut attendre que la methode passerAuJoueurSuivant soit
-//			// effectué dans le controlleurJeu, ce qui informe la vue d'un nouveau joueur
-//			// actuel.
-//			joueurActuel.addObserver(this);
-//
-//			updateComponentValues();
-//		} else if (arg0 instanceof Joueur) {
-//			updateComponentValues();
-//		}
 	}
 
 	private void initialize() {

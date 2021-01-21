@@ -27,7 +27,6 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 		try {
 			execute();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -39,23 +38,6 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 	}
 
 	private void executeStandard() {
-
-//		String message = "Actions possibles: ";
-
-//		message += !c.hasJoueurActuelPiocheCarteCeTour() ? "piocher | " : "p̶i̶o̶c̶h̶e̶r̶ | ";
-//		message += !c.hasJoueurActuelPoseCarteCeTour() && c.hasJoueurActuelPiocheCarteCeTour() ? "poser {x} {y} | "
-//				: "p̶o̶s̶e̶r̶ ̶{̶x̶}̶ ̶{̶y̶}̶ | ";
-//		message += !c.hasJoueurActuelDeplaceCarteCeTour() ? "deplacer {x1} {y1} {x2} {y2} | "
-//				: "d̶e̶p̶l̶a̶c̶e̶r̶ ̶{̶x̶1̶}̶ ̶{̶y̶1̶}̶ ̶{̶x̶2̶}̶ ̶{̶y̶2̶}̶ | ";
-//		message += c.hasJoueurActuelPoseCarteCeTour() ? "finir" : "f̶i̶n̶i̶r̶";
-//
-//		System.out.println("Actions possibles: piocher | poser {x} {y} | deplacer {x1} {y1} {x2} {y2} | finir");
-//
-//		System.out.print("Action: ");
-//
-//		
-//		
-//		
 
 		if (commande == null)
 			return;
@@ -111,8 +93,6 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 	}
 
 	private void executeAdvanced() {
-//		System.out.println("Actions possibles: piocher | poser {i} {x} {y} | deplacer {x} {y} | finir");
-//		System.out.print("Action: ");
 
 		if (commande == null)
 			return;
@@ -177,8 +157,6 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 	}
 
 	private void executeVariante() {
-//		System.out.println("Actions possibles: piocher | poser {i} {x} {y} | deplacer {x} {y} | finir");
-//		System.out.print("Action: ");
 
 		if (commande == null)
 			return;
@@ -235,11 +213,11 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 				return;
 		}
 	}
-	
+
 	public void arreter() {
 		ConsoleLineReader.getInstance().deleteObserver(this);
 	}
-	
+
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if (!(arg0 instanceof ConsoleLineReader))
