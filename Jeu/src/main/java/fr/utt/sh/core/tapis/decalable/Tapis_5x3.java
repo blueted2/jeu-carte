@@ -1,6 +1,4 @@
-package fr.utt.sh.core.tapis;
-
-import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
+package fr.utt.sh.core.tapis.decalable;
 
 /**
  * Une implementation de taille fixe 5x3 de {@link TapisRectDecalable}.

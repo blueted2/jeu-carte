@@ -18,7 +18,7 @@ import fr.utt.sh.core.tapis.Tapis;
  * @author grego
  *
  */
-public class StrategyTest implements Strategy {
+public class StrategyBot implements Strategy {
 
 	ControlleurJeu cj = ControlleurJeu.getInstance();
 

@@ -31,10 +31,10 @@ public class ControlleurInterfaceJeu {
 	private boolean          carteSelectioneeEstSurTapis;
 
 	/**
-	 * Constructeur pour le controlleu. Prend en argument l'{@link InterfaceJeu}
-	 * pour laquel ce controlleur est responsable.
+	 * Constructeur pour le controlleu.
 	 * 
-	 * @param vueJeu
+	 * @param vueJeu Une instance de {@link VueJeu} pour laquelle sur laquelle ce
+	 *               controlleur va agir.
 	 */
 	public ControlleurInterfaceJeu(VueJeu vueJeu) {
 		this.vueJeu = vueJeu;

@@ -20,8 +20,8 @@ import fr.utt.sh.gui.GenerateurVueTapis;
 import fr.utt.sh.gui.controlleur.ControlleurInterfaceJeu;
 
 /**
- * Une représentation du jeu actuel. <br>
- * Nécessite que ControlleurJue soit intialisé.
+ * Une représentation graphique du jeu actuel. <br>
+ * Nécessite que {@link ControlleurJeu} soit intialisé.
  * 
  * @author grego
  *
