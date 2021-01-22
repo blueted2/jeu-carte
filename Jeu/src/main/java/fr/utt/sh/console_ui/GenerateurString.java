@@ -6,8 +6,8 @@ import fr.utt.sh.core.tapis.Tapis;
 import fr.utt.sh.core.Joueur;
 
 /**
- * Cette classe contient des methodes pour créer des representaion string to
- * differents objets afin d'etre affichés a la console.
+ * Cette classe contient des méthodes pour créer des representations string 
+ * des différents objets afin d'être affichés par la console.
  * 
  * @author grego G
  */
@@ -43,6 +43,12 @@ public class GenerateurString {
 		return String.format("%s%s", charCouleur, charForme);
 	}
 
+	/**
+	 * Obtenir une représentation string de la forme d'une carte.
+	 * 
+	 * @param carte {@link Carte}
+	 * @return String
+	 */
 	private static String getCharForme(Carte carte) {
 		if (carte.getRemplissage() == Remplissage.Rempli)
 			switch (carte.getForme()) {
@@ -73,7 +79,7 @@ public class GenerateurString {
 	/**
 	 * Obtenir une représentation string des cartes dans la main d'un Joueur. Cette
 	 * représentaion tient sur deux lignes, la premiere pour l'indice de la carte,
-	 * la deuxieme pour la representaion de la carte.
+	 * la deuxième pour la représentaion de la carte.
 	 * 
 	 * @param joueur {@link Joueur}
 	 * @return String de deux lignes.

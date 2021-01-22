@@ -16,7 +16,7 @@ import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.actions.PoserCarte;
 
 /**
- * Une classe singleton permettant d'afficher la vue du jeu actuel a la console.
+ * Une classe singleton permettant d'afficher la vue du jeu actuel à la console.
  * @author grego
  *
  */
@@ -26,9 +26,9 @@ public class VueConsole implements Observer {
 	private ControlleurJeu    cj;
 
 	/**
-	 * Demarer la vue.
+	 * Demarrer la vue.
 	 * <br>
-	 * Nécessite que controlleurJeu soit deja intialisé.
+	 * Nécessite que controlleurJeu soit déjà initialisé.
 	 */
 	public static void begin() {
 		if (instance == null)

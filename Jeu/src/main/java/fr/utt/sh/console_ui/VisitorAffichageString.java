@@ -6,7 +6,7 @@ import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
 import fr.utt.sh.core.tapis.TapisRect;
 
 /**
- * Cette classe s'occupe de céer une représentaion string de tout les elements
+ * Cette classe s'occupe de créer une représentation string de tous les élements
  * du jeu.
  * 
  * @author grego
@@ -16,6 +16,9 @@ public class VisitorAffichageString implements VisitorAffichage {
 
 	private String representationString;
 
+	/*
+	 * Crée la représentation string d'un tapis rectangulaire.
+	 */
 	public void visit(TapisRect tapis) {
 
 		representationString = "";
@@ -80,6 +83,9 @@ public class VisitorAffichageString implements VisitorAffichage {
 		}
 	}
 
+	/*
+	 * Crée la représentation string d'un tapis triangulaire.
+	 */
 	public void visit(TapisTri tapis) {
 		representationString = "";
 
@@ -139,7 +145,7 @@ public class VisitorAffichageString implements VisitorAffichage {
 	}
 
 	/**
-	 * @return La representation string d'un {@link VisitableAffichage}.
+	 * @return La représentation string d'un {@link VisitableAffichage}.
 	 */
 	public String getRepresentationString() {
 		return representationString;

@@ -93,7 +93,10 @@ public class VueJeu extends JPanel implements Observer {
 	public JButton getBoutonFinTour() {
 		return boutonFinTour;
 	}
-
+	
+	/**
+	 *  Initialiser la vue du tapis. 
+	 */
 	private void initialize() {
 		cj.addObserver(this);
 

@@ -9,8 +9,8 @@ import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 
 /**
- * Une implementation de {@link Strategy} demandant a un joueur humain les
- * actions a efectuer avec la console.
+ * Une implémentation de {@link Strategy} demandant a un joueur humain les
+ * actions à effectuer avec la console.
  * 
  * @author grego
  *

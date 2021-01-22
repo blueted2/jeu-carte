@@ -15,7 +15,7 @@ public class DeplacerCarte implements ActionJeu, ActionTapis {
 	private Position destination;
 
 	/**
-	 * @param source      La {@link Position} origine de la carte déplacée.
+	 * @param source      La {@link Position} d'origine de la carte déplacée.
 	 * @param destination La {@link Position} d'arrivée de la carte déplacée.
 	 */
 	public DeplacerCarte(Position source, Position destination) {
@@ -25,7 +25,7 @@ public class DeplacerCarte implements ActionJeu, ActionTapis {
 	}
 
 	/**
-	 * @return La {@link Position} origine de la carte déplacée.
+	 * @return La {@link Position} d'origine de la carte déplacée.
 	 */
 	public Position getSource() {
 		return source;

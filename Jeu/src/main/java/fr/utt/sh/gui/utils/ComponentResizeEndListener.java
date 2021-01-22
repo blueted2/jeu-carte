@@ -7,9 +7,9 @@ import javax.swing.*;
  * Composant trouvé sur <a href=
  * "https://stackoverflow.com/questions/17338322/getting-the-last-resize-event-of-a-component">
  * Stackoverflow</a>. Cette classe agit comme un {@link ComponentAdapter}, mais
- * avec une fontionalité supplémentaire: detecter la fin du changement de la
- * taille d'un composent testant si il n'y a pas eut de changement dans les
- * dernieres n millisecondes.
+ * avec une fontionnalité supplémentaire: détecter la fin du changement de la
+ * taille d'un composant testant si il n'y a pas eu de changement dans les
+ * dernières n millisecondes.
  * 
  * @author grego
  *
@@ -47,7 +47,7 @@ public abstract class ComponentResizeEndListener extends ComponentAdapter implem
 	}
 
 	/**
-	 * Methode appellé lorsque la classe detecte la fin du changement de taille.
+	 * Methode appelée lorsque la classe détecte la fin du changement de taille.
 	 */
 	public abstract void resizeTimedOut();
 }

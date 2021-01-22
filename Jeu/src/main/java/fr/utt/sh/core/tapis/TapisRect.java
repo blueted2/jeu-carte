@@ -6,8 +6,8 @@ import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais
- * acceptant des positions -1 a largeur et -1 a hauteur inclus, afin de permttre
- * au jeu de se decaler.
+ * acceptant des positions -1 à largeur et -1 à hauteur inclus, afin de permettre
+ * au jeu de se décaler.
  * 
  * @author grego
  *
@@ -21,10 +21,10 @@ public class TapisRect extends Tapis {
 	protected int hauteur;
 
 	/**
-	 * Constructeur pour un tapis rectangulaire general.
+	 * Constructeur pour un tapis rectangulaire général.
 	 * 
-	 * @param largeur Largeur du jeu.
-	 * @param hauteur Hauteur du jeu.
+	 * @param largeur Largeur du tapis.
+	 * @param hauteur Hauteur du tapis.
 	 */
 	public TapisRect(int largeur, int hauteur) {
 		this.largeur = largeur;
@@ -34,9 +34,9 @@ public class TapisRect extends Tapis {
 	}
 
 	/**
-	 * Constructeur pour cloner un tapis. Prendre comme paramtre le tapis a cloner.
+	 * Constructeur pour cloner un tapis. Prendre comme paramètre le tapis à cloner.
 	 * 
-	 * @param tapis Le {@code Tapis} a cloner.
+	 * @param tapis Le {@code Tapis} à cloner.
 	 */
 	public TapisRect(TapisRect tapis) {
 		this.cartes = new Carte[tapis.cartes.length][];
@@ -72,8 +72,8 @@ public class TapisRect extends Tapis {
 		return hauteur;
 	}
 
-	// La position est elle valide, c'est-a-dire dans les bornes du tapis ? Peu
-	// inclure les bords pour permettre au tapis de se decaller.
+	// La position est-elle valide, c'est-à-dire dans les bornes du tapis ? Peut
+	// inclure les bords pour permettre au tapis de se décaler.
 	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
 			return false;
@@ -87,7 +87,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	// La position est elle valide, mais cette fois sans les bords.
+	// La position est-elle valide, mais cette fois sans les bords.
 	public boolean positionSurTapis(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
@@ -97,7 +97,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	// L'emplacement donné a-t-il une carte voisine ?.
+	// L'emplacement donné a-t-il une carte voisine ?
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines

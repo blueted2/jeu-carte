@@ -7,7 +7,7 @@ import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * Classe de base pour créer des tapis triangulaires. La hauteur et la largeur
- * seront egaux.
+ * seront égales.
  * 
  * @author grego
  *
@@ -23,7 +23,7 @@ public class TapisTri extends Tapis {
 	/**
 	 * Créer un tapis triangulaire de taille {@code taille}.
 	 * 
-	 * @param taille La taille du tapis triangulaire a créer.
+	 * @param taille La taille du tapis triangulaire à créer.
 	 */
 	public TapisTri(int taille) {
 		this.taille = taille;
@@ -36,9 +36,9 @@ public class TapisTri extends Tapis {
 	}
 
 	/**
-	 * Construteur pour cloner un tapis. Prendre comme parametre le tapis a cloner.
+	 * Construteur pour cloner un tapis. Prendre comme paramètre le tapis à cloner.
 	 * 
-	 * @param tapis Le tapis a etre cloné.
+	 * @param tapis Le tapis à cloner.
 	 * 
 	 */
 	public TapisTri(TapisTri tapis) {

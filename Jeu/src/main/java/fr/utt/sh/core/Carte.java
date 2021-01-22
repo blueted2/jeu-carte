@@ -5,7 +5,7 @@ package fr.utt.sh.core;
 
 /**
  * Une classe pour représenter toutes les cartes du jeu. Une {@code Carte} est
- * immutable, son etat pouvant seulement etre définie lors de sa création.
+ * immuable, son état pouvant seulement être défini lors de sa création.
  * 
  * @author grego
  *
@@ -111,6 +111,9 @@ public class Carte {
 		Cercle
 	}
 
+	/**
+	 * @return Les caractéristiques des cartes sous forme de String.
+	 */
 	public String toString() {
 		return String.format("%s %s %s", getForme().name(), getCouleur().name(), getRemplissage().name());
 	}

@@ -1,6 +1,6 @@
 /**
  * 
- * Ce package regoupe toutes les classes permettant la visualisation du jeu a la
+ * Ce package regroupe toutes les classes permettant la visualisation du jeu à la
  * console, et l'interaction du joueur avec le jeu par la console.
  * 
  * @author grego

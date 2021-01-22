@@ -6,7 +6,7 @@ import fr.utt.sh.core.Position;
 
 /**
  * Une variante de {@link EmplacementCarte}, utilisé pour representer les
- * position du tapis dehors du jeu, afin de permetre au jeu de se deplacer.
+ * positions du tapis hors du jeu, afin de permetre au jeu de se deplacer.
  * L'apparence de cet emplacement est gris, et il est caché par defaut.
  * 
  * @author grego

@@ -4,8 +4,8 @@ import fr.utt.sh.core.Position;
 import fr.utt.sh.core.tapis.TapisRect;
 
 /**
- * Une variante de {@link TapisRect}, avec une taille fixe, et definissant des
- * positions du tapis sur lesquelles des cartes ne peuvent pas etres posés.
+ * Une variante de {@link TapisRect}, avec une taille fixe, et définissant des
+ * positions du tapis sur lesquelles des cartes ne peuvent pas être posées.
  * 
  * @author grego
  *
@@ -15,7 +15,7 @@ public class TapisRectTrouee_6x3 extends TapisRect {
 	private Position[] trous = { new Position(1, 1), new Position(4, 0), new Position(4, 2) };
 
 	/**
-	 * Constructeur par defaut.
+	 * Constructeur par défaut.
 	 */
 	public TapisRectTrouee_6x3() {
 		super(6, 3);
@@ -24,7 +24,7 @@ public class TapisRectTrouee_6x3 extends TapisRect {
 	/**
 	 * Constructeur clonage.
 	 * 
-	 * @param tapis Le {@link TapisRectTrouee_6x3} voulant etre cloné.
+	 * @param tapis Le {@link TapisRectTrouee_6x3} voulant être cloné.
 	 */
 	public TapisRectTrouee_6x3(TapisRectTrouee_6x3 tapis) {
 		super(tapis);

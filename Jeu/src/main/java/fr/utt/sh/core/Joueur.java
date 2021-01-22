@@ -12,19 +12,19 @@ import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 /**
  * <pre>
  * Cette classe représente un joueur. Elle implémente une version du patron de conception
- * {@code Strategy}, modifié pour fonctioné ne multi thread. Au debut de chaque tour, ControlleurJeu appelle la méthode
- * {@link Joueur#beginStrategyThread()}, ce qui a son commence un thread executant une 
+ * {@code Strategy}, modifié pour fonctionner en multi thread. Au debut de chaque tour, ControlleurJeu appelle la méthode
+ * {@link Joueur#beginStrategyThread()}, ce qui à son tour commence un thread exécutant une 
  * {@link Strategy}.
  * 
  * Les attributs du joueur comme cartePiochee, carteVictoire ... sont tous
  * accessibles par des getters et setters, afin d'etre controllés de
- * l'exterieur, c'est-a-dire la classe {@code Joueur} n'est pas responsable pour
+ * l'exterieur, c'est-a-dire que la classe {@code Joueur} n'est pas responsable pour
  * ses actions, c'est simplement un rassemblement de cartes. 
- * Par exemple, pour piocher une carte, la {@link Strategy} du joueur appelle la methode
- * {@link ControlleurJeu#joueurActuelPiocheCarte()}, qui, apres avoir fait
- * certains verifications, va enlever une carte du tas de cartes restantes, et
- * la mettre dans {@code cartePioche} si les regles sont standard, ou a la fin de
- * {@code cartesDansMain} si les regles sont Advanced.
+ * Par exemple, pour piocher une carte, la {@link Strategy} du joueur appelle la méthode
+ * {@link ControlleurJeu#joueurActuelPiocheCarte()}, qui, après avoir fait
+ * certaines vérifications, va enlever une carte du tas de cartes restantes, et
+ * la mettre dans {@code cartePioche} si les règles sont standard, ou à la fin de
+ * {@code cartesDansMain} si les règles sont Advanced.
  * 
  * </pre>
  * 
@@ -42,9 +42,9 @@ public class Joueur {
 
 	/**
 	 * Le joueur est-il controllé par un humain ? Utilisé pour l'interface graphique
-	 * afin de determiner si l'interface doit etre activée ou non.
+	 * afin de determiner si l'interface doit être activée ou non.
 	 * 
-	 * @return {@code true} si le joueur est contorllé par un humain, {@code false}
+	 * @return {@code true} si le joueur est controllé par un humain, {@code false}
 	 *         sinon.
 	 */
 	public boolean isHumain() {
@@ -73,7 +73,7 @@ public class Joueur {
 	/**
 	 * Constructeur clonage.
 	 * 
-	 * @param joueur Le {@link Joueur} a cloner.
+	 * @param joueur Le {@link Joueur} à cloner.
 	 */
 	public Joueur(Joueur joueur) {
 		this.id            = joueur.id;
@@ -94,7 +94,7 @@ public class Joueur {
 	}
 
 	/**
-	 * Attribuer une carte a cartePiochee.
+	 * Attribuer une carte à cartePiochee.
 	 * 
 	 * @param carte {@link Carte}.
 	 */
@@ -112,7 +112,7 @@ public class Joueur {
 	}
 
 	/**
-	 * Attribuer une carte a carteVictoire.
+	 * Attribuer une carte à carteVictoire.
 	 * 
 	 * @param carte {@link Carte}.
 	 */
@@ -121,7 +121,7 @@ public class Joueur {
 	}
 
 	/**
-	 * Donne la carte a l'index donné.
+	 * Donne la carte à l'index donné.
 	 * 
 	 * @param index L'indice de la carte demandée.
 	 * @return {@link Carte}
@@ -147,7 +147,7 @@ public class Joueur {
 	/**
 	 * Ajouter une nouvelle carte dans le set {@code cartesDansMain}.
 	 * 
-	 * @param carte La {@link Carte} a ajouter.
+	 * @param carte La {@link Carte} à ajouter.
 	 */
 	public void ajouterCarteDansMain(Carte carte) {
 		cartesMain.add(carte);
@@ -156,9 +156,9 @@ public class Joueur {
 	/**
 	 * Enlever la carte du set {@code cartesDansMain}.
 	 * 
-	 * @param carte La {@link Carte} a retirer.
-	 * @return {@code true} si la carte etait dans le set et a pu etre retirée,
-	 *         {@code false}.
+	 * @param carte La {@link Carte} à retirer.
+	 * @return {@code true} si la carte était dans le set et a pu être retirée,
+	 *         {@code false} sinon.
 	 */
 	public boolean retirerCarteDansMain(Carte carte) {
 		if (!cartesMain.contains(carte))
@@ -170,7 +170,7 @@ public class Joueur {
 	}
 
 	/**
-	 * @return {@code int} le nombre de cartes.
+	 * @return {@code int} le nombre de cartes dans la main du joueur.
 	 */
 	public int getNombreCartesDansMain() {
 		return cartesMain.size();
@@ -178,7 +178,7 @@ public class Joueur {
 
 	/**
 	 * 
-	 * @return Une {@link ArrayList} des cartes dans le main du joueur.
+	 * @return Une {@link ArrayList} des cartes dans la main du joueur.
 	 */
 	public CopyOnWriteArrayList<Carte> getCartesDansMain() {
 		return cartesMain;
@@ -229,7 +229,7 @@ public class Joueur {
 	}
 
 	/**
-	 * Demander a la strategy du joueur d'arreter.
+	 * Demander à la strategy du joueur d'arrêter.
 	 */
 	public void arreterStrategy() {
 		strategy.arreter();
