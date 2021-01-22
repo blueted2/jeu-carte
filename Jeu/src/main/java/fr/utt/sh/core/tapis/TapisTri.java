@@ -124,15 +124,6 @@ public class TapisTri extends Tapis {
 		return false;
 	}
 
-	/**
-	 * Vérifie si une position donnée a des cartes voisines.
-	 * 
-	 * @param x     Abscisse de la position à vérifier.
-	 * @param y     Ordonnée de la position à vérifier.
-	 * 
-	 * @return {@code true} si la position a des cartes voisines,
-	 *         {@code false} sinon.
-	 */
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -283,12 +274,6 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Vérifie si le tapis est vide.
-	 * 
-	 * @return {@code true} si le tapis est vide,
-	 *         {@code false} sinon.
-	 */
 	public boolean estVide() {
 		for (int y = 0; y < taille; y++) {
 			for (int x = 0; x <= y; x++) {
