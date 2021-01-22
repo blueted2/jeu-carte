@@ -12,7 +12,7 @@ import fr.utt.sh.core.score.VisitorComptageScore;
  * @author grego
  *
  */
-public class TapisTri extends Tapis {
+public class TapisTri extends Tapis implements Decalable {
 
 	int taille;
 
@@ -125,6 +125,7 @@ public class TapisTri extends Tapis {
 	}
 
 	// L'emplacement donné a-t-il une carte voisine ?.
+	@Override
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -143,8 +144,8 @@ public class TapisTri extends Tapis {
 		return false;
 
 	}
-
-	boolean decalerAGauche() {
+  
+	private boolean decalerAGauche() {
 		// Verifier que colonne gauche est vide.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(0, y) != null)
@@ -162,7 +163,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	boolean decalerADroite() {
+	private boolean decalerADroite() {
 
 		// Verifier sur le coté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
@@ -182,7 +183,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	boolean decalerEnHaut() {
+	private boolean decalerEnHaut() {
 		// Verifier sur le coté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
@@ -198,7 +199,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	boolean decalerEnBas() {
+	private boolean decalerEnBas() {
 		for (int x = 0; x < taille; x++) {
 			if (getCarteAt(x, taille - 1) != null)
 				return false;
@@ -213,6 +214,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	@Override
 	boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionSurTapis(x, y))
 			return false;
@@ -242,6 +244,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	@Override
 	public boolean estVide() {
 		for (int y = 0; y < taille; y++) {
 			for (int x = 0; x <= y; x++) {
@@ -309,10 +312,12 @@ public class TapisTri extends Tapis {
 		return taille;
 	}
 
+	@Override
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
 	}
 
+	@Override
 	public void accept(VisitorComptageScore v) {
 		v.visit(this);
 
