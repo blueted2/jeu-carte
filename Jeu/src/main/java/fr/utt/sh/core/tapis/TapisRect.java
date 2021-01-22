@@ -49,8 +49,8 @@ public class TapisRect extends Tapis {
 			}
 		}
 
-		largeur = tapis.cartes.length;
-		hauteur = tapis.cartes[0].length;
+		largeur            = tapis.cartes.length;
+		hauteur            = tapis.cartes[0].length;
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
@@ -59,6 +59,7 @@ public class TapisRect extends Tapis {
 	 * 
 	 * @return int
 	 */
+	@Override
 	public int getLargeur() {
 		return largeur;
 	}
@@ -68,12 +69,13 @@ public class TapisRect extends Tapis {
 	 * 
 	 * @return int
 	 */
+	@Override
 	public int getHauteur() {
 		return hauteur;
 	}
 
-	// La position est elle valide, c'est-a-dire dans les bornes du tapis ? Peu
-	// inclure les bords pour permettre au tapis de se decaller.
+	
+	@Override
 	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
 			return false;
@@ -87,7 +89,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	// La position est elle valide, mais cette fois sans les bords.
+	@Override
 	public boolean positionSurTapis(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
@@ -97,7 +99,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	// L'emplacement donné a-t-il une carte voisine ?.
+	@Override
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -124,6 +126,7 @@ public class TapisRect extends Tapis {
 		return cartes[x][y];
 	}
 
+	@Override
 	protected boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
@@ -157,6 +160,7 @@ public class TapisRect extends Tapis {
 		return false;
 	}
 
+	@Override
 	public boolean estRempli() {
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {
@@ -167,6 +171,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
+	@Override
 	public boolean estVide() {
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {

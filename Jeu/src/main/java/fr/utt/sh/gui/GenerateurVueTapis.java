@@ -14,7 +14,9 @@ import fr.utt.sh.gui.vue.VueTapis;
  */
 public class GenerateurVueTapis {
 
-	/**Générer l'instance de {@link VueTapis}
+	/**
+	 * Générer l'instance de {@link VueTapis}
+	 * 
 	 * @param tapis Le tapis pour lequel generer la visualisation.
 	 * @return La visualisation {@link VueTapis} pour le tapis du jeu en cours.
 	 */
