@@ -142,6 +142,7 @@ public class TapisTri extends Tapis implements Decalable {
 		}
 
 		return false;
+	}
 
 	private boolean decalerAGauche() {
 		// Verifier que colonne gauche est vide.
