@@ -34,7 +34,7 @@ public class TapisRect extends Tapis {
 	}
 
 	/**
-	 * Constructeur pour cloner un tapis. Prendre comme paramètre le tapis à cloner.
+	 * Constructeur pour cloner un tapis. Prend comme paramètre le tapis à cloner.
 	 * 
 	 * @param tapis Le {@code Tapis} à cloner.
 	 */
@@ -72,8 +72,16 @@ public class TapisRect extends Tapis {
 		return hauteur;
 	}
 
-	// La position est-elle valide, c'est-à-dire dans les bornes du tapis ? Peut
-	// inclure les bords pour permettre au tapis de se décaler.
+	/**
+	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
+	 * Cette vérification inclut les bords du tapis, afin de lui permettre de se déplacer.
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position est valide,
+	 *         {@code false} sinon.
+	 */
 	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
 			return false;
@@ -87,7 +95,16 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	// La position est-elle valide, mais cette fois sans les bords.
+	/**
+	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
+	 * Contrairement à la précédente, cette vérification n'inclut pas les bords du tapis.
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position est valide,
+	 *         {@code false} sinon.
+	 */
 	public boolean positionSurTapis(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
@@ -97,7 +114,15 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	// L'emplacement donné a-t-il une carte voisine ?
+	/**
+	 * Vérifie si une position donnée a des cartes voisines.
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position a des cartes voisines,
+	 *         {@code false} sinon.
+	 */
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -117,6 +142,14 @@ public class TapisRect extends Tapis {
 
 	}
 
+	/**
+	 * Getter qui récupère la carte posée à un emplacement donné.
+	 * 
+	 * @param x     Abscisse de la carte à récupérer.
+	 * @param y     Ordonnée de la carte à récupérer.
+	 * 
+	 * @return une carte, ou {@code null} si la position donnée n'est pas valide.
+	 */
 	@Override
 	public Carte getCarteAt(int x, int y) {
 		if (!positionSurTapis(x, y))
@@ -124,6 +157,16 @@ public class TapisRect extends Tapis {
 		return cartes[x][y];
 	}
 
+	/**
+	 * Setter qui pose une carte donnée à un emplacement donné.
+	 * 
+	 * @param x     Abscisse de la position souhaitée.
+	 * @param y     Ordonnée de la position souhaitée.
+	 * @param carte Carte à poser.
+	 * 
+	 * @return {@code true} si la carte a pu être posée (position légale),
+	 *         {@code false} sinon.
+	 */
 	protected boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
@@ -132,6 +175,16 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Vérifie si un emplacement donné est valide pour y poser une carte donnée, puis le cas échéant la pose en appelant {@code setCarteAt}. 
+	 * 
+	 * @param x     Abscisse de la position souhaitée.
+	 * @param y     Ordonnée de la position souhaitée.
+	 * @param carte Carte à poser.
+	 * 
+	 * @return {@code true} si la carte a pu être posée,
+	 *         {@code false} sinon.
+	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 
@@ -157,6 +210,12 @@ public class TapisRect extends Tapis {
 		return false;
 	}
 
+	/**
+	 * Vérifie si le tapis est rempli.
+	 * 
+	 * @return {@code true} si le tapis est rempli,
+	 *         {@code false} sinon.
+	 */
 	public boolean estRempli() {
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {
@@ -167,6 +226,12 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Vérifie si le tapis est vide.
+	 * 
+	 * @return {@code true} si le tapis est vide,
+	 *         {@code false} sinon.
+	 */
 	public boolean estVide() {
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {

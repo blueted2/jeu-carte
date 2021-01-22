@@ -137,6 +137,9 @@ public class VueJeu extends JPanel implements Observer {
 		updatePositionsComposents();
 	}
 
+	/**
+	 * Mettre à jour les positions des composants de l'interface graphique.
+	 */
 	private void updatePositionsComposents() {
 		double proportionTapis   = .7;
 		double proportionJoueur  = .2;

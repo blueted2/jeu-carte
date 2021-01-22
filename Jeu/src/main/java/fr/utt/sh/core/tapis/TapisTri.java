@@ -36,7 +36,7 @@ public class TapisTri extends Tapis {
 	}
 
 	/**
-	 * Construteur pour cloner un tapis. Prendre comme paramètre le tapis à cloner.
+	 * Construteur pour cloner un tapis. Prend comme paramètre le tapis à cloner.
 	 * 
 	 * @param tapis Le tapis à cloner.
 	 * 
@@ -56,6 +56,16 @@ public class TapisTri extends Tapis {
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
+	/**
+	 * Vérifie si un emplacement donné est valide pour y poser une carte donnée, puis le cas échéant la pose en appelant {@code setCarteAt}. 
+	 * 
+	 * @param x     Abscisse de la position souhaitée.
+	 * @param y     Ordonnée de la position souhaitée.
+	 * @param carte Carte à poser.
+	 * 
+	 * @return {@code true} si la carte a pu être posée,
+	 *         {@code false} sinon.
+	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
@@ -124,7 +134,15 @@ public class TapisTri extends Tapis {
 		return false;
 	}
 
-	// L'emplacement donné a-t-il une carte voisine ?.
+	/**
+	 * Vérifie si une position donnée a des cartes voisines.
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position a des cartes voisines,
+	 *         {@code false} sinon.
+	 */
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -144,14 +162,20 @@ public class TapisTri extends Tapis {
 
 	}
 
+	/**
+	 * Décale le tapis vers la gauche.
+	 * 
+	 * @return {@code true} si le décalage a pu se faire,
+	 *         {@code false} sinon (colonne de gauche non-vide).
+	 */
 	boolean decalerAGauche() {
-		// Verifier que colonne gauche est vide.
+		// Verifier que la colonne gauche est vide.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(0, y) != null)
 				return false;
 		}
 
-		// On commence a y=1, car si ya pas de carte dans la premiere colonne, y'en aura
+		// On commence à y=1, car s'il n'y a pas de carte dans la première colonne, il n'y en aura
 		// pas une tout en haut.
 		for (int y = 1; y < taille; y++) {
 			for (int x = 0; x < y; x++) {
@@ -162,17 +186,22 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Décale le tapis vers la droite.
+	 * 
+	 * @return {@code true} si le décalage a pu se faire,
+	 *         {@code false} sinon (colonne de droite non-vide).
+	 */
 	boolean decalerADroite() {
 
-		// Verifier sur le coté droit qu'il n'y a pas de cartes.
+		// Verifier sur le côté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
 				return false;
 		}
 
-		// On commence a y=1, car si ya pas de carte a droite, y'en aura pas une en
+		// On commence a y=1, car s'il n'y a pas de carte à droite, il n'y en aura pas une en
 		// haut.
-		// pas une tout en haut.
 		for (int y = 1; y < taille; y++) {
 			for (int x = y; x > 0; x--) {
 				setCarteAt(getCarteAt(x - 1, y), x, y);
@@ -182,6 +211,12 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Décale le tapis vers le haut.
+	 * 
+	 * @return {@code true} si le décalage a pu se faire,
+	 *         {@code false} sinon (ligne du haut non-vide).
+	 */
 	boolean decalerEnHaut() {
 		// Verifier sur le coté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
@@ -198,6 +233,12 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Décale le tapis vers le bas.
+	 * 
+	 * @return {@code true} si le décalage a pu se faire,
+	 *         {@code false} sinon (ligne du bas non-vide).
+	 */
 	boolean decalerEnBas() {
 		for (int x = 0; x < taille; x++) {
 			if (getCarteAt(x, taille - 1) != null)
@@ -213,6 +254,16 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Setter qui pose une carte donnée à un emplacement donné.
+	 * 
+	 * @param x     Abscisse de la position souhaitée.
+	 * @param y     Ordonnée de la position souhaitée.
+	 * @param carte Carte à poser.
+	 * 
+	 * @return {@code true} si la carte a pu être posée (position légale),
+	 *         {@code false} sinon.
+	 */
 	boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionSurTapis(x, y))
 			return false;
@@ -221,6 +272,14 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Getter qui récupère la carte posée à un emplacement donné.
+	 * 
+	 * @param x     Abscisse de la carte à récupérer.
+	 * @param y     Ordonnée de la carte à récupérer.
+	 * 
+	 * @return une carte, ou {@code null} si la position donnée n'est pas valide.
+	 */
 	@Override
 	public Carte getCarteAt(int x, int y) {
 		if (!positionSurTapis(x, y))
@@ -229,6 +288,12 @@ public class TapisTri extends Tapis {
 		return cartes[y][x];
 	}
 
+	/**
+	 * Vérifie si le tapis est rempli.
+	 * 
+	 * @return {@code true} si le tapis est rempli,
+	 *         {@code false} sinon.
+	 */
 	@Override
 	public boolean estRempli() {
 		for (int y = 0; y < taille; y++) {
@@ -242,6 +307,12 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Vérifie si le tapis est vide.
+	 * 
+	 * @return {@code true} si le tapis est vide,
+	 *         {@code false} sinon.
+	 */
 	public boolean estVide() {
 		for (int y = 0; y < taille; y++) {
 			for (int x = 0; x <= y; x++) {
@@ -260,11 +331,27 @@ public class TapisTri extends Tapis {
 		return new TapisTri(this);
 	}
 
+	/**
+	 * Retire du tapis la carte présente à des coordonnées données.
+	 * 
+	 * @param x     Abscisse de la carte à retirer.
+	 * @param y     Ordonnée de la carte à retirer.
+	 */
 	@Override
 	public void retirerCarte(int x, int y) {
 		setCarteAt(null, x, y);
 	}
 
+	/**
+	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
+	 * Cette vérification inclut les bords du tapis, afin de lui permettre de se déplacer.
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position est valide,
+	 *         {@code false} sinon.
+	 */
 	@Override
 	public boolean positionLegale(int x, int y) {
 		if (x < -1)
@@ -285,6 +372,16 @@ public class TapisTri extends Tapis {
 
 	}
 
+	/**
+	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
+	 * Contrairement à la précédente, cette vérification n'inclut pas les bords du tapis.
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position est valide,
+	 *         {@code false} sinon.
+	 */
 	@Override
 	public boolean positionSurTapis(int x, int y) {
 		if (x < 0)
@@ -299,11 +396,21 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	/**
+	 * Getter largeur du tapis.
+	 * 
+	 * @return int
+	 */
 	@Override
 	public int getLargeur() {
 		return taille;
 	}
 
+	/**
+	 * Getter hauteur du tapis.
+	 * 
+	 * @return int
+	 */
 	@Override
 	public int getHauteur() {
 		return taille;

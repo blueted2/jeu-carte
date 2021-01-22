@@ -103,7 +103,11 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		return points;
 	}
 
-	// Calculer les points pour une ligne / colonne donnée.
+	/**
+	 * Calcule les points obtenus en plaçant une carte dans une ligne / colonne donnée.
+	 * @param listeCartes Les cartes dont on veut calculer le score.
+	 * @return score Le nombre de points pour la carte.
+	 */
 	int getPointsDansListe(LinkedList<Carte> listeCartes) {
 
 		int formeALaSuite       = 0;

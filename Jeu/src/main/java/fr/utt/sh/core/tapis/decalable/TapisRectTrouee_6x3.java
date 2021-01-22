@@ -24,12 +24,22 @@ public class TapisRectTrouee_6x3 extends TapisRect {
 	/**
 	 * Constructeur clonage.
 	 * 
-	 * @param tapis Le {@link TapisRectTrouee_6x3} voulant être cloné.
+	 * @param tapis Le {@link TapisRectTrouee_6x3} que l'on veut cloner.
 	 */
 	public TapisRectTrouee_6x3(TapisRectTrouee_6x3 tapis) {
 		super(tapis);
 	}
 
+	/**
+	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
+	 * Cette vérification doit prendre en compte les "trous" sur lesquels on ne peut pas poser de carte. 
+	 * 
+	 * @param x     Abscisse de la position à vérifier.
+	 * @param y     Ordonnée de la position à vérifier.
+	 * 
+	 * @return {@code true} si la position est valide,
+	 *         {@code false} sinon.
+	 */
 	@Override
 	public boolean positionLegale(int x, int y) {
 		if (!super.positionLegale(x, y))
