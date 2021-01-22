@@ -49,19 +49,23 @@ public class TapisRect extends Tapis {
 			}
 		}
 
-		largeur = tapis.cartes.length;
-		hauteur = tapis.cartes[0].length;
+		largeur            = tapis.cartes.length;
+		hauteur            = tapis.cartes[0].length;
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
+
+	@Override
 	public int getLargeur() {
 		return largeur;
 	}
-
+  
+	@Override
 	public int getHauteur() {
 		return hauteur;
 	}
 
+	@Override
 	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
 			return false;
@@ -75,6 +79,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
+	@Override
 	public boolean positionSurTapis(int x, int y) {
 		if (x < 0 || x > largeur - 1)
 			return false;
@@ -84,6 +89,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
+	@Override
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -111,16 +117,7 @@ public class TapisRect extends Tapis {
 		return cartes[x][y];
 	}
 
-	/**
-	 * Setter qui pose une carte donnée à un emplacement donné.
-	 * 
-	 * @param x     Abscisse de la position souhaitée.
-	 * @param y     Ordonnée de la position souhaitée.
-	 * @param carte Carte à poser.
-	 * 
-	 * @return {@code true} si la carte a pu être posée (position légale),
-	 *         {@code false} sinon.
-	 */
+	@Override
 	protected boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
 			return false;
@@ -155,6 +152,7 @@ public class TapisRect extends Tapis {
 		return false;
 	}
 
+	@Override
 	public boolean estRempli() {
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {
@@ -165,6 +163,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
+	@Override
 	public boolean estVide() {
 		for (int y = 0; y < hauteur; y++) {
 			for (int x = 0; x < largeur; x++) {

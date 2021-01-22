@@ -12,7 +12,7 @@ import fr.utt.sh.core.score.VisitorComptageScore;
  * @author grego
  *
  */
-public class TapisTri extends Tapis {
+public class TapisTri extends Tapis implements Decalable {
 
 	int taille;
 
@@ -124,6 +124,8 @@ public class TapisTri extends Tapis {
 		return false;
 	}
 
+	// L'emplacement donné a-t-il une carte voisine ?.
+	@Override
 	public boolean positionAVoisins(int x, int y) {
 
 		int[][] decalages = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } }; // Positions relatives des cartes voisines
@@ -141,16 +143,8 @@ public class TapisTri extends Tapis {
 
 		return false;
 
-	}
-
-	/**
-	 * Décale le tapis vers la gauche.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon (colonne de gauche non-vide).
-	 */
-	boolean decalerAGauche() {
-		// Verifier que la colonne gauche est vide.
+	private boolean decalerAGauche() {
+		// Verifier que colonne gauche est vide.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(0, y) != null)
 				return false;
@@ -167,14 +161,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Décale le tapis vers la droite.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon (colonne de droite non-vide).
-	 */
-	boolean decalerADroite() {
-
+	private boolean decalerADroite() {
 		// Verifier sur le côté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
@@ -192,13 +179,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Décale le tapis vers le haut.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon (ligne du haut non-vide).
-	 */
-	boolean decalerEnHaut() {
+	private boolean decalerEnHaut() {
 		// Verifier sur le coté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
@@ -214,13 +195,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Décale le tapis vers le bas.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon (ligne du bas non-vide).
-	 */
-	boolean decalerEnBas() {
+	private boolean decalerEnBas() {
 		for (int x = 0; x < taille; x++) {
 			if (getCarteAt(x, taille - 1) != null)
 				return false;
@@ -235,16 +210,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Setter qui pose une carte donnée à un emplacement donné.
-	 * 
-	 * @param x     Abscisse de la position souhaitée.
-	 * @param y     Ordonnée de la position souhaitée.
-	 * @param carte Carte à poser.
-	 * 
-	 * @return {@code true} si la carte a pu être posée (position légale),
-	 *         {@code false} sinon.
-	 */
+	@Override
 	boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionSurTapis(x, y))
 			return false;
@@ -274,6 +240,7 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
+	@Override
 	public boolean estVide() {
 		for (int y = 0; y < taille; y++) {
 			for (int x = 0; x <= y; x++) {
@@ -341,10 +308,12 @@ public class TapisTri extends Tapis {
 		return taille;
 	}
 
+	@Override
 	public void accept(VisitorAffichage v) {
 		v.visit(this);
 	}
 
+	@Override
 	public void accept(VisitorComptageScore v) {
 		v.visit(this);
 

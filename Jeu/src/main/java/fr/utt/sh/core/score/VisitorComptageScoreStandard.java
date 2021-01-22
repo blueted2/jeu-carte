@@ -3,8 +3,8 @@ package fr.utt.sh.core.score;
 import java.util.LinkedList;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.TapisRect;
+import fr.utt.sh.core.tapis.TapisTri;
 
 /**
  * <pre>
@@ -41,12 +41,13 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 	@Override
 	public void setCarte(Carte carte) {
-		this.carte  = carte;
+		this.carte       = carte;
 		couleurCarte     = carte.getCouleur();
 		formeCarte       = carte.getForme();
 		remplissageCarte = carte.getRemplissage();
 	}
 
+	
 	@Override
 	public void visit(TapisRect tapis) {
 		int largeurTapis = tapis.getLargeur();
@@ -99,17 +100,13 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		}
 	}
 
+	@Override
 	public int getPoints() {
 		return points;
 	}
 
-	/**
-	 * Calcule les points que donne une ligne/colonne pour une carte victoire donnée.
-	 * 
-	 * @param listeCartes Les cartes dont on veut calculer le score.
-	 * @return score Le nombre de points pour la carte.
-	 */
-	int getPointsDansListe(LinkedList<Carte> listeCartes) {
+	// Calculer les points pour une ligne / colonne de cartes donnée.
+	private int getPointsDansListe(LinkedList<Carte> listeCartes) {
 
 		int formeALaSuite       = 0;
 		int couleurALaSuite     = 0;

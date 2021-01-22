@@ -26,9 +26,8 @@ public class VueConsole implements Observer {
 	private ControlleurJeu    cj;
 
 	/**
-	 * Demarrer la vue.
-	 * <br>
-	 * Nécessite que controlleurJeu soit déjà initialisé.
+	 * Demarer la vue. <br>
+	 * Nécessite que controlleurJeu soit deja intialisé.
 	 */
 	public static void begin() {
 		if (instance == null)
@@ -71,11 +70,11 @@ public class VueConsole implements Observer {
 
 		if (arg1 instanceof ActionTapis)
 			afficherTapis();
-		
-		if(arg1 instanceof NouveauJoueur)
+
+		if (arg1 instanceof NouveauJoueur)
 			afficherNouveauJoueur((NouveauJoueur) arg1);
-		
-		if(arg1 instanceof FinPartie)
+
+		if (arg1 instanceof FinPartie)
 			afficherScoresDesJoueurs();
 
 	}
@@ -86,24 +85,25 @@ public class VueConsole implements Observer {
 	 */
 	private void afficherNouveauJoueur(NouveauJoueur nouveauJoueur) {
 		Joueur joueur = nouveauJoueur.getJoueur();
-		
+
 		System.out.println();
 		System.out.println("--------------------------------------------");
-		
+
 		System.out.println(String.format("A %s de jouer", joueur));
 		switch (cj.getRegles()) {
-		case Standard:
-			Carte carteVictoire = joueur.getCarteVictoire();
-			System.out.println(String.format("Carte victoire: %s (%s)", GenerateurString.getStringCarte(carteVictoire), carteVictoire));
-			break;
-		case Variante:
-		case Advanced:
-			break;	
+			case Standard:
+				Carte carteVictoire = joueur.getCarteVictoire();
+				System.out.println(String.format("Carte victoire: %s (%s)",
+						GenerateurString.getStringCarte(carteVictoire), carteVictoire));
+				break;
+			case Variante:
+			case Advanced:
+				break;
 
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + cj.getRegles());
 		}
-		
+
 	}
 
 	/**
