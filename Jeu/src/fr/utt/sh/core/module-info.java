@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author grego
- *
- */
-module jeucarte {
-}
