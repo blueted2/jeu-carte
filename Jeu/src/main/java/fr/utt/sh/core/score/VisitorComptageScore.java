@@ -1,8 +1,8 @@
 package fr.utt.sh.core.score;
 
 import fr.utt.sh.core.Carte;
-import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.TapisRect;
+import fr.utt.sh.core.tapis.decalable.TapisTri;
 
 /**
  * Cette interface a pour but d'être utilisée pour compter le score du tapis pour

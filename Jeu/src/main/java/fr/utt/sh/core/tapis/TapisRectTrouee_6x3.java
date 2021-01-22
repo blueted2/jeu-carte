@@ -1,7 +1,6 @@
-package fr.utt.sh.core.tapis.decalable;
+package fr.utt.sh.core.tapis;
 
 import fr.utt.sh.core.Position;
-import fr.utt.sh.core.tapis.TapisRect;
 
 /**
  * Une variante de {@link TapisRect}, avec une taille fixe, et définissant des

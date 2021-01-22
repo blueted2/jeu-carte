@@ -1,10 +1,11 @@
 package fr.utt.sh.core.tapis;
 
+import java.util.Observable;
+
 import fr.utt.sh.console_ui.VisitableAffichage;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.Position;
 import fr.utt.sh.core.score.VisitableComptageScore;
-import java.util.Observable;
 
 /**
  * {@link Tapis} est une classe abstraite de base pour toutes les variantes de
@@ -87,7 +88,8 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	 */
 	public abstract Carte getCarteAt(int x, int y);
 
-	abstract boolean setCarteAt(Carte carte, int x, int y);
+	
+	protected abstract boolean setCarteAt(Carte carte, int x, int y);
 
 	/**
 	 * Poser une {@link Carte} à une certaine position.

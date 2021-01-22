@@ -20,11 +20,11 @@ import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.strategy.StrategyJoueurConsole;
 import fr.utt.sh.core.strategy.StrategyBot;
 import fr.utt.sh.gui.InterfaceJeu;
-import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.TypeTapis;
-import fr.utt.sh.core.tapis.decalable.TapisRectTrouee_6x3;
+import fr.utt.sh.core.tapis.decalable.TapisTri;
 import fr.utt.sh.core.tapis.decalable.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis;
+import fr.utt.sh.core.tapis.TapisRectTrouee_6x3;
 
 /**
  * Cette classe singleton se charge de controller le flux général du jeu, ainsi

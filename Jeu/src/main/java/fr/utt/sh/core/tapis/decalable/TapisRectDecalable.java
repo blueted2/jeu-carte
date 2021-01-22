@@ -53,13 +53,8 @@ public class TapisRectDecalable extends TapisRect implements Decalable {
 
 	}
 
-	/**
-	 * Décale le tapis vers la gauche.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon.
-	 */
-	boolean decalerAGauche() {
+	@Override
+	public boolean decalerAGauche() {
 		for (int y = 0; y < hauteur; y++) {
 			// Si il y a une carte sur la colonne de gauche, les cartes ne peuvent pas être
 			// décalées.
@@ -78,13 +73,8 @@ public class TapisRectDecalable extends TapisRect implements Decalable {
 		return true;
 	}
 
-	/**
-	 * Décale le tapis vers la droite.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon.
-	 */
-	boolean decalerADroite() {
+	@Override
+	public boolean decalerADroite() {
 		for (int y = 0; y < hauteur; y++) {
 			// Si il y a une carte sur la colonne de droite, les cartes ne peuvent pas être
 			// décalées.
@@ -103,13 +93,8 @@ public class TapisRectDecalable extends TapisRect implements Decalable {
 		return true;
 	}
 
-	/**
-	 * Décale le tapis vers le haut.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon.
-	 */
-	boolean decalerEnHaut() {
+	@Override
+	public boolean decalerEnHaut() {
 		for (int x = 0; x < largeur; x++) {
 			if (getCarteAt(x, 0) != null)
 				return false;
@@ -126,13 +111,8 @@ public class TapisRectDecalable extends TapisRect implements Decalable {
 
 	}
 
-	/**
-	 * Décale le tapis vers le bas.
-	 * 
-	 * @return {@code true} si le décalage a pu se faire,
-	 *         {@code false} sinon.
-	 */
-	boolean decalerEnBas() {
+	@Override
+	public boolean decalerEnBas() {
 		for (int x = 0; x < largeur; x++) {
 			if (getCarteAt(x, hauteur - 1) != null)
 				return false;

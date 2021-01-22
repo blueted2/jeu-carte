@@ -1,16 +1,19 @@
 package fr.utt.sh.core;
 
-import fr.utt.sh.console_ui.Utils;
 import fr.utt.sh.core.tapis.TypeTapis;
 import fr.utt.sh.gui.InterfaceConfiguration;;
 
 /**
+ * Point d'entrée pour l'application.
  * 
+ * <pre>
+ * Arguments console possibles:
+ *   ["console" ou "graphique"] {nbHumains} {nbBots} {indexRegles} {indexTapis}
+ * </pre>
  * 
  * @author grego
  *
  */
-@SuppressWarnings("unused")
 public class Main {
 
 	/**
@@ -22,6 +25,7 @@ public class Main {
 
 		ControlleurJeu c = ControlleurJeu.getInstance();
 
+		// Choix des parametres du jeu avec des arguments console.
 		switch (args.length) {
 			case 1:
 				if (args[0].equals("console")) {

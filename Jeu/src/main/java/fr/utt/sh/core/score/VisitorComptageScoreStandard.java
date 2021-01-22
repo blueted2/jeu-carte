@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.tapis.TapisRect;
-import fr.utt.sh.core.tapis.TapisTri;
+import fr.utt.sh.core.tapis.decalable.TapisTri;
 
 /**
  * <pre>

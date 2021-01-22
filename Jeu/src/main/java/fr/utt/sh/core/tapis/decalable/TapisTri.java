@@ -1,9 +1,10 @@
-package fr.utt.sh.core.tapis;
+package fr.utt.sh.core.tapis.decalable;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.score.VisitorComptageScore;
-
+import fr.utt.sh.core.tapis.Decalable;
+import fr.utt.sh.core.tapis.Tapis;
 
 /**
  * Classe de base pour créer des tapis triangulaires. La hauteur et la largeur
@@ -64,7 +65,6 @@ public class TapisTri extends Tapis implements Decalable {
 		if (!positionAVoisins(x, y))
 			if (!estVide())
 				return false;
-
 
 		if (positionSurTapis(x, y)) {
 			if (getCarteAt(x, y) != null)
@@ -144,14 +144,16 @@ public class TapisTri extends Tapis implements Decalable {
 		return false;
 	}
 
-	private boolean decalerAGauche() {
+	@Override
+	public boolean decalerAGauche() {
 		// Verifier que colonne gauche est vide.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(0, y) != null)
 				return false;
 		}
 
-		// On commence à y=1, car s'il n'y a pas de carte dans la première colonne, il n'y en aura
+		// On commence à y=1, car s'il n'y a pas de carte dans la première colonne, il
+		// n'y en aura
 		// pas une tout en haut.
 		for (int y = 1; y < taille; y++) {
 			for (int x = 0; x < y; x++) {
@@ -162,14 +164,16 @@ public class TapisTri extends Tapis implements Decalable {
 		return true;
 	}
 
-	private boolean decalerADroite() {
+	@Override
+	public boolean decalerADroite() {
 		// Verifier sur le côté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
 				return false;
 		}
 
-		// On commence a y=1, car s'il n'y a pas de carte à droite, il n'y en aura pas une en
+		// On commence a y=1, car s'il n'y a pas de carte à droite, il n'y en aura pas
+		// une en
 		// haut.
 		for (int y = 1; y < taille; y++) {
 			for (int x = y; x > 0; x--) {
@@ -180,7 +184,8 @@ public class TapisTri extends Tapis implements Decalable {
 		return true;
 	}
 
-	private boolean decalerEnHaut() {
+	@Override
+	public boolean decalerEnHaut() {
 		// Verifier sur le coté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
@@ -196,7 +201,8 @@ public class TapisTri extends Tapis implements Decalable {
 		return true;
 	}
 
-	private boolean decalerEnBas() {
+	@Override
+	public boolean decalerEnBas() {
 		for (int x = 0; x < taille; x++) {
 			if (getCarteAt(x, taille - 1) != null)
 				return false;
@@ -212,7 +218,7 @@ public class TapisTri extends Tapis implements Decalable {
 	}
 
 	@Override
-	boolean setCarteAt(Carte carte, int x, int y) {
+	protected boolean setCarteAt(Carte carte, int x, int y) {
 		if (!positionSurTapis(x, y))
 			return false;
 

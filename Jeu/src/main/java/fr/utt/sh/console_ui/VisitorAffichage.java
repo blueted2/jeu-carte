@@ -1,7 +1,7 @@
 package fr.utt.sh.console_ui;
 
-import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
+import fr.utt.sh.core.tapis.decalable.TapisTri;
 import fr.utt.sh.core.tapis.TapisRect;
 
 /**

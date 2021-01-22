@@ -7,8 +7,8 @@ import javax.swing.JPanel;
 
 import fr.utt.sh.console_ui.VisitorAffichage;
 import fr.utt.sh.core.Position;
-import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.decalable.TapisRectDecalable;
+import fr.utt.sh.core.tapis.decalable.TapisTri;
 import fr.utt.sh.core.tapis.TapisRect;
 import fr.utt.sh.gui.vue.EmplacementCarte;
 import fr.utt.sh.gui.vue.EmplacementCarteBord;
