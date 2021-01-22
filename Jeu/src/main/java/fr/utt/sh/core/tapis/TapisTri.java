@@ -56,16 +56,6 @@ public class TapisTri extends Tapis {
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
-	/**
-	 * Vérifie si un emplacement donné est valide pour y poser une carte donnée, puis le cas échéant la pose en appelant {@code setCarteAt}. 
-	 * 
-	 * @param x     Abscisse de la position souhaitée.
-	 * @param y     Ordonnée de la position souhaitée.
-	 * @param carte Carte à poser.
-	 * 
-	 * @return {@code true} si la carte a pu être posée,
-	 *         {@code false} sinon.
-	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (!positionLegale(x, y))
@@ -272,14 +262,6 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Getter qui récupère la carte posée à un emplacement donné.
-	 * 
-	 * @param x     Abscisse de la carte à récupérer.
-	 * @param y     Ordonnée de la carte à récupérer.
-	 * 
-	 * @return une carte, ou {@code null} si la position donnée n'est pas valide.
-	 */
 	@Override
 	public Carte getCarteAt(int x, int y) {
 		if (!positionSurTapis(x, y))
@@ -288,12 +270,6 @@ public class TapisTri extends Tapis {
 		return cartes[y][x];
 	}
 
-	/**
-	 * Vérifie si le tapis est rempli.
-	 * 
-	 * @return {@code true} si le tapis est rempli,
-	 *         {@code false} sinon.
-	 */
 	@Override
 	public boolean estRempli() {
 		for (int y = 0; y < taille; y++) {
@@ -331,27 +307,11 @@ public class TapisTri extends Tapis {
 		return new TapisTri(this);
 	}
 
-	/**
-	 * Retire du tapis la carte présente à des coordonnées données.
-	 * 
-	 * @param x     Abscisse de la carte à retirer.
-	 * @param y     Ordonnée de la carte à retirer.
-	 */
 	@Override
 	public void retirerCarte(int x, int y) {
 		setCarteAt(null, x, y);
 	}
 
-	/**
-	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
-	 * Cette vérification inclut les bords du tapis, afin de lui permettre de se déplacer.
-	 * 
-	 * @param x     Abscisse de la position à vérifier.
-	 * @param y     Ordonnée de la position à vérifier.
-	 * 
-	 * @return {@code true} si la position est valide,
-	 *         {@code false} sinon.
-	 */
 	@Override
 	public boolean positionLegale(int x, int y) {
 		if (x < -1)
@@ -372,16 +332,6 @@ public class TapisTri extends Tapis {
 
 	}
 
-	/**
-	 * Vérifie si une position donnée est valide, c'est-à-dire sur le tapis. 
-	 * Contrairement à la précédente, cette vérification n'inclut pas les bords du tapis.
-	 * 
-	 * @param x     Abscisse de la position à vérifier.
-	 * @param y     Ordonnée de la position à vérifier.
-	 * 
-	 * @return {@code true} si la position est valide,
-	 *         {@code false} sinon.
-	 */
 	@Override
 	public boolean positionSurTapis(int x, int y) {
 		if (x < 0)
@@ -396,21 +346,11 @@ public class TapisTri extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Getter largeur du tapis.
-	 * 
-	 * @return int
-	 */
 	@Override
 	public int getLargeur() {
 		return taille;
 	}
 
-	/**
-	 * Getter hauteur du tapis.
-	 * 
-	 * @return int
-	 */
 	@Override
 	public int getHauteur() {
 		return taille;

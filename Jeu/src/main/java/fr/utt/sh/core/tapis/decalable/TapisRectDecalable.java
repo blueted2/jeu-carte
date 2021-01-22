@@ -21,16 +21,6 @@ public class TapisRectDecalable extends TapisRect implements Decalable {
 		super(largeur, hauteur);
 	}
 
-	/**
-	 * Vérifie si un emplacement donné est valide pour y poser une carte donnée, puis le cas échéant la pose en appelant {@code setCarteAt}. 
-	 * 
-	 * @param x     Abscisse de la position souhaitée.
-	 * @param y     Ordonnée de la position souhaitée.
-	 * @param carte Carte à poser.
-	 * 
-	 * @return {@code true} si la carte a pu être posée,
-	 *         {@code false} sinon.
-	 */
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 		if (super.poserCarte(carte, x, y))

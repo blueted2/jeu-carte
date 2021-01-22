@@ -142,14 +142,7 @@ public class TapisRect extends Tapis {
 
 	}
 
-	/**
-	 * Getter qui récupère la carte posée à un emplacement donné.
-	 * 
-	 * @param x     Abscisse de la carte à récupérer.
-	 * @param y     Ordonnée de la carte à récupérer.
-	 * 
-	 * @return une carte, ou {@code null} si la position donnée n'est pas valide.
-	 */
+
 	@Override
 	public Carte getCarteAt(int x, int y) {
 		if (!positionSurTapis(x, y))
@@ -175,16 +168,7 @@ public class TapisRect extends Tapis {
 		return true;
 	}
 
-	/**
-	 * Vérifie si un emplacement donné est valide pour y poser une carte donnée, puis le cas échéant la pose en appelant {@code setCarteAt}. 
-	 * 
-	 * @param x     Abscisse de la position souhaitée.
-	 * @param y     Ordonnée de la position souhaitée.
-	 * @param carte Carte à poser.
-	 * 
-	 * @return {@code true} si la carte a pu être posée,
-	 *         {@code false} sinon.
-	 */
+
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {
 

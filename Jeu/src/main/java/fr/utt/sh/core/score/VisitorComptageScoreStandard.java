@@ -104,7 +104,8 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	}
 
 	/**
-	 * Calcule les points obtenus en plaçant une carte dans une ligne / colonne donnée.
+	 * Calcule les points que donne une ligne/colonne pour une carte victoire donnée.
+	 * 
 	 * @param listeCartes Les cartes dont on veut calculer le score.
 	 * @return score Le nombre de points pour la carte.
 	 */
