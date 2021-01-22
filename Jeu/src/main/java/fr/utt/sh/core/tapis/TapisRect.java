@@ -6,8 +6,8 @@ import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * Le tapis de jeu standard. Un rectangle de taille largeur x hauteur, mais
- * acceptant des positions -1 a largeur et -1 a hauteur inclus, afin de permttre
- * au jeu de se decaler.
+ * acceptant des positions -1 à largeur et -1 à hauteur inclus, afin de permettre
+ * au jeu de se décaler.
  * 
  * @author grego
  *
@@ -21,10 +21,10 @@ public class TapisRect extends Tapis {
 	protected int hauteur;
 
 	/**
-	 * Constructeur pour un tapis rectangulaire general.
+	 * Constructeur pour un tapis rectangulaire général.
 	 * 
-	 * @param largeur Largeur du jeu.
-	 * @param hauteur Hauteur du jeu.
+	 * @param largeur Largeur du tapis.
+	 * @param hauteur Hauteur du tapis.
 	 */
 	public TapisRect(int largeur, int hauteur) {
 		this.largeur = largeur;
@@ -34,9 +34,9 @@ public class TapisRect extends Tapis {
 	}
 
 	/**
-	 * Constructeur pour cloner un tapis. Prendre comme paramtre le tapis a cloner.
+	 * Constructeur pour cloner un tapis. Prend comme paramètre le tapis à cloner.
 	 * 
-	 * @param tapis Le {@code Tapis} a cloner.
+	 * @param tapis Le {@code Tapis} à cloner.
 	 */
 	public TapisRect(TapisRect tapis) {
 		this.cartes = new Carte[tapis.cartes.length][];
@@ -54,27 +54,17 @@ public class TapisRect extends Tapis {
 		premiereCartePosee = tapis.premiereCartePosee;
 	}
 
-	/**
-	 * Getter largeur du tapis.
-	 * 
-	 * @return int
-	 */
+
 	@Override
 	public int getLargeur() {
 		return largeur;
 	}
-
-	/**
-	 * Getter hauteur du tapis.
-	 * 
-	 * @return int
-	 */
+  
 	@Override
 	public int getHauteur() {
 		return hauteur;
 	}
 
-	
 	@Override
 	public boolean positionLegale(int x, int y) {
 		if (x < -1 || x > largeur)
@@ -119,6 +109,7 @@ public class TapisRect extends Tapis {
 
 	}
 
+
 	@Override
 	public Carte getCarteAt(int x, int y) {
 		if (!positionSurTapis(x, y))
@@ -134,6 +125,7 @@ public class TapisRect extends Tapis {
 
 		return true;
 	}
+
 
 	@Override
 	public boolean poserCarte(Carte carte, int x, int y) {

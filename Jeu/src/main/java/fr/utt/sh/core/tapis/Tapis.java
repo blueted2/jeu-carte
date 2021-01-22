@@ -10,14 +10,14 @@ import java.util.Observable;
  * {@link Tapis} est une classe abstraite de base pour toutes les variantes de
  * tapis possibles. <br>
  * 
- * La position d'une carte est donnée par deux parametres integers, pouvant
- * representer soit des coordonnées cartésiens comme pour {@link TapisRect},
- * soit polaire pour une implémentation de tapis circulaire (actuelement il n'y
+ * La position d'une carte est donnée par deux paramètres integer, pouvant
+ * représenter soit des coordonnées cartésiennes comme pour {@link TapisRect},
+ * soit polaires pour une implémentation de tapis circulaire (actuellement il n'y
  * a pas d'implémentations polaires de tapis). <br>
- * {@link Tapis} doit permet un deplacement dynamique du jeu. Cela se fait en
- * ayant les emplacements du bord toujours vides. Si une carte est posé sur ces
- * emplacements, le {@link Tapis} tente de decaler toutes les cartes, en
- * assurant que la taille totales du tapis est toujours respecté.
+ * {@link Tapis} doit permettre un déplacement dynamique du jeu. Cela se fait en
+ * ayant les emplacements du bord toujours vides. Si une carte est posée sur ces
+ * emplacements, le {@link Tapis} tente de décaler toutes les cartes, en
+ * s'assurant que la taille totale du tapis est toujours respectée.
  * 
  * 
  * 
@@ -27,14 +27,14 @@ import java.util.Observable;
 public abstract class Tapis extends Observable implements VisitableAffichage, VisitableComptageScore {
 
 	/**
-	 * Echanger la position de deux cartes posées sur le tapis. Cette méthode prend
-	 * en compte si
+	 * Échanger la position de deux cartes posées sur le tapis. Cette méthode prend
+	 * en compte : <br>
 	 * 
-	 * @param x1 Abscisse depart de la carte.
-	 * @param y1 Ordonnee depart de la carte.
-	 * @param x2 Abscisse arrivée de la carte.
-	 * @param y2 Ordonnee arrivée de la carte.
-	 * @return {@code true} si l'échange a pu etre effectuer, {@code false} sinon.
+	 * @param x1 Abscisse de départ de la carte.
+	 * @param y1 Ordonnée de départ de la carte.
+	 * @param x2 Abscisse d'arrivée de la carte.
+	 * @param y2 Ordonnée d'arrivée de la carte.
+	 * @return {@code true} si l'échange a pu être effectué, {@code false} sinon.
 	 */
 	public boolean deplacerCarte(int x1, int y1, int x2, int y2) {
 		if (!positionLegale(x1, y1))
@@ -47,11 +47,11 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 
 		if (positionSurTapis(x2, y2)) {
 			if (getCarteAt(x2, y2) != null) {
-				// Si la positoin d'arrivée est jouable et contient une carte, retournée false;
+				// Si la position d'arrivée est jouable et contient une carte, retourner false;
 				return false;
 			}
 
-			Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
+			Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte à déplacer.
 			setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
 
 			if (poserCarte(carteDeplacee, x2, y2)) {
@@ -60,11 +60,11 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 				return true;
 			}
 
-			setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, le remettre d'ou elle vient.
+			setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, la remettre d'où elle vient.
 			return false;
 		}
 
-		Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte a decplacer.
+		Carte carteDeplacee = getCarteAt(x1, y1); // Obtenir la carte à déplacer.
 		setCarteAt(null, x1, y1); // Supprimer temporairement la carte.
 
 		if (poserCarte(carteDeplacee, x2, y2)) { // Essayer de la poser
@@ -73,30 +73,30 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 			return true;
 		}
 
-		setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, le remettre d'ou elle vient.
+		setCarteAt(carteDeplacee, x1, y1); // Si pas pu poser, la remettre d'où elle vient.
 		return false;
 	}
 
 	/**
-	 * Obtenir la {@link Carte} a une position donnée.
+	 * Obtenir la {@link Carte} à une position donnée.
 	 * 
 	 * @param x Abscisse de la carte.
-	 * @param y Ordonnee de la carte.
-	 * @return {@code null} si la position donnee est invalide, ou il n'u a pas de
-	 *         carte a la position spécifiée , sinon une {@link Carte}.
+	 * @param y Ordonnée de la carte.
+	 * @return {@code null} si la position donnée est invalide, ou s'il n'y a pas de
+	 *         carte à la position spécifiée, sinon une {@link Carte}.
 	 */
 	public abstract Carte getCarteAt(int x, int y);
 
 	abstract boolean setCarteAt(Carte carte, int x, int y);
 
 	/**
-	 * Poser une {@link Carte} a une certaine position.
+	 * Poser une {@link Carte} à une certaine position.
 	 * 
-	 * @param carte La carte a poser.
+	 * @param carte La carte à poser.
 	 * @param x     Abscisse de la carte.
 	 * @param y     Ordonnée de la carte.
-	 * @return {@link Carte} si il y a bien une carte a la position specifiée,
-	 *         {@code null} si il n'y a pas de carte, ou la position n'est pas
+	 * @return {@link Carte} si il y a bien une carte à la position specifiée,
+	 *         {@code null} si il n'y a pas de carte, ou si la position n'est pas
 	 *         valide.
 	 */
 	public abstract boolean poserCarte(Carte carte, int x, int y);
@@ -108,25 +108,25 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	public abstract boolean estRempli();
 
 	/**
-	 * Donne un clone du tapis, afin d'avoir access direct au tapis, tout en
-	 * protegeant celui utilisé pour le jeu.
+	 * Donne un clone du tapis, afin d'avoir un accès direct au tapis, tout en
+	 * protégeant celui utilisé pour le jeu.
 	 * 
 	 * @return Un {@code Tapis} clone.
 	 */
 	public abstract Tapis getClone();
 
 	/**
-	 * Determiner si a la position donnée, une carte peut etre posée, incluant les
-	 * bords, c'est-a-dire les positions qui peuvent aussi faire deplacer le tapis.
+	 * Déterminer si à la position donnée, une carte peut être posée, incluant les
+	 * bords, c'est-à-dire les positions qui peuvent aussi faire déplacer le tapis.
 	 * 
 	 * @param x Abscisse de la position.
 	 * @param y Ordonnée de la position.
-	 * @return {@code true} si la position est legale, {@code false} sinon.
+	 * @return {@code true} si la position est légale, {@code false} sinon.
 	 */
 	public abstract boolean positionLegale(int x, int y);
 
 	/**
-	 * Determiner si a la position donnée, une carte peut etre posée, n'incluant pas
+	 * Determiner si à la position donnée, une carte peut être posée, n'incluant pas
 	 * les bords. <br>
 	 * Different de {@link #positionLegale(int, int)}.
 	 * 
@@ -137,7 +137,7 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	public abstract boolean positionSurTapis(int x, int y);
 
 	/**
-	 * Retire une carte du tapis a la position specifié.
+	 * Retire une carte du tapis à la position specifiée.
 	 * 
 	 * @param x Abscisse de la carte.
 	 * @param y Ordonnée de la carte.
@@ -151,7 +151,7 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	 * 
 	 * @param x Abscisse position.
 	 * @param y Ordonnée position.
-	 * @return {@code true} si la positon a au moins un voisin, {@code false} sinon.
+	 * @return {@code true} si la position a au moins un voisin, {@code false} sinon.
 	 */
 	public abstract boolean positionAVoisins(int x, int y);
 
@@ -170,17 +170,17 @@ public abstract class Tapis extends Observable implements VisitableAffichage, Vi
 	public abstract int getHauteur();
 
 	/**
-	 * Indique sur le tapis est completement vide.
+	 * Indique si le tapis est complètement vide.
 	 * 
 	 * @return Boolean
 	 */
 	public abstract boolean estVide();
 
 	/**
-	 * Raccoursis pour {@link #getCarteAt(int, int)}.
+	 * Raccourcis pour {@link #getCarteAt(int, int)}.
 	 * 
-	 * @param posCarte La position de la carte a obtenir.
-	 * @return La carte a la position donnée.
+	 * @param posCarte La position de la carte à obtenir.
+	 * @return La carte à la position donnée.
 	 */
 	public Carte getCarteAt(Position posCarte) {
 		return getCarteAt(posCarte.getX(), posCarte.getY());

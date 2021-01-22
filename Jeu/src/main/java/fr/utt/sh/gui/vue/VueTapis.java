@@ -15,8 +15,8 @@ import fr.utt.sh.gui.InterfaceJeu;
 
 /**
  * La visualisation du tapis du jeu. Cette classe emploie le patron de
- * conception Oberser/Observable afin de detecter lorsqu'un {@link Tapis} change
- * d'etat.
+ * conception Oberser/Observable afin de détecter lorsqu'un {@link Tapis} change
+ * d'état.
  * 
  * @author grego
  *
@@ -36,12 +36,12 @@ public class VueTapis extends JPanel implements Observer {
 	/**
 	 * Constructeur pour la visualisation du tapis. <br>
 	 * Remarque: Ce constructeur n'est pas appelé directement dans {@link VueJeu}, a
-	 * la place un visitor puis un generateur sont utilisé afin de "generer"
+	 * la place un visitor puis un générateur sont utilisés afin de "générer"
 	 * l'instance de la visualisation.
 	 * <br>
 	 * 
 	 * 
-	 * @param tapis Le {@link Tapis} que va réprésenter cette vue.
+	 * @param tapis Le {@link Tapis} que va représenter cette vue.
 	 */
 	public VueTapis(Tapis tapis) {
 		super();
@@ -50,11 +50,11 @@ public class VueTapis extends JPanel implements Observer {
 	}
 
 	/**
-	 * Ajouter un {@link EmplacementCarte} a la liste des emplacements cartes. Une
-	 * liste séparée de ces emplacement est utilisé afin de plus facilement afectuer
+	 * Ajouter un {@link EmplacementCarte} à la liste des emplacements cartes. Une
+	 * liste séparée de ces emplacements est utilisée afin de plus facilement effectuer
 	 * des actions sur ces emplacements.
 	 * 
-	 * @param emCarte {@link EmplacementCarte} a ajouter.
+	 * @param emCarte {@link EmplacementCarte} à ajouter.
 	 */
 	public void addEmCarte(EmplacementCarte emCarte) {
 		emCartes.add(emCarte);

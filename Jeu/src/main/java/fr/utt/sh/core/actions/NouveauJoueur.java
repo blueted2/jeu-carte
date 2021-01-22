@@ -13,14 +13,14 @@ public class NouveauJoueur implements ActionJeu {
 	private Joueur joueur;
 
 	/**
-	 * @param joueur Le {@link Joueur} commenceant son tour.
+	 * @param joueur Le {@link Joueur} commençant son tour.
 	 */
 	public NouveauJoueur(Joueur joueur) {
 		this.joueur = joueur;
 	}
 
 	/**
-	 * @return Le {@link Joueur} commenceant son tour.
+	 * @return Le {@link Joueur} commençant son tour.
 	 */
 	public Joueur getJoueur() {
 		return joueur;

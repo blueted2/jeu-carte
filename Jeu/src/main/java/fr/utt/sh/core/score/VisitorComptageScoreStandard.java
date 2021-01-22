@@ -8,13 +8,13 @@ import fr.utt.sh.core.tapis.TapisTri;
 
 /**
  * <pre>
- * Cette implementation de {@link VisitorComptageScore} compte les points pour
- * une certaine carte dans la facon decrite par le projet.
+ * Cette implémentation de {@link VisitorComptageScore} compte les points pour
+ * une certaine carte dans la façon décrite par le projet.
  * 
- * La carte pour laquelle le score sera calculé doit etre donné dans le
- * constructeur, et pour effectuer le comptage du score, la methode
- * {@link VisitorComptageScore#visit} doit etre appelé avec un tapis comme
- * parametre.
+ * La carte pour laquelle le score sera calculé doit être donnée dans le
+ * constructeur, et pour effectuer le comptage du score, la méthode
+ * {@link VisitorComptageScore#visit} doit être appelée avec un tapis comme
+ * paramètre.
  * </pre>
  * 
  * @author grego
@@ -33,7 +33,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 	 * Ce constructeur demande de spécifier initialement la carte pour laquelle le
 	 * score sera compté.
 	 * 
-	 * @param carte La carte
+	 * @param carte La carte pour laquelle le score sera compté.
 	 */
 	public VisitorComptageScoreStandard(Carte carte) {
 		setCarte(carte);
@@ -53,7 +53,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 		int largeurTapis = tapis.getLargeur();
 		int hauteurTapis = tapis.getHauteur();
 
-		// Calcule des lignes
+		// Calcul des lignes
 		for (int y = 0; y < hauteurTapis; y++) {
 			LinkedList<Carte> ligneCartes = new LinkedList<Carte>();
 			for (int x = 0; x < largeurTapis; x++) {
@@ -63,7 +63,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 			points += getPointsDansListe(ligneCartes);
 		}
 
-		// Calcule des colonnes
+		// Calcul des colonnes
 		for (int x = 0; x < largeurTapis; x++) {
 			LinkedList<Carte> colonneCartes = new LinkedList<Carte>();
 			for (int y = 0; y < hauteurTapis; y++) {
@@ -76,9 +76,9 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 	@Override
 	public void visit(TapisTri tapis) {
-		int tailleTapis = tapis.getHauteur(); // Hauteur et largeur sont les meme pour un tapis triangulaire.
+		int tailleTapis = tapis.getHauteur(); // Hauteur et largeur sont identiques pour un tapis triangulaire.
 
-		// Calcule des lingnes
+		// Calcul des lignes
 		for (int y = 0; y < tailleTapis; y++) {
 
 			LinkedList<Carte> ligneCartes = new LinkedList<Carte>();
@@ -89,7 +89,7 @@ public class VisitorComptageScoreStandard implements VisitorComptageScore {
 
 		}
 
-		// Calcule des colonnes
+		// Calcul des colonnes
 		for (int x = 0; x < tailleTapis; x++) {
 			LinkedList<Carte> colonneCartes = new LinkedList<Carte>();
 			for (int y = x; y < tailleTapis; y++) {

@@ -20,8 +20,8 @@ import fr.utt.sh.gui.InterfaceJeu;
 
 /**
  * Classe responsable pour la visualisation graphique des cartes du joueur
- * actuel. Cette classe emploie le pattron de conception Observer/Observable, en
- * ecoutant pour des changements dans l'objet {@link Joueur} du joueur actuel,
+ * actuel. Cette classe emploie le patron de conception Observer/Observable, en
+ * écoutant pour des changements dans l'objet {@link Joueur} du joueur actuel,
  * et des changements dans l'instance de {@link ControlleurJeu}
  * 
  * @author grego
@@ -133,7 +133,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 	}
 
 	/**
-	 * Obtenir le panel regroupant les {@link EmplacementCarte} representant les
+	 * Obtenir le panel regroupant les {@link EmplacementCarte} représentant les
 	 * cartes du joueur.
 	 * 
 	 * @return {@code JPanel}
@@ -158,7 +158,7 @@ public class VueJoueurActuel extends JPanel implements Observer {
 
 
 	/**
-	 * Obtenir la liste des {@link EmplacementCarte} representant la main du joueur.
+	 * Obtenir la liste des {@link EmplacementCarte} représentant la main du joueur.
 	 * 
 	 * @return {@code ArrayList<EmplacementCarte>}
 	 */

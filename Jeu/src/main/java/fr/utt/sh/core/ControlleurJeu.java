@@ -27,8 +27,8 @@ import fr.utt.sh.core.tapis.decalable.Tapis_5x3;
 import fr.utt.sh.core.tapis.Tapis;
 
 /**
- * Cette classe singleton se charge de controller le flux general du jeu, ainsi
- * de la logique des règles.
+ * Cette classe singleton se charge de controller le flux général du jeu, ainsi
+ * que la logique des règles.
  * 
  * @author grego
  *
@@ -67,8 +67,8 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Une methodes utilitaire statique permettant de determiner si une certaine
-	 * configuration du nombre de joueurs humains et oridnateur est valide.
+	 * Une méthode utilitaire statique permettant de déterminer si une certaine
+	 * configuration du nombre de joueurs humains et ordinateur est valide.
 	 * 
 	 * @param joueursHumains Le nombre de joueurs humains dans la partie.
 	 * @param joueursBots    Le nombre de joueurs bots dans la partie.
@@ -132,9 +132,9 @@ public class ControlleurJeu extends Observable {
 
 	/**
 	 * 
-	 * Commencer un nouveau jeu, et supprime celle deja en cours. Le nombre total de
-	 * joueurs doit etre soit 2 ou 3, donc les combinaisons possibles de joueurs
-	 * humains et bots sonts:
+	 * Commencer un nouveau jeu, et supprime celui déjà en cours. Le nombre total de
+	 * joueurs doit être soit 2 ou 3, donc les combinaisons possibles de joueurs
+	 * humains et bots sont :
 	 * 
 	 * <pre>
 	 * 0, 2
@@ -150,10 +150,10 @@ public class ControlleurJeu extends Observable {
 	 * 
 	 * @param nbHumains       Le nombre de joueurs humains.
 	 * @param nbBots          Le nombre de joueurs bots.
-	 * @param regles          Les regles de jeu a utiliser
-	 * @param typeTapis       Le type de tapis a utiliser
-	 * @param nombreDeParties Le nombre de parties dans un jeu
-	 * @param interfaceJeu    Si l'interface graphique doit etre activée
+	 * @param regles          Les règles de jeu à utiliser.
+	 * @param typeTapis       Le type de tapis à utiliser.
+	 * @param nombreDeParties Le nombre de parties dans un jeu.
+	 * @param interfaceJeu    Si l'interface graphique doit être activée.
 	 */
 	public void commencerNouveauJeu(int nbHumains, int nbBots, Regles regles, TypeTapis typeTapis, int nombreDeParties,
 			boolean interfaceJeu) {
@@ -192,7 +192,7 @@ public class ControlleurJeu extends Observable {
 		genererJoueurs(nbHumains, nbBots);
 		genererToutesCartes();
 
-		// Commener l'interface graphique du jeu.
+		// Commencer l'interface graphique du jeu.
 		if (interfaceJeu) {
 			InterfaceJeu.begin();
 		}
@@ -218,7 +218,7 @@ public class ControlleurJeu extends Observable {
 	 * Essayer de commencer une nouvelle partie, tout en verifiant si la partie
 	 * actuelle peut se terminer.
 	 * 
-	 * @return {@code true} si une nouvelle partie a pu etre commencée,
+	 * @return {@code true} si une nouvelle partie a pu être commencée,
 	 *         {@code false} sinon.
 	 */
 	public boolean commencerNouvellePartie() {
@@ -241,7 +241,7 @@ public class ControlleurJeu extends Observable {
 		debutPartie = true;
 
 		// Au lieu d'aller chercher toutes les cartes chez les joueurs, simplement les
-		// recreers.
+		// recréer.
 		initialiserCartes();
 
 		// Au debut de la partie, il faut jeter une carte.
@@ -274,8 +274,8 @@ public class ControlleurJeu extends Observable {
 	 */
 	public boolean passerAuJoueurSuivant() {
 
-		// Si c'est le debut de la partie, on a pas besoin de verifier si le joueur
-		// actuel a deja pioché/poser une carte...
+		// Si c'est le debut de la partie, on n'a pas besoin de verifier si le joueur
+		// actuel a deja pioché/posé une carte...
 		//
 		if (!debutPartie) {
 			if (!joueurActuelAPiocheCarteCeTour && ilResteDesCartes())
@@ -308,7 +308,7 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Obtenir le {@link Joueur} actuel, c'est a dire le joueur en train de joueur.
+	 * Obtenir le {@link Joueur} actuel, c'est a dire le joueur en train de jouer.
 	 * 
 	 * @return {@link Joueur}.
 	 */
@@ -319,8 +319,8 @@ public class ControlleurJeu extends Observable {
 	/**
 	 * Faire piocher une carte au joueur actuel.
 	 * 
-	 * @return Si le joueur actuel a le droit de piocher une carte, {@code true},
-	 *         sinon {@code false}.
+	 * @return {@code true} si le joueur actuel a le droit de piocher une carte, 
+	 *         {@code false} sinon.
 	 */
 	public boolean joueurActuelPiocheCarte() {
 		if (tapis.estRempli())
@@ -362,14 +362,14 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Le joueur actuel tente de poser une carte dans sa main. Si la carte peut etre
-	 * posé a l'emplacement indiqué, la carte sera enlevée de la main du joueur, et
+	 * Le joueur actuel tente de poser une carte dans sa main. Si la carte peut être
+	 * posée à l'emplacement indiqué, la carte sera enlevée de la main du joueur, et
 	 * posée sur le tapis.
 	 * 
 	 * @param carte La {@link Carte} du joueur a poser.
 	 * @param x     Abscisse de l'emplacement voulu.
 	 * @param y     Ordonnée de l'emplacement voulu.
-	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
+	 * @return {@code true} si la carte a pu être posée, {@code false} sinon.
 	 */
 	public boolean joueurActuelPoseCarteDansMain(Carte carte, int x, int y) {
 
@@ -391,12 +391,12 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Fait poser la carte piochee du joueur actuel (en verifiant si il a deja
+	 * Fait poser la carte piochée du joueur actuel (en verifiant si il a déjà
 	 * pioché une carte ce tour).
 	 * 
-	 * @param x Abscisse de la postion de la carte.
-	 * @param y Ordonné de la postion de la carte.
-	 * @return {@code true} si la carte a pu etre posée, {@code false} sinon.
+	 * @param x Abscisse de la position de la carte.
+	 * @param y Ordonnée de la position de la carte.
+	 * @return {@code true} si la carte a pu être posée, {@code false} sinon.
 	 */
 	public boolean joueurActuelPoseCartePiochee(int x, int y) {
 		Carte cartePiochee = joueurActuel.getCartePiochee();
@@ -412,9 +412,9 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/*
-	 * Poser une carte donnée. Cette méthode est privée car elle est plus generale.
-	 * Les autres methodes comme joueurActuelPoseCartePiochee ou
-	 * joueurActuelPoseCarteDansMain appelerons cette methode.
+	 * Poser une carte donnée. Cette méthode est privée car elle est plus générale.
+	 * Les autres méthodes comme joueurActuelPoseCartePiochee ou
+	 * joueurActuelPoseCarteDansMain appelleront cette méthode.
 	 */
 	private boolean joueurActuelPoseCarte(Carte carte, int x, int y) {
 		if (joueurActuelAPoseCarteCeTour)
@@ -430,7 +430,7 @@ public class ControlleurJeu extends Observable {
 		return true;
 	}
 
-	// Choisi et enleve une carte aleatoire de la liste des cartes restantes.
+	// Choisit et enlève une carte aléatoire de la liste des cartes restantes.
 	private Carte popCarteAleatoire() {
 		if (!ilResteDesCartes())
 			return null;
@@ -440,8 +440,8 @@ public class ControlleurJeu extends Observable {
 		return c;
 	}
 
-	// Donner une carte victoire a chaque joueur. Seulement appelé en debut de
-	// partie, et pour les regles standard.
+	// Donner une carte victoire à chaque joueur. Seulement appelé en debut de
+	// partie, et pour les règles standard.
 	private boolean distribuerCartesVictoires() {
 		for (Joueur joueur : joueurs) {
 			joueur.setCarteVictoire(popCarteAleatoire());
@@ -470,14 +470,14 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Deplacer une carte sur le tapis, prennant en compte si le joueur actuel a
-	 * deja deplacé une carte, si la nouvelle position a des voisins...
+	 * Déplacer une carte sur le tapis, prennant en compte si le joueur actuel a
+	 * déjà deplacé une carte, si la nouvelle position a des voisins...
 	 * 
 	 * @param x1 Abscisse de depart de la carte.
 	 * @param y1 Ordonnée de depart de la carte.
 	 * @param x2 Abscisse d'arrivée de la carte.
 	 * @param y2 Ordonnée d'arrivée de la carte.
-	 * @return {@code true} si le deplacement a pu etre effectué, {@code false}
+	 * @return {@code true} si le déplacement a pu être effectué, {@code false}
 	 *         sinon.
 	 */
 	public boolean joueurActuelDeplaceCarte(int x1, int y1, int x2, int y2) {
@@ -516,9 +516,9 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * Le joueur actuel a-t-il le droit d'arreter son tour.
+	 * Le joueur actuel a-t-il le droit d'arrêter son tour ?
 	 * 
-	 * @return {@code true} si le joueur actuel peut arreter son tour, {@code false}
+	 * @return {@code true} si le joueur actuel peut arrêter son tour, {@code false}
 	 *         sinon.
 	 */
 	public boolean joueurActuelPeutFinir() {
@@ -531,7 +531,7 @@ public class ControlleurJeu extends Observable {
 
 	/**
 	 * Obtenir une copie profonde du tapis, c'est-a-dire une copie de la liste des
-	 * cartes stockés par les tapis, et non seuelement une copie de la reference a
+	 * cartes stockées par les tapis, et non seuelement une copie de la reference à
 	 * la liste. <br>
 	 * Cela permet de modifier le tapis, sans influencer le jeu actuel.
 	 * 
@@ -594,7 +594,7 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * @return {@code true} si le joueur actuel a deja posé une carte ce tour,
+	 * @return {@code true} si le joueur actuel a déjà posé une carte ce tour,
 	 *         {@code false} sinon.
 	 */
 	public boolean hasJoueurActuelPoseCarteCeTour() {
@@ -602,7 +602,7 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * @return {@code true} si le joueur actuel a deja pioché une carte ce tour,
+	 * @return {@code true} si le joueur actuel a déjà pioché une carte ce tour,
 	 *         {@code false} sinon.
 	 */
 	public boolean hasJoueurActuelPiocheCarteCeTour() {
@@ -610,7 +610,7 @@ public class ControlleurJeu extends Observable {
 	}
 
 	/**
-	 * @return {@code true} si le joueur a deja déplacé une carte ce tour,
+	 * @return {@code true} si le joueur a déjà déplacé une carte ce tour,
 	 *         {@code false} sinon.
 	 */
 	public boolean hasJoueurActuelDeplaceCarteCeTour() {
@@ -670,7 +670,7 @@ public class ControlleurJeu extends Observable {
 	/**
 	 * Obtenir le type {@link Regles} du jeu en cours.
 	 * 
-	 * @return Les regles.
+	 * @return Les règles.
 	 */
 	public Regles getRegles() {
 		return regles;
@@ -680,7 +680,7 @@ public class ControlleurJeu extends Observable {
 	 * Faire terminer le tour du joueur actuel, tout en verifiant si ce joueur a le
 	 * droit de terminer.
 	 * 
-	 * @return {@code true} si le tour du joueur a pu etre terminé, {@code false}
+	 * @return {@code true} si le tour du joueur a pu être terminé, {@code false}
 	 *         sinon.
 	 */
 	public boolean terminerTourJoueurActuel() {

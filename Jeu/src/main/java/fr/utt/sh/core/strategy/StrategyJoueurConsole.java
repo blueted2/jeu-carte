@@ -7,10 +7,11 @@ import fr.utt.sh.console_ui.ConsoleLineReader;
 import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
+import fr.utt.sh.core.Regles;
 
 /**
- * Une implementation de {@link Strategy} demandant a un joueur humain les
- * actions a efectuer avec la console.
+ * Une implémentation de {@link Strategy} demandant a un joueur humain les
+ * actions à effectuer avec la console.
  * 
  * @author grego
  *
@@ -37,6 +38,9 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 		ConsoleLineReader.getInstance().addObserver(this);
 	}
 
+	/**
+	 * Fait jouer un joueur humain, selon les {@link Regles} Standard.
+	 */
 	private void executeStandard() {
 
 		if (commande == null)
@@ -92,6 +96,9 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 		}
 	}
 
+	/**
+	 * Fait jouer un joueur humain, selon les {@link Regles} Advanced.
+	 */
 	private void executeAdvanced() {
 
 		if (commande == null)
@@ -156,6 +163,9 @@ public class StrategyJoueurConsole implements Strategy, Observer {
 		}
 	}
 
+	/**
+	 * Fait jouer un joueur humain, selon les {@link Regles} Variante.
+	 */
 	private void executeVariante() {
 
 		if (commande == null)

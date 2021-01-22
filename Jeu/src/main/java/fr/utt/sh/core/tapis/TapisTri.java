@@ -7,7 +7,7 @@ import fr.utt.sh.core.score.VisitorComptageScore;
 
 /**
  * Classe de base pour créer des tapis triangulaires. La hauteur et la largeur
- * seront egaux.
+ * seront égales.
  * 
  * @author grego
  *
@@ -23,7 +23,7 @@ public class TapisTri extends Tapis implements Decalable {
 	/**
 	 * Créer un tapis triangulaire de taille {@code taille}.
 	 * 
-	 * @param taille La taille du tapis triangulaire a créer.
+	 * @param taille La taille du tapis triangulaire à créer.
 	 */
 	public TapisTri(int taille) {
 		this.taille = taille;
@@ -36,9 +36,9 @@ public class TapisTri extends Tapis implements Decalable {
 	}
 
 	/**
-	 * Construteur pour cloner un tapis. Prendre comme parametre le tapis a cloner.
+	 * Construteur pour cloner un tapis. Prend comme paramètre le tapis à cloner.
 	 * 
-	 * @param tapis Le tapis a etre cloné.
+	 * @param tapis Le tapis à cloner.
 	 * 
 	 */
 	public TapisTri(TapisTri tapis) {
@@ -143,8 +143,6 @@ public class TapisTri extends Tapis implements Decalable {
 
 		return false;
 
-	}
-  
 	private boolean decalerAGauche() {
 		// Verifier que colonne gauche est vide.
 		for (int y = 0; y < taille; y++) {
@@ -152,7 +150,7 @@ public class TapisTri extends Tapis implements Decalable {
 				return false;
 		}
 
-		// On commence a y=1, car si ya pas de carte dans la premiere colonne, y'en aura
+		// On commence à y=1, car s'il n'y a pas de carte dans la première colonne, il n'y en aura
 		// pas une tout en haut.
 		for (int y = 1; y < taille; y++) {
 			for (int x = 0; x < y; x++) {
@@ -164,16 +162,14 @@ public class TapisTri extends Tapis implements Decalable {
 	}
 
 	private boolean decalerADroite() {
-
-		// Verifier sur le coté droit qu'il n'y a pas de cartes.
+		// Verifier sur le côté droit qu'il n'y a pas de cartes.
 		for (int y = 0; y < taille; y++) {
 			if (getCarteAt(y, y) != null)
 				return false;
 		}
 
-		// On commence a y=1, car si ya pas de carte a droite, y'en aura pas une en
+		// On commence a y=1, car s'il n'y a pas de carte à droite, il n'y en aura pas une en
 		// haut.
-		// pas une tout en haut.
 		for (int y = 1; y < taille; y++) {
 			for (int x = y; x > 0; x--) {
 				setCarteAt(getCarteAt(x - 1, y), x, y);

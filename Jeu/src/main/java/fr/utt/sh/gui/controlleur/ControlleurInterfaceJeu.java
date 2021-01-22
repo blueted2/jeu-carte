@@ -15,7 +15,7 @@ import fr.utt.sh.gui.vue.VueJeu;
 /**
  * Cette classe est le controlleur pour une {@link InterfaceJeu}. Elle ajoute
  * les listeners sur les emplacements des cartes sur le tapis, dans la main du
- * joueur..., afin de permettre aux actions effectués sur l'interface graphique
+ * joueur..., afin de permettre aux actions effectuées sur l'interface graphique
  * d'avoir un effet sur le jeu.
  * 
  * @author grego
@@ -31,9 +31,9 @@ public class ControlleurInterfaceJeu {
 	private boolean          carteSelectioneeEstSurTapis;
 
 	/**
-	 * Constructeur pour le controlleu.
+	 * Constructeur pour le controlleur.
 	 * 
-	 * @param vueJeu Une instance de {@link VueJeu} pour laquelle sur laquelle ce
+	 * @param vueJeu Une instance de {@link VueJeu} sur laquelle ce
 	 *               controlleur va agir.
 	 */
 	public ControlleurInterfaceJeu(VueJeu vueJeu) {
@@ -57,7 +57,7 @@ public class ControlleurInterfaceJeu {
 			}
 		});
 
-		// Listeners pour les cartes dans du tapis.
+		// Listeners pour les cartes dans le tapis.
 		vueJeu.getVueTapis().getEmplacementsCartes().forEach((emCarteTapis) -> {
 			emCarteTapis.addActionListener(new ActionListener() {
 				@Override
@@ -140,7 +140,7 @@ public class ControlleurInterfaceJeu {
 		switch (cj.getRegles()) {
 			case Standard:
 
-				// Listener pour la carte piochee.
+				// Listener pour la carte piochée.
 				emCartePiochee.addActionListener(new ActionListener() {
 
 					@Override
@@ -163,7 +163,7 @@ public class ControlleurInterfaceJeu {
 				break;
 			case Advanced:
 			case Variante:
-				// Listeners pour les cartes dans la main ud joueur. Les listeners sont ajouté
+				// Listeners pour les cartes dans la main du joueur. Les listeners sont ajoutés
 				// quand les composants de la vueJoueurActuel sont ajoutés.
 				vueJeu.getVueJoueurActuel().getPanelCarteDansMain().addContainerListener(new ContainerAdapter() {
 					@Override
@@ -200,16 +200,16 @@ public class ControlleurInterfaceJeu {
 		}
 	}
 
-	// Selectionner une nouvelle carte.
+	// Sélectionner une nouvelle carte.
 	private void selectionerEmCarte(EmplacementCarte emCarte) {
 		carteSelectioneeEstSurTapis = false;
 		if (emCarteSelectionee != null)
-			emCarteSelectionee.setSelectionee(false); // Enlever l'effet de selection de la carte selectionée
+			emCarteSelectionee.setSelectionee(false); // Enlever l'effet de sélection de la carte sélectionée
 														// précédente.
 
 		emCarteSelectionee = emCarte;
 		if (emCarte != null)
-			emCarte.setSelectionee(true); // Ajouter l'effet de selection a la nouvelle carte.
+			emCarte.setSelectionee(true); // Ajouter l'effet de sélection à la nouvelle carte.
 	}
 
 }

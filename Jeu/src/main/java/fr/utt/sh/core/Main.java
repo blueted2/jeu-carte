@@ -14,9 +14,9 @@ import fr.utt.sh.gui.InterfaceConfiguration;;
 public class Main {
 
 	/**
-	 * Methode main, executant le jeu.
+	 * Méthode main, exécutant le jeu.
 	 * 
-	 * @param args Les arguments de ligne commande.
+	 * @param args Les arguments de ligne de commande.
 	 */
 	public static void main(String[] args) {
 
@@ -50,7 +50,7 @@ public class Main {
 
 		while (!c.isJeuTermine()) {
 			try {
-				Thread.sleep(10);// Sans le delais, le program devient instable.
+				Thread.sleep(10);// Sans le delai, le programme devient instable.
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

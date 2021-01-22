@@ -5,17 +5,17 @@ import fr.utt.sh.core.tapis.TapisTri;
 import fr.utt.sh.core.tapis.TapisRect;
 
 /**
- * Ce interface a pour but d'etre utilisé pour compter le score du tapis pour
- * une certanine carte qui sera donné par la methode {@link #setCarte}.
+ * Cette interface a pour but d'être utilisée pour compter le score du tapis pour
+ * une certaine carte qui sera donnée par la methode {@link #setCarte}.
  * 
  * @author grego
  *
  */
 public interface VisitorComptageScore {
 	/**
-	 * Definir la carte pour laquelle le score est calculé.
+	 * Définir la carte pour laquelle le score est calculé.
 	 * 
-	 * @param carte La {@link Carte} pour laquelle on caclule le score.
+	 * @param carte La {@link Carte} pour laquelle on calcule le score.
 	 */
 	public abstract void setCarte(Carte carte);
 
@@ -23,7 +23,7 @@ public interface VisitorComptageScore {
 	 * Visiter un tapis rectangulaire afin d'y compter le score pour une certaine
 	 * carte.
 	 * 
-	 * @param tapis Le {@link TapisRect} a visiter.
+	 * @param tapis Le {@link TapisRect} à visiter.
 	 */
 	public abstract void visit(TapisRect tapis);
 
@@ -31,13 +31,13 @@ public interface VisitorComptageScore {
 	 * Visiter un tapis triangulaire afin d'y compter le score pour une certaine
 	 * carte.
 	 * 
-	 * @param tapis Le {@link TapisTri} a visiter.
+	 * @param tapis Le {@link TapisTri} à visiter.
 	 */
 	public abstract void visit(TapisTri tapis);
 
 	/**
-	 * Permet d'obtenir le nombre de points APRES avoir visiter le tapis. Si cette
-	 * methode est appelee avant de visiter un tapis, le score retourné sera 0.
+	 * Permet d'obtenir le nombre de points APRÈS avoir visité le tapis. Si cette
+	 * méthode est appelée avant de visiter un tapis, le score retourné sera 0.
 	 * 
 	 * @return Le nombre de points pour la carte.
 	 */

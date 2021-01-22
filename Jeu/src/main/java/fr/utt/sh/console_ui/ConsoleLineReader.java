@@ -3,8 +3,8 @@ package fr.utt.sh.console_ui;
 import java.util.Observable;
 
 /**
- * Cette classe singleton créer un thread qui attend que l'utilisateur ecrive
- * une ligne a la console, puis avec le patron Oberser Observable, alerte ses
+ * Cette classe singleton crée un thread qui attend que l'utilisateur écrive
+ * une ligne à la console, puis avec le patron Oberser Observable, alerte ses
  * observers.
  * 
  * @author grego
@@ -30,7 +30,7 @@ public class ConsoleLineReader extends Observable {
 	}
 
 	/**
-	 * Obtenir l'instace de la classe. Necéssaire car un observer ne peut pas etre
+	 * Obtenir l'instace de la classe. Necéssaire car un observer ne peut pas être
 	 * ajouté statiquement.
 	 * 
 	 * @return {@link ConsoleLineReader}
@@ -42,7 +42,7 @@ public class ConsoleLineReader extends Observable {
 	}
 
 	/**
-	 * Obtenir la derniere ligne qui a été ecrite dans la console.
+	 * Obtenir la dernière ligne qui a été écrite dans la console.
 	 * 
 	 * @return Un array de mots.
 	 */

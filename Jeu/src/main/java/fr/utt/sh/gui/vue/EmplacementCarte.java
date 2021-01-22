@@ -31,7 +31,7 @@ public class EmplacementCarte extends JButton {
 	private Border originalBorder;
 
 	/**
-	 * Créer un {@code EmplacementCarte}, avec comme parametre la position que cet
+	 * Créer un {@code EmplacementCarte}, avec comme paramètre la position que cet
 	 * emplacement aurait sur le tapis. Mettre {@code null} si cet emplacement n'est
 	 * pas sur un tapis.
 	 * 
@@ -52,7 +52,7 @@ public class EmplacementCarte extends JButton {
 	}
 
 	/**
-	 * Affectuer une {@link Carte} a cette position. Cela mettra egalement a jour
+	 * Affecter une {@link Carte} à cette position. Cela mettra également à jour
 	 * l'icon de cet emplacement.
 	 * 
 	 * @param carte La {@link Carte} a cette position.
@@ -101,7 +101,7 @@ public class EmplacementCarte extends JButton {
 	}
 
 	/**
-	 * Obtenir la carte que represent cet emplacement.
+	 * Obtenir la carte que represente cet emplacement.
 	 * 
 	 * @return La {@link Carte} de cet emplacement.
 	 */
@@ -110,9 +110,9 @@ public class EmplacementCarte extends JButton {
 	}
 
 	/**
-	 * Activer/desactivé un effet de "selection" sur l'emplacement.
+	 * Activer/desactiver un effet de "selection" sur l'emplacement.
 	 * 
-	 * @param etat Si l'effet est active ou non.
+	 * @param etat Si l'effet est actif ou non.
 	 */
 	public void setSelectionee(boolean etat) {
 		if (etat) {

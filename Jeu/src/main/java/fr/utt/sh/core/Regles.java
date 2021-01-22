@@ -1,24 +1,24 @@
 package fr.utt.sh.core;
 
 /**
- * Une enumerations des differentes regles du jeu possible.
+ * Une énumeration des différentes règles du jeu possibles.
  * 
  * @author grego
  *
  */
 public enum Regles {
 	/**
-	 * Regles standard.
+	 * Règles standard.
 	 */
 	Standard,
 	/**
-	 * Regles advanved.
+	 * Règles advanced.
 	 */
 	Advanced,
 
 	/**
-	 * Une variante des regles Advanced, ou toutes les cartes sont distribués au
-	 * debut du jeu, et le score du joueur déterminé avec la derniere carte du
+	 * Une variante des règles Advanced, où toutes les cartes sont distribuées au
+	 * debut du jeu, et le score du joueur déterminé avec la dernière carte du
 	 * joueur.
 	 */
 	Variante

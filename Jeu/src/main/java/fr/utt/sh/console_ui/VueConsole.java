@@ -16,8 +16,7 @@ import fr.utt.sh.core.actions.PiocherCarte;
 import fr.utt.sh.core.actions.PoserCarte;
 
 /**
- * Une classe singleton permettant d'afficher la vue du jeu actuel a la console.
- * 
+ * Une classe singleton permettant d'afficher la vue du jeu actuel à la console.
  * @author grego
  *
  */
@@ -80,6 +79,10 @@ public class VueConsole implements Observer {
 
 	}
 
+	/**
+	 * Lors d'un changement de tour, affiche le nom du joueur qui doit jouer, et sa carte de victoire le cas échéant.
+	 * @param nouveauJoueur Le joueur dont c'est le tour.
+	 */
 	private void afficherNouveauJoueur(NouveauJoueur nouveauJoueur) {
 		Joueur joueur = nouveauJoueur.getJoueur();
 
@@ -103,6 +106,10 @@ public class VueConsole implements Observer {
 
 	}
 
+	/**
+	 * Affiche la carte qu'un joueur vient de déplacer et ses emplacements d'origine et de destination.
+	 * @param deplacerCarte La carte que le joueur a déplacé.
+	 */
 	private void afficherDeplacerCarte(DeplacerCarte deplacerCarte) {
 		Position source      = deplacerCarte.getSource();
 		Position destination = deplacerCarte.getDestination();
@@ -116,6 +123,10 @@ public class VueConsole implements Observer {
 
 	}
 
+	/**
+	 * Affiche la carte qu'un joueur vient de piocher.
+	 * @param piocherCarte La carte que le joueur a pioché. 
+	 */
 	private void afficherJoueurPiocheCarte(PiocherCarte piocherCarte) {
 		Carte  carte            = piocherCarte.getCarte();
 		String stringJoueur     = cj.getJoueurActuel().toString();
@@ -125,6 +136,10 @@ public class VueConsole implements Observer {
 		System.out.println(String.format("%s pioché: %s (%s)", stringJoueur, stringCourtCarte, stringCarte));
 	}
 
+	/**
+	 * Affiche la carte qu'un joueur vient de poser et son emplacement.
+	 * @param poserCarte La carte que le joueur a posé. 
+	 */
 	private void afficherPoserCarte(PoserCarte poserCarte) {
 		String stringJoueur   = cj.getJoueurActuel().toString();
 		String stringCarte    = GenerateurString.getStringCarte(poserCarte.getCarte());
@@ -133,16 +148,25 @@ public class VueConsole implements Observer {
 		System.out.println(String.format("%s a posé %s a %s", stringJoueur, stringCarte, stringPosition));
 	}
 
+	/**
+	 * Affiche le tapis.
+	 */
 	private void afficherTapis() {
 		System.out.print(GenerateurString.getStringTapis(cj.getTapis()));
 	}
-
+	
+	/**
+	 * Affiche la main du joueur actuel.
+	 */
 	private void afficherMainJoueurActuel() {
 		System.out.println("Main:");
 		System.out.println(GenerateurString.getStringCartesDansMainJoueur(cj.getJoueurActuel()));
 		System.out.println();
 	}
 
+	/**
+	 * Affiche les scores des différents joueurs.
+	 */
 	private void afficherScoresDesJoueurs() {
 		cj.getJoueurs().forEach(j -> {
 			System.out.println(String.format("Score de %s: %d", j, j.getScore()));

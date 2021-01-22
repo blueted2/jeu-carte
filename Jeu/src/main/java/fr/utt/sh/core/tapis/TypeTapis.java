@@ -1,7 +1,7 @@
 package fr.utt.sh.core.tapis;
 
 /**
- * Une enumeration de types de tapis valides.
+ * Une énumeration de types de tapis valides.
  * 
  * @author grego
  *

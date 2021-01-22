@@ -4,16 +4,17 @@ import fr.utt.sh.core.Carte;
 import fr.utt.sh.core.ControlleurJeu;
 import fr.utt.sh.core.Joueur;
 import fr.utt.sh.core.Position;
+import fr.utt.sh.core.Regles;
 import fr.utt.sh.core.score.VisitorComptageScore;
 import fr.utt.sh.core.score.VisitorComptageScoreStandard;
 import fr.utt.sh.core.tapis.Tapis;
 
 /**
- * Une implementation test d'une strategy. Quand cette strategy est utilisée,
+ * Une implémentation test d'une strategy. Quand cette strategy est utilisée,
  * elle teste chaque position du tapis afin de trouver celle qui
  * donnera le meilleur score. <br>
- * Limites: Cette strategie ne posera pas la carte a une position qui necessitera un
- * deplacement.
+ * Limites: Cette stratégie ne posera pas la carte à une position qui nécessitera un
+ * déplacement.
  * 
  * @author grego
  *
@@ -61,6 +62,12 @@ public class StrategyBot implements Strategy {
 		return;
 	}
 
+	/**
+	 * Fait jouer un joueur bot, selon les {@link Regles} Standard.
+	 * @return {@code true} si le tour du bot a pu être terminé, {@code false}
+	 *         sinon.
+	 * @throws InterruptedException si le tour est interrompu. 
+	 */
 	private boolean executeStandard() throws InterruptedException {
 
 		Thread.sleep(delay);
@@ -88,6 +95,12 @@ public class StrategyBot implements Strategy {
 		return cj.terminerTourJoueurActuel();
 	}
 
+	/**
+	 * Fait jouer un joueur bot, selon les {@link Regles} Advanced.
+	 * @return {@code true} si le tour du bot a pu être terminé, {@code false}
+	 *         sinon.
+	 * @throws InterruptedException si le tour est interrompu. 
+	 */
 	private boolean executeAdvanced() throws InterruptedException {
 
 		joueurActuel = cj.getJoueurActuel();
@@ -109,13 +122,19 @@ public class StrategyBot implements Strategy {
 		return cj.terminerTourJoueurActuel();
 	}
 
+	/**
+	 * Détermine la meilleure position où poser une carte donnée, c'est-à-dire la position qui rapporterait le plus de points.
+	 * @param carteVictoire La carte de victoire du joueur.
+	 * @param carteAPoser La carte que le joueur veut poser. 
+	 * @return Position La meilleure position possible. 
+	 */
 	private Position getMeilleurePosition(Carte carteVictoire, Carte carteAPoser) {
 		int posXMax  = -1; // Position invalide, pour tester si la valeur a été changée.
 		int posYMax  = -1;
 		int scoreMax = -1;
 
-		// Essayer tous les coordonnées possibles pour trouver une position jouable, et
-		// qui donnerait le meilleure score.
+		// Essayer toutes les coordonnées possibles pour trouver une position jouable, et
+		// qui donnerait le meilleur score.
 		for (int y = 0; y < hTapis; y++) {
 			for (int x = 0; x < lTapis; x++) {
 

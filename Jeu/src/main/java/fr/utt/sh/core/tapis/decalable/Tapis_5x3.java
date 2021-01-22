@@ -1,7 +1,7 @@
 package fr.utt.sh.core.tapis.decalable;
 
 /**
- * Une implementation de taille fixe 5x3 de {@link TapisRectDecalable}.
+ * Une implémentation de taille fixe 5x3 de {@link TapisRectDecalable}.
  * @author grego
  *
  */
