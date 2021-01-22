@@ -10,9 +10,9 @@ import fr.utt.sh.core.tapis.Tapis;
 
 /**
  * Une implementation test d'une strategy. Quand cette strategy est utilisée,
- * elle pioche, puis teste chaque position du tapis afin de trouver celle qui
+ * elle teste chaque position du tapis afin de trouver celle qui
  * donnera le meilleur score. <br>
- * Cette strategie ne posera pas la carte a une position qui necessitera un
+ * Limites: Cette strategie ne posera pas la carte a une position qui necessitera un
  * deplacement.
  * 
  * @author grego
