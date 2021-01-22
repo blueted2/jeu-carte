@@ -21,7 +21,7 @@ import fr.utt.sh.core.Regles;
 import fr.utt.sh.core.tapis.TypeTapis;
 
 /**
- * Classe singleton créant une interface graphique pour configuer et commencer
+ * Classe singleton créer une interface graphique pour configuer et commencer
  * un nouveau jeu.
  * 
  * @author grego

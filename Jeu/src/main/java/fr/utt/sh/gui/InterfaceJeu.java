@@ -11,7 +11,7 @@ import fr.utt.sh.gui.utils.ComponentResizeEndListener;
 import fr.utt.sh.gui.vue.VueJeu;
 
 /**
- * Classe singleton créeant une visualisation graphique de l'etat du jeu en
+ * Classe singleton créer une visualisation graphique de l'etat du jeu en
  * cours.
  * 
  * @author grego
@@ -36,8 +36,8 @@ public class InterfaceJeu {
 	public static final double RATIO_CARTE = 1.5;
 
 	/**
-	 * Cette attribut contient un map entre les objets {@link Carte} et leur image
-	 * associé.
+	 * Cet attribut contient un map entre les objets {@link Carte} et leurs image
+	 * associés.
 	 */
 	public static HashMap<Carte, Image> imagesCartes;
 
